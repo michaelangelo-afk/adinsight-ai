@@ -12,10 +12,30 @@ export async function signOut() {
 }
 
 export async function getCurrentUser() {
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+  // Bail safely when Supabase env vars aren't set — treat as unauthenticated.
+  // This is critical for server components that run before the project
+  // has a real Supabase project provisioned.
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return null;
+  }
+
+  let supabase;
+  try {
+    supabase = createClient();
+  } catch {
+    return null;
+  }
+
+  let user;
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+  } catch {
+    return null;
+  }
   if (!user) return null;
 
   // Fetch the user's extended profile from the users table
