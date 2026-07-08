@@ -9,6 +9,7 @@ import { PlatformChart } from "@/components/dashboard/platform-chart";
 import { RecommendationsPanel } from "@/components/dashboard/recommendations-panel";
 import { CampaignsTable } from "@/components/dashboard/campaigns-table";
 import { AccountsStrip } from "@/components/dashboard/accounts-strip";
+import { MetaActionToast } from "@/components/dashboard/meta-action-toast";
 import {
   getDashboardSummary,
   getCampaigns,
@@ -68,6 +69,11 @@ export default async function DashboardPage() {
       <Topbar profile={profile} />
       <AutoRefresh interval={60_000}>
         <div className="flex-1 p-6 md:p-8 space-y-6">
+          {/* Phase 3.1 — flash-cookie-driven action feedback. The cookie
+              has maxAge=30 so it auto-clears on next page read; the toast
+              renders once per rendered action. */}
+          <MetaActionToast />
+          {/* Welcome / summary line */}
           {/* Welcome / summary line */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
             <div>

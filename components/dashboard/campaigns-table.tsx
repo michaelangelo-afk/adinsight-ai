@@ -5,6 +5,7 @@ import { Pause, Play, ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { CampaignSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
+import { updateCampaign } from "@/app/actions/meta";
 
 function Sparkline({ data, tone }: { data: number[]; tone: "good" | "warn" | "bad" }) {
   const w = 80;
@@ -178,20 +179,20 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                       <Badge tone={statusTone(c.status)}>
                         {c.status}
                       </Badge>
-                      <button
-                        type="button"
-                        aria-disabled="true"
-                        aria-label={c.status === "active" ? "Pause campaign" : "Resume campaign"}
-                        title={`Phase 3 wiring pending — would ${c.status === "active" ? "pause" : "resume"} ${c.name}`}
-                        onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-amber-300 hover:bg-amber-500/10 cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
-                      >
-                        {c.status === "active" ? (
-                          <Pause size={13} />
-                        ) : (
-                          <Play size={13} />
-                        )}
-                      </button>
+                      <form action={updateCampaign.bind(null, c.id, c.status === "active" ? "PAUSED" : "ACTIVE")} className="contents">
+                        <button
+                          type="submit"
+                          aria-label={c.status === "active" ? `Pause ${c.name}` : `Resume ${c.name}`}
+                          title={c.status === "active" ? `Pause ${c.name} on Meta` : `Resume ${c.name} on Meta`}
+                          className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-amber-300 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                        >
+                          {c.status === "active" ? (
+                            <Pause size={13} />
+                          ) : (
+                            <Play size={13} />
+                          )}
+                        </button>
+                      </form>
                       <button
                         type="button"
                         aria-disabled="true"

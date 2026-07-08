@@ -5,6 +5,7 @@ import { Sparkles, Check, X, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Recommendation } from "@/lib/types";
 import { formatNaira } from "@/lib/utils";
+import { updateRecommendationStatus } from "@/app/actions/recommendations";
 
 type Filter = "all" | "pending" | "applied" | "dismissed";
 
@@ -106,36 +107,45 @@ export function RecommendationsPanel({
                 <div className="mt-3 flex flex-wrap gap-2">
                   {r.status === "pending" && (
                     <>
-                      <button
-                        type="button"
-                        disabled
-                        aria-label="Apply"
-                        title={`Phase 3 wiring pending — would apply: ${r.title}`}
-                        className="inline-flex items-center gap-1.5 rounded-md bg-violet-600/70 px-3 py-1.5 text-xs font-medium text-white cursor-not-allowed"
-                      >
-                        <ArrowUpRight size={12} />
-                        Apply
-                      </button>
-                      <button
-                        type="button"
-                        disabled
-                        aria-label="Mark done"
-                        title="Phase 3 wiring pending — would mark recommendation as done"
-                        className="inline-flex items-center gap-1.5 rounded-md bg-mist-50/[0.02] hairline px-3 py-1.5 text-xs font-medium text-mist-400 cursor-not-allowed"
-                      >
-                        <Check size={12} />
-                        Mark done
-                      </button>
-                      <button
-                        type="button"
-                        disabled
-                        aria-label="Dismiss"
-                        title="Phase 3 wiring pending — would dismiss recommendation"
-                        className="inline-flex items-center gap-1.5 rounded-md bg-mist-50/[0.02] hairline px-3 py-1.5 text-xs font-medium text-mist-400 cursor-not-allowed"
-                      >
-                        <X size={12} />
-                        Dismiss
-                      </button>
+                      {/*
+                        Each button now binds the recommendation id + status
+                        to the server action. applyRecommendation and
+                        markDoneRecommendation both write status="applied"
+                        — same end state, different UX intent.
+                      */}
+                      <form action={updateRecommendationStatus.bind(null, r.id, "applied")} className="contents">
+                        <button
+                          type="submit"
+                          aria-label={`Apply: ${r.title}`}
+                          title={`Apply this recommendation`}
+                          className="inline-flex items-center gap-1.5 rounded-md bg-violet-600/70 hover:bg-violet-500 px-3 py-1.5 text-xs font-medium text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                        >
+                          <ArrowUpRight size={12} />
+                          Apply
+                        </button>
+                      </form>
+                      <form action={updateRecommendationStatus.bind(null, r.id, "applied")} className="contents">
+                        <button
+                          type="submit"
+                          aria-label={`Mark done: ${r.title}`}
+                          title={`Mark this recommendation as done`}
+                          className="inline-flex items-center gap-1.5 rounded-md bg-mist-50/[0.02] hairline hover:border-naira-500/40 px-3 py-1.5 text-xs font-medium text-mist-200 hover:text-naira-300 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                        >
+                          <Check size={12} />
+                          Mark done
+                        </button>
+                      </form>
+                      <form action={updateRecommendationStatus.bind(null, r.id, "dismissed")} className="contents">
+                        <button
+                          type="submit"
+                          aria-label={`Dismiss: ${r.title}`}
+                          title={`Dismiss this recommendation`}
+                          className="inline-flex items-center gap-1.5 rounded-md bg-mist-50/[0.02] hairline px-3 py-1.5 text-xs font-medium text-mist-400 hover:text-rose-300 hover:border-rose-500/40 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                        >
+                          <X size={12} />
+                          Dismiss
+                        </button>
+                      </form>
                     </>
                   )}
                   {r.status === "applied" && (

@@ -1,5 +1,6 @@
 import { Plus, RefreshCw, Link2 } from "lucide-react";
 import type { AdAccount } from "@/lib/types";
+import { connectMeta, syncInsights } from "@/app/actions/meta";
 
 const PLATFORM_META: Record<string, { name: string; color: string }> = {
   meta: { name: "Meta Ads", color: "#9b6cff" },
@@ -45,26 +46,29 @@ export function AccountsStrip({ accounts }: { accounts: AdAccount[] }) {
         </div>
       )}
 
-      <button
-        type="button"
-        aria-disabled="true"
-        title="Phase 3 wiring pending — would launch Meta OAuth to connect an ad account"
-        onClick={(e) => e.preventDefault()}
-        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-200 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target cursor-not-allowed group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
-      >
-        <Plus size={12} className="transition-transform duration-300 group-hover:rotate-90" />
-        Connect
-      </button>
-      <button
-        type="button"
-        aria-disabled="true"
-        title="Phase 3 wiring pending — would trigger a fresh sync with connected accounts"
-        onClick={(e) => e.preventDefault()}
-        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target cursor-not-allowed group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
-      >
-        <RefreshCw size={12} className="transition-transform duration-500 group-hover:rotate-180" />
-        Sync
-      </button>
+      {/* Connect — server action sets a CSRF state cookie + redirects to
+          Facebook OAuth. The form's "contents" class lets the button
+          participate in the parent flex layout as if it weren't wrapped. */}
+      <form action={connectMeta} className="contents">
+        <button
+          type="submit"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-200 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+        >
+          <Plus size={12} className="transition-transform duration-300 group-hover:rotate-90" />
+          Connect
+        </button>
+      </form>
+      {/* Sync — server action re-fetches Meta insights and revalidates
+          /dashboard so the auto-refresh tick picks up the change. */}
+      <form action={syncInsights} className="contents">
+        <button
+          type="submit"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+        >
+          <RefreshCw size={12} className="transition-transform duration-500 group-hover:rotate-180" />
+          Sync
+        </button>
+      </form>
     </div>
   );
 }
