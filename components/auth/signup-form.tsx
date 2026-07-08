@@ -49,12 +49,15 @@ export function SignupForm() {
         return;
       }
 
-      // Session is null when "Confirm email" is enabled on the Supabase project.
+      // Session is null when the remote Supabase project has "Confirm email" enabled
+      // (the local supabase/config.toml may say false — check the actual remote setting).
+      // The "try signing in" hint below is opportunistic: it may unblock the user if
+      // the project has double_confirm_changes = false, otherwise the login form
+      // returns a clearer "email not confirmed" error.
+      // Disable at: Supabase dashboard → Authentication → Providers → Email → Confirm email.
       if (!data?.session) {
         setError(
-          `Account created! Please check your email for a confirmation link ` +
-          `before continuing. If you don't see it, try signing in with the ` +
-          `same credentials — your account may already be active.`
+          `Account created! Please check your email for a confirmation link before continuing. If you don't see it, try signing in with the same credentials — your account may already be active.`
         );
         return;
       }
