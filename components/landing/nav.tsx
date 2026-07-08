@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
-import { Button, LinkButton } from "@/components/ui/button";
+import { LinkButton } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Menu, X } from "lucide-react";
 
@@ -102,13 +102,28 @@ export function Nav() {
                 {l.label}
             </a>
             ))}
+            {/* FIX: desktop buttons use <LinkButton> with href="/dashboard". The
+                mobile dropdown was using plain <Button> which had no href/onClick
+                handler — clicks were silent no-ops. Link buttons + auto-close. */}
             <div className="flex gap-2 pt-2">
-              <Button variant="secondary" size="sm" className="flex-1">
+              <LinkButton
+                href="/login"
+                variant="secondary"
+                size="sm"
+                className="flex-1"
+                onClick={() => setOpen(false)}
+              >
                 Sign in
-              </Button>
-              <Button variant="primary" size="sm" className="flex-1">
+              </LinkButton>
+              <LinkButton
+                href="/signup"
+                variant="primary"
+                size="sm"
+                className="flex-1 shadow-glow-emerald"
+                onClick={() => setOpen(false)}
+              >
                 Start free
-              </Button>
+              </LinkButton>
             </div>
           </div>
         </div>
