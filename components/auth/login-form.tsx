@@ -18,9 +18,18 @@ export function LoginForm() {
     e.preventDefault();
     setError("");
 
+    // The form-level env check is a runtime safety net. In normal
+    // operation NEXT_PUBLIC_SUPABASE_URL is inlined into this chunk at
+    // build time by Webpack, so the check passes trivially. It only
+    // fires when the project was built without the env var in scope
+    // (missing .env.local in dev, or Vercel env vars not set for the
+    // production target).
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       setError(
-        "Supabase isn't configured. Set NEXT_PUBLIC_SUPABASE_URL in .env.local."
+        "Supabase isn't configured. Set NEXT_PUBLIC_SUPABASE_URL in .env.local " +
+          "(local dev) or in the Vercel project Settings → Environment Variables " +
+          "(production). Then rebuild/redeploy so the value gets inlined into " +
+          "the client bundle."
       );
       return;
     }
