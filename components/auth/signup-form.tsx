@@ -35,7 +35,7 @@ export function SignupForm() {
 
     try {
       const supabase = createClient();
-      const { error: authError } = await supabase.auth.signUp({
+      const { data, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -46,6 +46,23 @@ export function SignupForm() {
 
       if (authError) {
         setError(authError.message);
+        return;
+      }
+
+      // If the Supabase project has "Confirm email" enabled (the default for
+      // new projects), signUp returns { user, session: null } and does NOT
+      // set any auth cookies. The user must click the confirmation link
+      // (which routes through /auth/callback) before they can be considered
+      // authenticated. Without this guard, they get redirected to
+      // /onboarding (a public route) and then fail the API call with
+      // "Not authenticated" when they try to save their business details.
+      if (!data.session) {
+        setError(
+          "Account created! Please check your email for a confirmation link " +
+            "before continuing. If you don't see it, check your spam folder, " +
+            "or ask an admin to disable email confirmation in the Supabase " +
+            "project (Authentication → Providers → Email)."
+        );
         return;
       }
 
