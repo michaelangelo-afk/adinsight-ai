@@ -155,7 +155,7 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
       >
         <div
           className={
-            "inline-flex items-center justify-center rounded-xl border " +
+            "inline-flex items-center justify-center rounded-xl border transition-all duration-300 group-hover:scale-110 group-hover:rotate-[8deg] group-hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.4)] " +
             feature.iconHalo +
             " " +
             (isHero ? "h-12 w-12" : "h-11 w-11")
@@ -163,7 +163,7 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
         >
           <Icon
             size={isHero ? 22 : 20}
-            className="text-violet-700 dark:text-violet-300"
+            className="text-violet-700 dark:text-violet-300 transition-transform duration-300"
             strokeWidth={2}
           />
         </div>

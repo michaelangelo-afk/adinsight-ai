@@ -101,11 +101,10 @@ export function Pricing() {
             <div
               key={t.name}
               className={cn(
-                "relative rounded-2xl p-7 transition-transform",
-                "hover:-translate-y-1 hover:scale-[1.01]",
+                "relative rounded-2xl p-7 transition-all duration-300 hover-lift group",
                 t.highlight
                   ? "bg-white border-2 border-violet-700/60 shadow-glow-forest dark:border-violet-500/60 dark:shadow-glow-emerald-dark dark:bg-ink-900"
-                  : "bg-white border border-mist-200 shadow-card-flat dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark"
+                  : "bg-white border border-mist-200 shadow-card-flat dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark hover:border-violet-300/60"
               )}
             >
               {t.highlight && (
@@ -191,7 +190,7 @@ export function Pricing() {
                   href="/dashboard"
                   variant={t.highlight ? "primary" : "secondary"}
                   size="md"
-                  className={cn("w-full", t.highlight && "shadow-glow-emerald")}
+                  className={cn("w-full touch-target group/cta", t.highlight && "shadow-glow-emerald hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.7)]")}
                 >
                   {t.cta}
                 </LinkButton>

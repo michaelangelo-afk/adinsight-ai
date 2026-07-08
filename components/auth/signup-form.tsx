@@ -110,9 +110,9 @@ export function SignupForm() {
   };
 
   return (
-    <div className="rounded-2xl glass-card p-8 shadow-card-elevated dark:shadow-card-elevated-dark">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-mist-600 dark:text-mist-50">
+    <div className="rounded-2xl glass-card shadow-card-elevated dark:shadow-card-elevated-dark p-6 sm:p-8 animate-fade-up hover-lift">
+      <div className="text-center mb-7 sm:mb-8">
+        <h1 className="text-2xl sm:text-[1.7rem] font-bold tracking-tight text-mist-600 dark:text-mist-50">
           Create your account
         </h1>
         <p className="mt-2 text-sm text-mist-600 dark:text-mist-300">
@@ -120,23 +120,23 @@ export function SignupForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         {error && (
-          <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 space-y-2">
+          <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 space-y-2 animate-fade-up">
             <p>{error}</p>
             {needsEmailConfirmation && !resendSent && (
               <button
                 type="button"
                 onClick={handleResend}
                 disabled={resendLoading}
-                className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 underline disabled:opacity-50 disabled:cursor-not-allowed"
+                className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 underline underline-offset-4 decoration-violet-400/60 hover:decoration-violet-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed tap-press touch-target"
               >
-                {resendLoading ? "Sending…" : "Resend confirmation email"}
+                {resendLoading ? "Sending…" : "↻ Resend confirmation email"}
               </button>
             )}
             {resendSent && (
-              <p className="text-emerald-600 dark:text-emerald-400">
-                Confirmation email resent. Check your inbox and spam folder.
+              <p className="text-emerald-600 dark:text-emerald-400 font-medium animate-fade-up">
+                ✓ Confirmation email resent. Check your inbox and spam folder.
               </p>
             )}
           </div>
@@ -149,10 +149,10 @@ export function SignupForm() {
           >
             Full name
           </label>
-          <div className="relative">
+          <div className="relative focus-glow rounded-lg">
             <User
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
             />
             <input
               id="fullName"
@@ -161,7 +161,7 @@ export function SignupForm() {
               onChange={(e) => setFullName(e.target.value)}
               required
               placeholder="Adaeze Okafor"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
           </div>
         </div>
@@ -173,10 +173,10 @@ export function SignupForm() {
           >
             Email
           </label>
-          <div className="relative">
+          <div className="relative focus-glow rounded-lg">
             <Mail
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
             />
             <input
               id="email"
@@ -185,7 +185,7 @@ export function SignupForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="adaeze@lagosbites.com"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
           </div>
         </div>
@@ -197,10 +197,10 @@ export function SignupForm() {
           >
             Password
           </label>
-          <div className="relative">
+          <div className="relative focus-glow rounded-lg">
             <Lock
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
             />
             <input
               id="password"
@@ -210,12 +210,13 @@ export function SignupForm() {
               required
               minLength={8}
               placeholder="Min. 8 characters"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-mist-400 hover:text-mist-600 dark:hover:text-mist-200"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-mist-400 hover:text-violet-600 dark:hover:text-violet-300 tap-press transition-colors duration-200"
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -225,16 +226,23 @@ export function SignupForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-violet-700 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+          className="w-full rounded-lg bg-violet-700 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald hover:shadow-[0_0_50px_-5px_rgba(16,185,129,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target"
         >
-          {loading ? "Creating account…" : "Create account"}
+          {loading ? (
+            <span className="inline-flex items-center justify-center gap-2">
+              <span className="h-3.5 w-3.5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+              Creating account…
+            </span>
+          ) : (
+            "Create account"
+          )}
         </button>
 
-        <p className="text-center text-sm text-mist-500 dark:text-mist-400">
+        <p className="text-center text-sm text-mist-500 dark:text-mist-400 pt-1">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200"
+            className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 transition-colors duration-200"
           >
             Sign in
           </Link>

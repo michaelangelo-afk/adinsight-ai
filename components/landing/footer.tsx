@@ -62,9 +62,14 @@ export function Footer() {
                     <a
                       href="#"
                       className="
-                        text-sm transition-colors
+                        relative inline-block text-sm transition-colors duration-200
                         text-mist-600 hover:text-violet-700 dark:text-mist-300 dark:hover:text-violet-300
                         dark:text-mist-300 dark:hover:text-violet-300
+                        after:absolute after:left-0 after:right-0 after:-bottom-0.5
+                        after:h-px after:origin-left after:scale-x-0
+                        after:bg-gradient-to-r after:from-violet-600 after:to-naira-500
+                        after:transition-transform after:duration-300 after:ease-out
+                        hover:after:scale-x-100
                       "
                     >
                       {item}

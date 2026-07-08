@@ -167,3 +167,140 @@ html.dark :focus-visible {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ───────── Polished micro-interaction utilities (Wave 2) ───────── */
+
+/* Card/elevated surface lift on hover. Reusable across pricing cards,
+   feature cards, recommendations, etc. */
+.hover-lift {
+  @apply transition-all duration-300 ease-out;
+  will-change: transform, box-shadow;
+}
+.hover-lift:hover {
+  @apply -translate-y-1 scale-[1.012];
+  filter: drop-shadow(0 14px 30px rgba(16, 185, 129, 0.15));
+}
+
+/* Standardised press tactility for any button-like element. */
+.tap-press {
+  @apply transition-transform duration-150 ease-out;
+}
+.tap-press:active:not(:disabled) {
+  transform: scale(0.965);
+}
+
+/* Animated border-bottom indicator for nav rail items (Sidebar). */
+.nav-indicator {
+  position: relative;
+}
+.nav-indicator::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #15803d, #10b981);
+  transform: translateY(-50%);
+  transition: height 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-indicator.is-active::before {
+  height: 60%;
+}
+
+/* Input focus glow used by auth forms + any future inputs. */
+.focus-glow {
+  @apply transition-all duration-200;
+}
+.focus-glow:focus,
+.focus-glow:focus-within {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(22, 163, 74, 0.18),
+    0 0 24px -4px rgba(16, 185, 129, 0.45);
+  border-color: rgb(22 163 74 / 1) !important;
+}
+
+/* Iconographic hover attention: parent hover rotates the child icon. */
+.icon-attention .icon-target {
+  @apply transition-transform duration-300 ease-out;
+}
+.icon-attention:hover .icon-target {
+  transform: rotate(8deg) scale(1.12);
+}
+
+/* Subtle ripple for primary actions. Works with the Button. */
+.tap-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.tap-ripple::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--ripple-x, 50%) var(--ripple-y, 50%),
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease-out;
+}
+.tap-ripple.is-rippling::after {
+  opacity: 1;
+  transition: opacity 0ms;
+}
+
+/* Mobile slide-in transition helper used by Nav mobile menu. */
+.slide-down {
+  animation: slide-down 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Count-up fade for KPI numbers (use with .animate-count-up). */
+.animate-count-up {
+  animation: count-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Skeleton shimmer placeholder for loading states. */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.04) 0%,
+    rgba(15, 23, 42, 0.10) 35%,
+    rgba(15, 23, 42, 0.04) 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+html.dark .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.10) 35%,
+    rgba(255, 255, 255, 0.04) 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Touch-target floor — preserve Apple/Material 44px minimum. */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}

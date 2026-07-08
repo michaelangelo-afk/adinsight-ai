@@ -153,12 +153,13 @@ function AutomationTile() {
 
 function HeroPreview() {
   return (
-    <div className="relative">
-      <div className="absolute -inset-8 -z-10 bg-glow-emerald blur-3xl opacity-80 dark:opacity-60" />
+    <div className="relative group">
+      <div className="absolute -inset-8 -z-10 bg-glow-emerald blur-3xl opacity-80 dark:opacity-60 animate-pulse-soft" />
       <div
         className="
           rounded-3xl bg-white border border-mist-200 shadow-card-elevated p-5 md:p-6
           dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-elevated-dark
+          hover-lift
         "
       >
         {/* Topbar */}
@@ -484,18 +485,18 @@ export function Hero() {
               bad ads and rebalance your budget while you sleep.
             </p>
 
-            <div
-              className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-3 animate-fade-up"
-              style={{ animationDelay: "480ms", animationFillMode: "both" }}
-            >
+      <div
+        className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 animate-fade-up w-full sm:w-auto"
+        style={{ animationDelay: "480ms", animationFillMode: "both" }}
+      >
               <LinkButton
                 href="/dashboard"
                 variant="primary"
                 size="lg"
-                className="shadow-glow-emerald animate-scale-pulse hover:!animate-none"
+                className="shadow-glow-emerald shadow-[0_0_50px_-5px_rgba(16,185,129,0.55)] hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] touch-target group"
               >
                 Start free 14-day trial
-                <ArrowRight size={16} />
+                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
               </LinkButton>
               <LinkButton href="#workflow" variant="secondary" size="lg">
                 See how it works

@@ -9,10 +9,10 @@ export function Card({
   variant?: "elevated" | "glow" | "subtle";
 }) {
   const variants = {
-    elevated: "glass-card shadow-card-elevated",
+    elevated: "glass-card shadow-card-elevated hover-lift",
     glow:
-      "glass-card shadow-glow-violet border-violet-500/20",
-    subtle: "rounded-xl bg-ink-850/60 hairline"
+      "glass-card shadow-glow-violet border-violet-500/20 hover-lift",
+    subtle: "rounded-xl bg-ink-850/60 hairline transition-colors duration-300"
   };
   return (
     <div
@@ -28,7 +28,7 @@ export function CardHeader({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("p-6 pb-3 flex items-start justify-between", className)}
+      className={cn("p-5 sm:p-6 pb-3 flex items-start justify-between gap-4", className)}
       {...props}
     />
   );
@@ -62,7 +62,7 @@ export function CardContent({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-6 pt-0", className)} {...props} />;
+  return <div className={cn("p-5 sm:p-6 pt-0", className)} {...props} />;
 }
 
 export function CardFooter({
@@ -72,7 +72,7 @@ export function CardFooter({
   return (
     <div
       className={cn(
-        "p-6 pt-0 flex items-center gap-2 mt-2",
+        "p-5 sm:p-6 pt-0 flex items-center gap-2 mt-2",
         className
       )}
       {...props}

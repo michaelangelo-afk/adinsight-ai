@@ -133,6 +133,45 @@ const config: Config = {
         "mesh-shift": {
           "0%, 100%": { backgroundPosition: "20% 20%, 80% 10%, 60% 90%" },
           "50%": { backgroundPosition: "60% 30%, 30% 60%, 80% 70%" }
+        },
+        "press-down": {
+          "0%": { transform: "scale(1)" },
+          "60%": { transform: "scale(0.96)" },
+          "100%": { transform: "scale(1)" }
+        },
+        "icon-bob": {
+          "0%, 100%": { transform: "translateY(0) rotate(0)" },
+          "50%": { transform: "translateY(-1px) rotate(-2deg)" }
+        },
+        "icon-spin-hover": {
+          "0%": { transform: "rotate(0) scale(1)" },
+          "100%": { transform: "rotate(8deg) scale(1.08)" }
+        },
+        "ring-pulse": {
+          "0%, 100%": {
+            boxShadow:
+              "0 0 0 0 rgba(16, 185, 129, 0.45), 0 0 0 0 rgba(22, 163, 74, 0.0)"
+          },
+          "50%": {
+            boxShadow:
+              "0 0 0 6px rgba(16, 185, 129, 0.0), 0 0 0 12px rgba(22, 163, 74, 0.12)"
+          }
+        },
+        "draw-line": {
+          "0%": { strokeDashoffset: "120" },
+          "100%": { strokeDashoffset: "0" }
+        },
+        "count-up": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "slide-in-right": {
+          "0%": { opacity: "0", transform: "translateX(-12px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" }
+        },
+        "bg-shimmer-fade": {
+          "0%, 100%": { opacity: "0" },
+          "50%": { opacity: "1" }
         }
       },
       animation: {
@@ -145,7 +184,15 @@ const config: Config = {
         "aurora-border": "aurora-border 6s ease infinite",
         float: "float 6s ease-in-out infinite",
         "scale-pulse": "scale-pulse 3s ease-in-out infinite",
-        "mesh-shift": "mesh-shift 18s ease-in-out infinite"
+        "mesh-shift": "mesh-shift 18s ease-in-out infinite",
+        "press-down": "press-down 240ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "icon-bob": "icon-bob 2.8s ease-in-out infinite",
+        "ring-pulse": "ring-pulse 2.4s ease-in-out infinite",
+        "draw-line": "draw-line 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        "count-up": "count-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "slide-in-right":
+          "slide-in-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "bg-shimmer-fade": "bg-shimmer-fade 1.6s ease-in-out infinite"
       }
     }
   },

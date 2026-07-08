@@ -26,20 +26,24 @@ export function Nav() {
           dark:bg-ink-950/80 dark:border-ink-700/60
         "
       />
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-6 py-4">
         <Link href="/" className="shrink-0">
           <Logo />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-7 lg:gap-8">
           {NAV_LINKS.map((l) => (
             <a
               key={l.href}
               href={l.href}
               className="
-                text-sm font-medium text-mist-600 hover:text-violet-700
+                relative text-sm font-medium text-mist-600 hover:text-violet-700
                 dark:text-mist-200 dark:hover:text-violet-300
-                transition-colors
+                transition-colors duration-200
+                after:absolute after:left-0 after:right-0 after:-bottom-1
+                after:h-px after:origin-left after:scale-x-0 after:bg-violet-600
+                after:transition-transform after:duration-300 after:ease-out
+                hover:after:scale-x-100 dark:after:bg-violet-400
               "
             >
               {l.label}
@@ -68,13 +72,14 @@ export function Nav() {
           <ThemeToggle />
           <button
             className="
-              inline-flex h-10 w-10 items-center justify-center rounded-lg
-              bg-white border border-mist-300 hover:border-mist-400
-              dark:bg-ink-900 dark:border-ink-700
-              transition-colors
+              inline-flex h-11 w-11 items-center justify-center rounded-lg
+              bg-white border border-mist-300 hover:border-violet-400 hover:bg-violet-50
+              dark:bg-ink-900 dark:border-ink-700 dark:hover:border-violet-500/60 dark:hover:bg-ink-850
+              transition-all duration-200 tap-press touch-target
             "
             onClick={() => setOpen((s) => !s)}
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -84,7 +89,7 @@ export function Nav() {
       {open && (
         <div
           className="
-            md:hidden border-t
+            md:hidden border-t slide-down
             border-mist-200 bg-white/95 backdrop-blur-xl
             dark:border-ink-700 dark:bg-ink-950/95
           "

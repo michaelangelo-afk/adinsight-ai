@@ -69,15 +69,15 @@ export function Workflow() {
               <div
                 key={s.title}
                 className="
-                  relative rounded-2xl p-7 transition-all duration-300
+                  group relative rounded-2xl p-7 transition-all duration-300 hover-lift
                   bg-white border border-mist-200 shadow-card-flat
-                  hover:border-violet-700/40 hover:-translate-y-1 hover:shadow-glow-forest
+                  hover:border-violet-700/40 hover:shadow-glow-forest
                   dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark
                   dark:hover:border-violet-700/40 dark:hover:shadow-glow-emerald-dark
                 "
               >
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient shadow-glow-emerald">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient shadow-glow-emerald transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:shadow-[0_0_30px_-4px_rgba(16,185,129,0.6)]">
                     <Icon size={20} className="text-white" strokeWidth={2.4} />
                   </div>
                   <span

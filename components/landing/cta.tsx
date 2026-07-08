@@ -14,9 +14,10 @@ export function Cta() {
       <div className="relative mx-auto max-w-6xl px-6">
         <div
           className="
-            relative overflow-hidden rounded-3xl border shadow-card-elevated
+            group relative overflow-hidden rounded-3xl border shadow-card-elevated
             bg-white border-mist-200
             dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-elevated-dark
+            hover-lift hover:border-violet-400/60
           "
         >
           {/* Soft brand gradient overlay */}
@@ -66,10 +67,10 @@ export function Cta() {
                   href="/dashboard"
                   variant="primary"
                   size="lg"
-                  className="shadow-glow-emerald"
+                  className="touch-target group hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] transition-shadow duration-300"
                 >
                   Start free 14-day trial
-                  <ArrowRight size={16} />
+                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </LinkButton>
                 <LinkButton
                   href="#"
