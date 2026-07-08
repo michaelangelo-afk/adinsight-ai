@@ -39,19 +39,22 @@ export function readSupabaseEnv(): SupabaseEnvStatus {
 
 /**
  * Format a host-neutral, user-facing error string for a missing-env
- * status. Lives next to the status type so the policy ("which var is
- * missing") and the copy stay in sync.
+ * status. The `missing` key from `SupabaseEnvStatus` is mapped to a
+ * readable var name via `VAR_NAMES` directly above, so adding a new
+ * env var is a one-line change in this module.
  */
 export function formatEnvError(status: {
   ok: false;
   missing: "url" | "anonKey" | "both";
 }): string {
+  const plural = status.missing === "both";
   const names = VAR_NAMES[status.missing];
+  const value = plural ? "values" : "value";
+  const verb = plural ? "are" : "is";
   return (
-    `Supabase isn't configured. ${names} ${status.missing === "both" ? "are" : "is"} not set. ` +
-    `Add ${status.missing === "both" ? "them" : "it"} to .env.local (local dev) or ` +
-    `your hosting provider's environment-variable settings (production target), ` +
-    `then rebuild so the value${status.missing === "both" ? "s" : ""} get${status.missing === "both" ? "" : "s"} ` +
-    `inlined into the client bundle.`
+    `Supabase isn't configured. Missing env: ${names}. ` +
+    `Add to .env.local (local dev) or your hosting provider's ` +
+    `environment-variable settings (production target), then rebuild ` +
+    `so the ${value} ${verb} inlined into the client bundle.`
   );
 }
