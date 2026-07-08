@@ -1,0 +1,78 @@
+# GrowthAds — Git + GitHub Quickstart for a New AI
+Use this to bootstrap a new Codebuff session so it can commit & push to the repo.
+
+================================================================================
+ GIT REMOTE & BRANCH
+================================================================================
+
+Remote: git@github.com:michaelangelo-afk/adinsight-ai.git
+Branch: main (default)
+Current HEAD: 5a5f17a "feat: dark mode toggle + modern UI polish"
+
+All 4 commits on main:
+  232a677  feat: initial AdInsight AI prototype
+  a685613  rebrand: AdInsight AI → GrowthAds (green-and-white)
+  81213cd  polish: live stats marquee + animated workflow + hero staggered reveal
+  5a5f17a  feat: dark mode toggle + modern UI polish
+
+================================================================================
+ BOOTSTRAP PROMPT FOR NEW CHAT
+================================================================================
+
+Paste this as the first message in your new Codebuff chat:
+
+"""
+You are working on /root/GrowthAds, a Next.js 14 + Tailwind SaaS landing for
+GrowthAds (multi-platform ad analytics for Nigerian SMEs).
+
+REMOTE GIT REPO: git@github.com:michaelangelo-afk/adinsight-ai.git (branch: main)
+HEAD: 5a5f17a — 4 commits on main.
+
+POLICIES (MUST FOLLOW):
+1. ALWAYS commit and push after making changes:
+   git add -A && git commit -m "description of changes" && git push origin main
+2. ALWAYS read files before editing them.
+3. Run npm run typecheck after any significant changes.
+4. Respect the existing design system and color palette.
+
+Tech: Next.js 14.2.15 App Router, TypeScript strict, Tailwind 3.4.13
+(darkMode: "class"), Framer Motion, Recharts, Lucide React.
+
+Full landing page: Nav → Hero → StatsMarquee → Features → Workflow →
+Pricing → Cta → Footer. Dashboard stub under app/(dashboard)/dashboard/.
+
+Dark mode via ThemeProvider + FlashThemeScript (no FOUC). Design tokens in
+tailwind.config.ts. Utility classes in app/globals.css.
+
+Read project-summary.txt in the project root for full details.
+"""
+
+================================================================================
+ KEY RULES TO REMEMBER
+================================================================================
+
+✅ ALWAYS commit + push after changes:
+   git add -A && git commit -m "..." && git push origin main
+✅ Read files before editing them
+✅ Run npm run typecheck after significant changes
+✅ Dark mode uses "class" strategy — add dark: variants to new components
+✅ Primary brand color: violet-700 (#15803D) — use for CTAs, chips, accents
+✅ Nav link order: Logo → nav links → ThemeToggle → "Start free" CTA
+✅ Metadata set for growthads.ng
+
+================================================================================
+ NPM SCRIPTS
+================================================================================
+
+npm run dev       → next dev
+npm run build     → next build
+npm run start     → next start
+npm run lint      → next lint
+npm run typecheck → tsc --noEmit
+
+================================================================================
+ PROJECT PATH
+================================================================================
+
+The project lives at /root/GrowthAds/ on disk.
+maS3rW9IeLo0cRPi
