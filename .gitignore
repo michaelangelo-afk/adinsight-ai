@@ -41,3 +41,7 @@ next-env.d.ts
 
 # Bulky TTF font cache used by the ui-styling skill — reinstall via the skill loader, not via git
 /.claude/skills/ui-styling/canvas-fonts/
+
+# Operator secrets inventory (NEVER commit, even locally — contains credential metadata)
+docs/SECRETS.md
+**/SECRETS.md
