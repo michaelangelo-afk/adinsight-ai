@@ -1,18 +1,57 @@
-// Runtime safety net for the Supabase browser env. NEXT_PUBLIC_* values
-// are inlined by Webpack at build time, so on a healthy deploy this
-// check returns { ok: true } cheaply. It only fires when the build env
-// is missing the var for the active target, in which case the call
-// sites surface a runbook pointer instead of letting createClient()
-// throw an opaque auth error.
-export type EnvCheck = { ok: true } | { ok: false; reason: string };
+// lib/supabase/env.ts
+//
+// IMPORTANT: this file intentionally lives in its own module rather than
+// being inlined into lib/supabase/client.ts. Keeping it separate means any
+// change to the env-check surface (or the underlying env vars being set
+// late on Vercel) forces Webpack to produce a fresh chunk on the next
+// build, which is the cache-bust that resolves the failure mode where
+// `process.env.NEXT_PUBLIC_*` was inlined as `undefined` in a stale
+// chunk. See commit d4ecee4 for the bug this prevents regressing into.
 
-export function assertSupabaseConfigured(): EnvCheck {
+export type SupabaseEnvStatus =
+  | { ok: true; url: string; anonKey: string }
+  | { ok: false; missing: "url" | "anonKey" | "both" };
+
+const VAR_NAMES: Record<"url" | "anonKey" | "both", string> = {
+  url: "NEXT_PUBLIC_SUPABASE_URL",
+  anonKey: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  both: "NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY",
+};
+
+/**
+ * Returns the Supabase browser env as a discriminated union, checking
+ * BOTH NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.
+ *
+ * On a healthy deploy, Webpack has already inlined both values at build
+ * time, so this returns `{ ok: true, url, anonKey }` cheaply. When env
+ * vars are missing for the active build target, the failure mode is
+ * identified precisely so the caller can format a specific message
+ * (UI copy stays out of this module).
+ */
+export function readSupabaseEnv(): SupabaseEnvStatus {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!url) {
-    return {
-      ok: false,
-      reason: `Supabase isn't configured. Set NEXT_PUBLIC_SUPABASE_URL in .env.local (local dev) or your hosting provider's environment-variable settings (production target), then rebuild so the value gets inlined into the client bundle.`,
-    };
-  }
-  return { ok: true };
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url && !anonKey) return { ok: false, missing: "both" };
+  if (!url) return { ok: false, missing: "url" };
+  if (!anonKey) return { ok: false, missing: "anonKey" };
+  return { ok: true, url, anonKey };
+}
+
+/**
+ * Format a host-neutral, user-facing error string for a missing-env
+ * status. Lives next to the status type so the policy ("which var is
+ * missing") and the copy stay in sync.
+ */
+export function formatEnvError(status: {
+  ok: false;
+  missing: "url" | "anonKey" | "both";
+}): string {
+  const names = VAR_NAMES[status.missing];
+  return (
+    `Supabase isn't configured. ${names} ${status.missing === "both" ? "are" : "is"} not set. ` +
+    `Add ${status.missing === "both" ? "them" : "it"} to .env.local (local dev) or ` +
+    `your hosting provider's environment-variable settings (production target), ` +
+    `then rebuild so the value${status.missing === "both" ? "s" : ""} get${status.missing === "both" ? "" : "s"} ` +
+    `inlined into the client bundle.`
+  );
 }

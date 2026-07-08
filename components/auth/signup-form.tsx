@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { assertSupabaseConfigured } from "@/lib/supabase/env";
+import { readSupabaseEnv, formatEnvError } from "@/lib/supabase/env";
 
 export function SignupForm() {
   const router = useRouter();
@@ -25,9 +25,9 @@ export function SignupForm() {
       return;
     }
 
-    const env = assertSupabaseConfigured();
+    const env = readSupabaseEnv();
     if (!env.ok) {
-      setError(env.reason);
+      setError(formatEnvError(env));
       return;
     }
 
