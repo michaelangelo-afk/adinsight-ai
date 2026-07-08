@@ -49,19 +49,12 @@ export function SignupForm() {
         return;
       }
 
-      // If the Supabase project has "Confirm email" enabled (the default for
-      // new projects), signUp returns { user, session: null } and does NOT
-      // set any auth cookies. The user must click the confirmation link
-      // (which routes through /auth/callback) before they can be considered
-      // authenticated. Without this guard, they get redirected to
-      // /onboarding (a public route) and then fail the API call with
-      // "Not authenticated" when they try to save their business details.
-      if (!data.session) {
+      // Session is null when "Confirm email" is enabled on the Supabase project.
+      if (!data?.session) {
         setError(
-          "Account created! Please check your email for a confirmation link " +
-            "before continuing. If you don't see it, check your spam folder, " +
-            "or ask an admin to disable email confirmation in the Supabase " +
-            "project (Authentication → Providers → Email)."
+          `Account created! Please check your email for a confirmation link ` +
+          `before continuing. If you don't see it, try signing in with the ` +
+          `same credentials — your account may already be active.`
         );
         return;
       }
