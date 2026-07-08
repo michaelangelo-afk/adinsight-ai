@@ -302,22 +302,50 @@ function clearDemoCookie() {
 /** Disconnect — clears tokens at rest + sets status=revoked. Also clears
  *  the demo cookie so a demo-only connection round-trips cleanly. */
 export async function disconnectMeta(): Promise<void> {
-  // Cookie is the source of truth for demo state — clear it first so
-  // any DB hiccup below doesn't leave the UI in a stale "connected"
-  // state during the next render.
+  // Peek at the existing row so we know whether the DB update or the
+  // cookie is the source of truth. A row with meta_user_id == DEMO_META_USER_ID
+  // is recognizably a demo row written by connectDemoMeta — for those, the
+  // cookie is the UI source of truth and DB errors should be silent. For a
+  // real OAuth row, the DB IS the source of truth and a DB failure means
+  // the user still has valid tokens server-side — surface it.
+  let isDemoRow = false;
+  try {
+    const conn = await getMyMetaConnectionWithSecrets();
+    isDemoRow = conn?.meta_user_id === DEMO_META_USER_ID;
+  } catch {
+    // Couldn't even query — treat as demo row so we don't blame the user.
+    isDemoRow = true;
+  }
+  // Clear the cookie first so any DB hiccup below doesn't leave the UI in
+  // a stale "demo · live" pill during the next render.
   clearDemoCookie();
   try {
     await disconnectMyMetaConnection();
-  } catch {
-    // DB disconnect is best-effort cleanup. Without a Supabase backend,
-    // disconnectMyMetaConnection throws — but the cookie (the UI source
-    // of truth) was already cleared above. Don't surface the DB error
-    // to the user: the disconnect intent is honored either way.
+    cookies().set(
+      "meta_action_msg",
+      setMetaActionMsg.success("Meta account disconnected."),
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+    );
+  } catch (err) {
+    if (isDemoRow) {
+      // Demo-only flow: cookie was the source of truth, already cleared.
+      // Surface success anyway so the UI confirms the disconnect intent.
+      cookies().set(
+        "meta_action_msg",
+        setMetaActionMsg.success("Meta account disconnected."),
+        { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+      );
+    } else {
+      // Real OAuth row: the DB is the source of truth. A failed UPDATE
+      // here means tokens are still server-side — the user MUST know.
+      cookies().set(
+        "meta_action_msg",
+        setMetaActionMsg.error(
+          err instanceof Error ? err.message : "Disconnect failed"
+        ),
+        { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+      );
+    }
   }
-  cookies().set(
-    "meta_action_msg",
-    setMetaActionMsg.success("Meta account disconnected."),
-    { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
-  );
   revalidatePath("/dashboard");
 }
