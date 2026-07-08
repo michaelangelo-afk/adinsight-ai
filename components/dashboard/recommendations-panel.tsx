@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Sparkles, Check, X, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { recommendations } from "@/lib/mock-data";
+import type { Recommendation } from "@/lib/types";
 import { formatNaira } from "@/lib/utils";
 
 type Filter = "all" | "pending" | "applied" | "dismissed";
@@ -23,7 +23,11 @@ function impactTone(
   return "neutral";
 }
 
-export function RecommendationsPanel() {
+export function RecommendationsPanel({
+  recommendations
+}: {
+  recommendations: Recommendation[];
+}) {
   const [filter, setFilter] = useState<Filter>("all");
   const filtered =
     filter === "all"

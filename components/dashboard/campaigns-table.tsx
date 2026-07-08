@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Pause, Play, ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { campaigns } from "@/lib/mock-data";
+import type { CampaignSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
 
 function Sparkline({ data, tone }: { data: number[]; tone: "good" | "warn" | "bad" }) {
@@ -62,7 +62,7 @@ function statusTone(
   return "neutral";
 }
 
-export function CampaignsTable() {
+export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) {
   const [sortKey, setSortKey] = useState<"spend" | "conversions" | "cpc">(
     "spend"
   );
@@ -126,6 +126,13 @@ export function CampaignsTable() {
             </tr>
           </thead>
           <tbody>
+            {sorted.length === 0 && (
+              <tr>
+                <td colSpan={6} className="py-12 text-center text-sm text-mist-400">
+                  No campaigns yet. Connect an ad account to begin syncing.
+                </td>
+              </tr>
+            )}
             {sorted.map((c) => {
               const tone =
                 c.status === "active"

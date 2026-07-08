@@ -18,13 +18,20 @@ export function SignupForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
-      setLoading(false);
       return;
     }
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      setError(
+        "Supabase isn't configured. Set NEXT_PUBLIC_SUPABASE_URL in .env.local."
+      );
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const supabase = createClient();
@@ -44,8 +51,13 @@ export function SignupForm() {
 
       // Redirect to onboarding to collect business details
       router.push("/onboarding");
-    } catch {
-      setError("An unexpected error occurred. Please try again.");
+    } catch (err) {
+      // Surface the real error so it's debuggable
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }

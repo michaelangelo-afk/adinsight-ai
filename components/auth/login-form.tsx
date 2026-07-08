@@ -17,6 +17,14 @@ export function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      setError(
+        "Supabase isn't configured. Set NEXT_PUBLIC_SUPABASE_URL in .env.local."
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -33,8 +41,13 @@ export function LoginForm() {
 
       router.push("/dashboard");
       router.refresh();
-    } catch {
-      setError("An unexpected error occurred. Please try again.");
+    } catch (err) {
+      // Surface the real error so it's debuggable — not just an opaque "unexpected".
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }

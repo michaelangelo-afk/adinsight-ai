@@ -1,10 +1,13 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import type { DashboardSummary, CampaignSummary, Recommendation } from "@/lib/types";
-import { dashboardSummary as mockSummary } from "@/lib/mock-data";
-import { campaigns as mockCampaigns } from "@/lib/mock-data";
-import { recommendations as mockRecommendations } from "@/lib/mock-data";
+import type { AdAccount, DashboardSummary, CampaignSummary, Recommendation } from "@/lib/types";
+import {
+  dashboardSummary as mockSummary,
+  campaigns as mockCampaigns,
+  recommendations as mockRecommendations,
+  connectedAccounts as mockAccounts
+} from "@/lib/mock-data";
 
 const USE_MOCK = process.env.USE_MOCK_DATA === "true";
 
@@ -177,5 +180,49 @@ export async function getRecommendations(): Promise<Recommendation[]> {
     estimatedSavings: r.estimated_savings,
     status: r.status,
     createdAt: r.created_at
+  }));
+}
+
+/**
+ * Fetches the connected ad accounts (Meta/Google/TikTok OAuth tokens) for
+ * the user's organization. RLS via migration 003 hides the encrypted_token
+ * column automatically — we just query the safe columns here.
+ */
+export async function getConnectedAccounts(): Promise<AdAccount[]> {
+  if (USE_MOCK) return mockAccounts;
+
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not authenticated");
+
+  const { data: userRecord } = await supabase
+    .from("users")
+    .select("organization_id")
+    .eq("id", user.id)
+    .maybeSingle();
+  const orgId = userRecord?.organization_id;
+  if (!orgId) throw new Error("No organization found");
+
+  // column-level GRANTs from migration 003 make this safe — we cannot read
+  // encrypted_token even if we tried (the role lacks that column privilege).
+  const { data, error } = await supabase
+    .from("ad_accounts")
+    .select(
+      "id, organization_id, platform, platform_account_id, platform_account_name, is_active, token_expires_at, connected_at"
+    )
+    .eq("organization_id", orgId)
+    .order("connected_at", { ascending: false });
+
+  if (error) throw new Error(`Failed to fetch accounts: ${error.message}`);
+
+  return (data ?? []).map((a) => ({
+    id: a.id,
+    profileId: a.organization_id,
+    platform: a.platform as AdAccount["platform"],
+    platformAccountId: a.platform_account_id,
+    isActive: a.is_active,
+    connectedAt: a.connected_at
   }));
 }
