@@ -33,6 +33,9 @@ export interface CurrentUser {
  * Coerce the joined `organizations` field — Supabase returns it as either
  * a single object or an array depending on the join cardinality. Returns
  * a defensive default string when no org is found.
+ *
+ * Used in both `app/(dashboard)/layout.tsx` and the dashboard page so
+ * the org-name coercion lives in exactly ONE place.
  */
 export function resolveOrgName(
   organizations: CurrentUserProfile["organizations"]
@@ -43,12 +46,10 @@ export function resolveOrgName(
 }
 
 /**
- * Deduplicated within a single request so /layout and /page can both
- * fetch user metadata without hitting Supabase twice. cache() is safe
- * in "use server" files because each RSC render is a fresh request
- * lifecycle.
+ * Inner implementation of getCurrentUser. Kept separate so cache() can
+ * wrap it without TypeScript widening the return type.
  */
-export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
+async function fetchCurrentUser(): Promise<CurrentUser | null> {
   // Bail safely when Supabase env vars aren't set — treat as unauthenticated.
   // This is critical for server components that run before the project
   // has a real Supabase project provisioned.
@@ -84,24 +85,25 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
     ...authedUser,
     profile: (userRecord as CurrentUserProfile | null) ?? null
   };
-});
-
-/**
- * Convenience helper — returns the signed-in user's organization_id
- * (or null if unauthenticated / not yet assigned).
- */
-export async function getOrganizationId(): Promise<string | null> {
-  const user = await getCurrentUser();
-  return user?.profile?.organization_id ?? null;
 }
 
 /**
- * Sign out and redirect to the marketing landing page.
- * Used by the sidebar <form action={signOut}> button.
+ * Deduplicated within a single request so /layout and /page can both
+ * fetch user metadata without hitting Supabase twice. cache() is safe
+ * in "use server" files because each RSC render is a fresh request
+ * lifecycle.
+ *
+ * Use the unwrapped `fetchCurrentUser` for tests / non-request contexts.
+ */
+export const getCurrentUser = cache(fetchCurrentUser);
+
+/**
+ * Sign out and redirect to /login so the user understands they need
+ * to authenticate again. Used by the sidebar <form action={signOut}>.
  */
 export async function signOut() {
   const supabase = createClient();
   await supabase.auth.signOut();
   revalidatePath("/");
-  redirect("/");
+  redirect("/login");
 }
