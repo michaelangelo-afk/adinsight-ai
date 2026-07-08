@@ -31,7 +31,7 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
   }));
 
   return (
-    <div className="glass-card rounded-2xl p-6">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="mb-4">
         <div className="text-xs uppercase tracking-wider text-mist-400">
           Platform mix

@@ -39,7 +39,7 @@ export function RecommendationsPanel({
     .reduce((s, r) => s + (r.estimatedSavings ?? 0), 0);
 
   return (
-    <div className="glass-card rounded-2xl p-6">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="flex items-start justify-between gap-4 mb-1">
         <div>
           <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-violet-300">
@@ -77,10 +77,10 @@ export function RecommendationsPanel({
         {filtered.map((r) => (
           <div
             key={r.id}
-            className="rounded-xl bg-ink-900/60 hairline p-4 group hover:border-violet-500/40 transition-colors"
+            className="rounded-xl bg-ink-900/60 hairline p-4 group hover-lift hover:border-violet-500/40 transition-all duration-300"
           >
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 border border-violet-500/30">
+              <div className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 border border-violet-500/30 transition-all duration-300 group-hover:scale-110 group-hover:rotate-[10deg] group-hover:bg-violet-500/30 group-hover:border-violet-400/50">
                 <Sparkles size={14} className="text-violet-300" />
               </div>
               <div className="flex-1">

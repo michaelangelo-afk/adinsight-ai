@@ -24,7 +24,7 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
   }));
 
   return (
-    <div className="glass-card rounded-2xl p-6">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="text-xs uppercase tracking-wider text-mist-400">

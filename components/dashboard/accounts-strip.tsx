@@ -45,12 +45,24 @@ export function AccountsStrip({ accounts }: { accounts: AdAccount[] }) {
         </div>
       )}
 
-      <button className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-200 hover:bg-violet-500/20">
-        <Plus size={12} />
+      <button
+        type="button"
+        aria-disabled="true"
+        title="Phase 3 wiring pending — would launch Meta OAuth to connect an ad account"
+        onClick={(e) => e.preventDefault()}
+        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-200 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target cursor-not-allowed group"
+      >
+        <Plus size={12} className="transition-transform duration-300 group-hover:rotate-90" />
         Connect
       </button>
-      <button className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100">
-        <RefreshCw size={12} />
+      <button
+        type="button"
+        aria-disabled="true"
+        title="Phase 3 wiring pending — would trigger a fresh sync with connected accounts"
+        onClick={(e) => e.preventDefault()}
+        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target cursor-not-allowed group"
+      >
+        <RefreshCw size={12} className="transition-transform duration-500 group-hover:rotate-180" />
         Sync
       </button>
     </div>

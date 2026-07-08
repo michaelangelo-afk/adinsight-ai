@@ -69,7 +69,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
   const sorted = [...campaigns].sort((a, b) => b[sortKey] - a[sortKey]);
 
   return (
-    <div className="glass-card rounded-2xl p-6">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="text-xs uppercase tracking-wider text-mist-400">
@@ -143,7 +143,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
               return (
                 <tr
                   key={c.id}
-                  className="border-b border-mist-50/[0.04] last:border-0 group hover:bg-mist-50/[0.02]"
+                  className="border-b border-mist-50/[0.04] last:border-0 group hover:bg-mist-50/[0.06] transition-colors duration-200"
                 >
                   <td className="py-3 px-2">
                     <div className="flex items-center gap-2.5">
@@ -184,7 +184,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         aria-label={c.status === "active" ? "Pause campaign" : "Resume campaign"}
                         title={`Phase 3 wiring pending — would ${c.status === "active" ? "pause" : "resume"} ${c.name}`}
                         onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity p-1 rounded text-mist-500 cursor-not-allowed"
+                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-amber-300 hover:bg-amber-500/10 cursor-not-allowed"
                       >
                         {c.status === "active" ? (
                           <Pause size={13} />
@@ -198,7 +198,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         aria-label="More actions"
                         title={`Phase 3 wiring pending — open details for ${c.name}`}
                         onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity p-1 rounded text-mist-500 cursor-not-allowed"
+                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-violet-300 hover:bg-violet-500/10 cursor-not-allowed"
                       >
                         <MoreHorizontal size={13} />
                       </button>

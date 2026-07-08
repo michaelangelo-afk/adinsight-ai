@@ -125,11 +125,12 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
         return (
           <div
             key={c.label}
-            className="glass-card rounded-2xl p-5 group hover:-translate-y-0.5 transition-transform"
+            className="glass-card rounded-2xl p-5 sm:p-6 group hover-lift animate-fade-up"
+            style={{ animationDelay: `${i * 60}ms` }}
           >
             <div className="flex items-center justify-between">
-              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-mist-50/[0.04] hairline">
-                <Icon size={16} className="text-violet-300" />
+              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-mist-50/[0.04] hairline transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-500/15 group-hover:border-violet-500/40">
+                <Icon size={16} className="text-violet-300 transition-transform duration-300 group-hover:rotate-[8deg]" />
               </div>
               <span
                 className={
@@ -149,7 +150,7 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
             </div>
             <div className="mt-3">
               <div className="text-xs text-mist-400">{c.label}</div>
-              <div className="mt-1 text-2xl font-semibold tracking-tight text-mist-50">
+              <div className="mt-1 text-2xl font-semibold tracking-tight text-mist-50 tabular-nums animate-count-up">
                 {c.value}
               </div>
               {c.sub && (
