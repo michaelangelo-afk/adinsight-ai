@@ -313,8 +313,10 @@ export async function disconnectMeta(): Promise<void> {
     const conn = await getMyMetaConnectionWithSecrets();
     isDemoRow = conn?.meta_user_id === DEMO_META_USER_ID;
   } catch {
-    // Couldn't even query — treat as demo row so we don't blame the user.
-    isDemoRow = true;
+    // Couldn't even query. Default to NOT-demo so we err on the side of
+    // surfacing any subsequent DB error rather than silently lying to a
+    // user with a real connection whose DB just happens to be flaky.
+    isDemoRow = false;
   }
   // Clear the cookie first so any DB hiccup below doesn't leave the UI in
   // a stale "demo · live" pill during the next render.
