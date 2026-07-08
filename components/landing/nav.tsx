@@ -49,11 +49,13 @@ export function Nav() {
 
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
-          <LinkButton href="/dashboard" variant="ghost" size="sm">
+          {/* With real Supabase auth wired up, the buttons should respect the
+              actual flows: existing users → /login, new users → /signup. */}
+          <LinkButton href="/login" variant="ghost" size="sm">
             Sign in
           </LinkButton>
           <LinkButton
-            href="/dashboard"
+            href="/signup"
             variant="primary"
             size="sm"
             className="shadow-glow-emerald"
