@@ -15,10 +15,15 @@ export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSent, setResendSent] = useState(false);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setNeedsEmailConfirmation(false);
+    setResendSent(false);
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
@@ -51,12 +56,13 @@ export function SignupForm() {
 
       // Session is null when the remote Supabase project has "Confirm email" enabled
       // (Authentication → Providers → Email → Confirm email) — the local config.toml
-      // may say false. The "try signing in" hint below is opportunistic: it may
-      // unblock the user if double_confirm_changes = false, otherwise the login form
-      // returns a clearer "email not confirmed" error.
+      // may say false. The "try signing in" hint below is opportunistic: it works
+      // if the project doesn't require double-confirming email changes, otherwise the
+      // login form returns a clearer "email not confirmed" error.
       if (!data?.session) {
+        setNeedsEmailConfirmation(true);
         setError(
-          `Account created! Please check your email for a confirmation link before continuing (also check your spam folder). If you don't see it, try signing in to check if your account is already active.`
+          `Account created! Please check ${email} for a confirmation link before continuing (also check your spam folder). If you don't see it, try signing in to check if your account is already active.`
         );
         return;
       }
@@ -75,6 +81,34 @@ export function SignupForm() {
     }
   };
 
+  const handleResend = async () => {
+    setResendLoading(true);
+    setResendSent(false);
+    try {
+      const supabase = createClient();
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      if (resendError) {
+        setError(resendError.message);
+        return;
+      }
+      setResendSent(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to resend confirmation email."
+      );
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
   return (
     <div className="rounded-2xl glass-card p-8 shadow-card-elevated dark:shadow-card-elevated-dark">
       <div className="text-center mb-8">
@@ -88,8 +122,23 @@ export function SignupForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400">
-            {error}
+          <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 space-y-2">
+            <p>{error}</p>
+            {needsEmailConfirmation && !resendSent && (
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={resendLoading}
+                className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 underline disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {resendLoading ? "Sending…" : "Resend confirmation email"}
+              </button>
+            )}
+            {resendSent && (
+              <p className="text-emerald-600 dark:text-emerald-400">
+                Confirmation email resent. Check your inbox and spam folder.
+              </p>
+            )}
           </div>
         )}
 
