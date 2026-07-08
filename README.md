@@ -2,7 +2,7 @@
 
 The first slice of [GrowthAds](https://growthads.ng) — the growth platform built for Nigerian SMEs running ads on Meta, Google, and TikTok.
 
-> **Status:** This is a high-fidelity interactive prototype with rich mock data. The UI/UX, types, and component architecture are production-grade; the data layer is wired to in-memory mock fixtures. Real Supabase / Meta / Paystack / OpenAI wiring is the next milestone.
+> **Status:** Phase 1 backend foundation is live. Auth UI, onboarding flow, database schema, RLS policies, server actions, and middleware are all wired up. The dashboard is still on the rich in-memory mock fixtures (`USE_MOCK_DATA=false` flips to real Supabase). Real Meta / Paystack / OpenAI wiring is the next milestone.
 
 ---
 
@@ -36,7 +36,23 @@ npm run typecheck      # tsc --noEmit
 npm run build          # production build (runs full type-check)
 ```
 
-Node ≥ 18.
+Node ≥ 20.
+
+## Connecting to Supabase (Phase 1 is ready)
+
+1. Copy `.env.local.example` to `.env.local` and fill in:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (server actions only — **never expose to client**)
+2. Run migrations against your project. **Order matters** — run them as two separate SQL batches:
+   ```
+   supabase/migrations/001_schema.sql    ← tables, enums, extensions only
+   supabase/migrations/002_policies.sql  ← RLS policies, indexes, triggers
+   ```
+   *Why split?* The `organizations` RLS policy references `users`, but `users` references `auth.users`. Postgres rejects policies that reference tables not yet created. Splitting solves the chicken-and-egg.
+3. Set `USE_MOCK_DATA=false` in `.env.local` to flip the dashboard onto real Supabase reads.
+
+If env vars are missing or Supabase is unreachable, the middleware + layout fall through safely (the dashboard will redirect to `/login`).
 
 ---
 
@@ -61,6 +77,22 @@ Node ≥ 18.
   /types.ts           # TS types mirroring Postgres schema (4.2 of the spec)
   /mock-data.ts       # Rich in-memory fixtures, deterministic
   /utils.ts           # Naira formatters, class-name merging
+  /supabase
+    /client.ts        # Browser client (auth forms)
+    /server.ts        # Server client + service_role client
+    /middleware.ts    # Edge-runtime safe Supabase session ref
+
+/supabase
+  /migrations
+    001_schema.sql    # Tables + enums (run first)
+    002_policies.sql  # RLS policies + triggers + indexes (run second)
+
+/app
+  /actions             # Server actions: auth, onboarding, dashboard
+  /(auth)
+    /login, /signup, /onboarding
+  /auth/callback       # Supabase email confirmation receipt
+  /api/onboarding      # POST endpoint wrapper around completeOnboarding
 ```
 
 The `lib/types.ts` shapes match the database tables in section 4.2 of the spec 1:1, so when you wire Supabase you'll be replacing fixture reads with `supabase.from('campaigns').select(...)` and the rest of the tree stays untouched.
@@ -95,17 +127,28 @@ All tokens live in `tailwind.config.ts`. The landing is light-mode by design; th
 
 ---
 
+## Schema (run against Supabase Postgres)
+
+| Table | Purpose | Tenant-scoped via |
+|---|---|---|
+| `organizations` | Root tenant record | `id` |
+| `users` | Profile linked to `organizations` (auto-created on signup) | `auth.uid()` |
+| `subscriptions` | Plan tier + Paystack sub codes | `organization_id` |
+| `ad_accounts` | Platform (Meta/Google/TikTok) OAuth tokens | `organization_id` |
+| `campaigns` | Live campaigns synced from platforms | `organization_id` |
+| `campaign_metrics` | Daily spend / clicks / conversions breakdown | `campaign_id → organization_id` |
+| `recommendations` | AI-generated reallocation / pause suggestions | `organization_id` |
+| `reports` | Generated weekly PDF reports | `organization_id` |
+
+OAuth tokens in `ad_accounts.encrypted_token` are NOT exposed via RLS — there is no `SELECT` policy on the base table. Authenticated users query `ad_accounts_public` view (no token column); only `service_role` (via Edge Functions / server actions) decrypts tokens.
+
 ## Roadmap notes
 
-What's NOT yet built (intentionally — out of scope for this slice):
+What's NOT yet built:
 
-- Auth UI / Supabase Auth wiring
-- Real Meta, Google, TikTok, X, LinkedIn, Snapchat OAuth + API flows
-- Rule-engine for **smart automations** (e.g. auto-pause ads when CPC exceeds budget)
-- Paystack subscription + escrow
-- Influencer marketplace pages (data model is there; UI to come)
-- Weekly PDF report generation
-- AI recommendation prompt engineering
-- Light/dark theme toggle (landing is light by design; dashboard is dark)
+- Meta / Google / TikTok OAuth + sync Edge Function
+- Paystack subscription + webhook
+- Influencer marketplace UI
+- AI recommendations pipeline
 
-Each of these can be slotted in without changing the component tree.
+These can all be slotted in without breaking the existing component tree.
