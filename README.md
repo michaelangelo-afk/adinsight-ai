@@ -174,3 +174,4 @@ What's NOT yet built:
 - AI recommendations pipeline
 
 These can all be slotted in without breaking the existing component tree.
+# Generated 2026-07-08: triggered redeploy so Supabase env vars take effect.
