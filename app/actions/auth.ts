@@ -4,45 +4,12 @@ import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-/**
- * Public shape returned by getCurrentUser.
- * `organizations` is typed as either a single object (1:1 join) OR an
- * array (Supabase 1:N join behavior) — callers should resolve via
- * `resolveOrgName()` below.
- */
-export interface CurrentUserProfile {
-  id: string;
-  organization_id: string | null;
-  full_name: string;
-  phone: string | null;
-  avatar: string | null;
-  organizations:
-    | { name: string }
-    | Array<{ name: string }>
-    | null;
-}
+import type { CurrentUserProfile } from "@/lib/auth/user-profile";
 
 export interface CurrentUser {
   id: string;
   email?: string;
   profile: CurrentUserProfile | null;
-}
-
-/**
- * Coerce the joined `organizations` field — Supabase returns it as either
- * a single object or an array depending on the join cardinality. Returns
- * a defensive default string when no org is found.
- *
- * Used in both `app/(dashboard)/layout.tsx` and the dashboard page so
- * the org-name coercion lives in exactly ONE place.
- */
-export function resolveOrgName(
-  organizations: CurrentUserProfile["organizations"]
-): string {
-  if (!organizations) return "My Business";
-  if (Array.isArray(organizations)) return organizations[0]?.name ?? "My Business";
-  return organizations.name ?? "My Business";
 }
 
 /**

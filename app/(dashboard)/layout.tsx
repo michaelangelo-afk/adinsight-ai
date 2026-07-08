@@ -1,7 +1,8 @@
 import * as React from "react";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { getCurrentUser, resolveOrgName } from "@/app/actions/auth";
+import { getCurrentUser } from "@/app/actions/auth";
+import { resolveOrgName } from "@/lib/auth/user-profile";
 
 /**
  * Dashboard route group layout.

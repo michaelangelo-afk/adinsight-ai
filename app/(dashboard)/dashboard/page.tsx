@@ -15,7 +15,8 @@ import {
   getRecommendations,
   getConnectedAccounts
 } from "@/app/actions/dashboard";
-import { getCurrentUser, resolveOrgName } from "@/app/actions/auth";
+import { getCurrentUser } from "@/app/actions/auth";
+import { resolveOrgName } from "@/lib/auth/user-profile";
 
 /**
  * Phase 2 — Real-Supabase dashboard page.
