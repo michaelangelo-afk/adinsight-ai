@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { assertSupabaseConfigured } from "@/lib/supabase/env";
 
 export function SignupForm() {
   const router = useRouter();
@@ -24,19 +25,9 @@ export function SignupForm() {
       return;
     }
 
-    // The form-level env check is a runtime safety net. In normal
-    // operation NEXT_PUBLIC_SUPABASE_URL is inlined into this chunk at
-    // build time by Webpack, so the check passes trivially. It only
-    // fires when the project was built without the env var in scope
-    // (missing .env.local in dev, or Vercel env vars not set for the
-    // production target).
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      setError(
-        "Supabase isn't configured. Set NEXT_PUBLIC_SUPABASE_URL in .env.local " +
-          "(local dev) or in the Vercel project Settings → Environment Variables " +
-          "(production). Then rebuild/redeploy so the value gets inlined into " +
-          "the client bundle."
-      );
+    const env = assertSupabaseConfigured();
+    if (!env.ok) {
+      setError(env.reason);
       return;
     }
 
