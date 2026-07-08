@@ -184,7 +184,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         aria-label={c.status === "active" ? "Pause campaign" : "Resume campaign"}
                         title={`Phase 3 wiring pending — would ${c.status === "active" ? "pause" : "resume"} ${c.name}`}
                         onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-amber-300 hover:bg-amber-500/10 cursor-not-allowed"
+                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-amber-300 hover:bg-amber-500/10 cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
                       >
                         {c.status === "active" ? (
                           <Pause size={13} />
@@ -198,7 +198,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         aria-label="More actions"
                         title={`Phase 3 wiring pending — open details for ${c.name}`}
                         onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-violet-300 hover:bg-violet-500/10 cursor-not-allowed"
+                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-500 hover:text-violet-300 hover:bg-violet-500/10 cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
                       >
                         <MoreHorizontal size={13} />
                       </button>

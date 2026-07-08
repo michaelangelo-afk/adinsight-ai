@@ -171,14 +171,21 @@ html.dark :focus-visible {
 /* ───────── Polished micro-interaction utilities (Wave 2) ───────── */
 
 /* Card/elevated surface lift on hover. Reusable across pricing cards,
-   feature cards, recommendations, etc. */
+   feature cards, recommendations, etc.
+   `will-change` is intentionally gated on `(hover: hover)` so touch
+   devices (which keep `:hover` sticky after a tap) don't keep a GPU
+   layer alive forever — saves battery and avoids paint cost. */
 .hover-lift {
   @apply transition-all duration-300 ease-out;
-  will-change: transform, box-shadow;
 }
 .hover-lift:hover {
   @apply -translate-y-1 scale-[1.012];
   filter: drop-shadow(0 14px 30px rgba(16, 185, 129, 0.15));
+}
+@media (hover: hover) {
+  .hover-lift:hover {
+    will-change: transform, box-shadow;
+  }
 }
 
 /* Standardised press tactility for any button-like element. */
@@ -222,15 +229,13 @@ html.dark :focus-visible {
   border-color: rgb(22 163 74 / 1) !important;
 }
 
-/* Iconographic hover attention: parent hover rotates the child icon. */
-.icon-attention .icon-target {
-  @apply transition-transform duration-300 ease-out;
-}
-.icon-attention:hover .icon-target {
-  transform: rotate(8deg) scale(1.12);
-}
+/* Icon-target parent/child hover pattern (deprecated). All current
+   polish uses direct `group-hover:rotate-X group-hover:scale-X` on
+   the icon's parent flex container, so this utility is dead code.
+   Kept here only as a comment so future maintainers know the pattern
+   was considered and replaced by Tailwind's `group-hover:`. */
 
-/* Subtle ripple for primary actions. Works with the Button. */
+/* Subtle ripple for primary actions. Works with the Button. *//* Subtle ripple for primary actions. Works with the Button. */
 .tap-ripple {
   position: relative;
   overflow: hidden;
