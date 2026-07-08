@@ -132,9 +132,12 @@ export async function getAuthedUserAndMetaSecrets(): Promise<
  */
 export async function upsertMyMetaConnection(input: {
   meta_user_id: string;
-  meta_user_name?: string;
+  meta_user_name?: string | null;
   access_token: string;
-  refresh_token?: string;
+  // PG column is nullable (long-lived / extended-credentials tokens aren't
+  // always granted by Meta). Accept null explicitly so callers that don't
+  // have a refresh token can communicate that — not just omit the field.
+  refresh_token?: string | null;
   expires_at: string;
   scopes: string[];
 }): Promise<string | null> {

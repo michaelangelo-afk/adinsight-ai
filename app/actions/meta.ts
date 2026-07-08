@@ -254,7 +254,10 @@ export async function connectDemoMeta(): Promise<void> {
     await upsertMyMetaConnection({
       meta_user_id: DEMO_META_USER_ID,
       meta_user_name: DEMO_META_USER_NAME,
-      access_token: `demo:${crypto.randomUUID()}`,
+      // Match the existing CSRF state generator's pattern (randomBytes(24)
+      // → hex) so demo tokens + OAuth state have a consistent shape if
+      // we ever want to tokenize / log them side-by-side.
+      access_token: `demo:${crypto.randomBytes(24).toString("hex")}`,
       refresh_token: null,
       // 30-day window — long enough that it won't brown out before the
       // user reconnects with real OAuth.
