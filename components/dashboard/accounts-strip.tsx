@@ -1,6 +1,6 @@
-import { Plus, RefreshCw, Link2 } from "lucide-react";
+import { Plus, RefreshCw, Link2, Sparkles } from "lucide-react";
 import type { AdAccount } from "@/lib/types";
-import { connectMeta, syncInsights } from "@/app/actions/meta";
+import { connectMeta, connectDemoMeta, syncInsights } from "@/app/actions/meta";
 
 const PLATFORM_META: Record<string, { name: string; color: string }> = {
   meta: { name: "Meta Ads", color: "#9b6cff" },
@@ -56,6 +56,21 @@ export function AccountsStrip({ accounts }: { accounts: AdAccount[] }) {
         >
           <Plus size={12} className="transition-transform duration-300 group-hover:rotate-90" />
           Connect
+        </button>
+      </form>
+      {/* Try demo — secondary action for users without a real Meta Ads
+          account today. Upserts a row into meta_connections with a
+          recognizable demo sentinel so a future real OAuth upsert can
+          cleanly overwrite it via the user_id unique constraint. */}
+      <form action={connectDemoMeta} className="contents">
+        <button
+          type="submit"
+          aria-label="Connect a demo Meta ad account (no real OAuth)"
+          title="Demo mode — populates the connected-state UI without real Meta OAuth. Connect Meta Ads later to swap to live insights."
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+        >
+          <Sparkles size={12} className="transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-200" />
+          Try demo
         </button>
       </form>
       {/* Sync — server action re-fetches Meta insights and revalidates

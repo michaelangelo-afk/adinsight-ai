@@ -45,6 +45,15 @@ const STATE_COOKIE = "meta_oauth_state";
 const STATE_MAX_AGE = 600;
 
 /**
+ * Recognizable demo-account identifiers so a future real OAuth upsert
+ * can clearly tell demo vs production. The meta_user_id stays stable
+ * across re-connects so the user's existing dashboard demo state is
+ * preserved until they swap to a real Meta account.
+ */
+const DEMO_META_USER_ID = "demo-account-lagos-bites";
+const DEMO_META_USER_NAME = "Demo Ad Account";
+
+/**
  * Internal result type. Form-action exports return Promise<void> because
  * a form action must satisfy `void | Promise<void>` per React DOM types.
  * We surface every meaningful outcome via the meta_action_msg flash
@@ -224,6 +233,51 @@ async function updateCampaignImpl(
       friendly: err instanceof Error ? err.message : "Meta update failed"
     };
   }
+}
+
+/**
+ * Demo connect — upserts a recognizable demo row into meta_connections
+ * with synthetic scopes + a clearly-fake token. No real Meta API call.
+ * The user_id unique constraint means a real OAuth callback later
+ * simply overwrites the demo row, so the friend-test scenario tomorrow
+ * transitions cleanly.
+ *
+ * Demo vs production distinction:
+ *   - meta_user_id is "demo-account-lagos-bites" (recognizable)
+ *   - access_token is "demo:<uuid>" (obvious sentinel)
+ *   - No readMetaEnv() check — demo mode intentionally bypasses env
+ *     validation so users without META_APP_ID set can still preview
+ *     the connected-state UI.
+ */
+export async function connectDemoMeta(): Promise<void> {
+  try {
+    await upsertMyMetaConnection({
+      meta_user_id: DEMO_META_USER_ID,
+      meta_user_name: DEMO_META_USER_NAME,
+      access_token: `demo:${crypto.randomUUID()}`,
+      refresh_token: null,
+      // 30-day window — long enough that it won't brown out before the
+      // user reconnects with real OAuth.
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      scopes: ["ads_management", "ads_read"]
+    });
+    cookies().set(
+      "meta_action_msg",
+      setMetaActionMsg.success(
+        "Demo Meta account connected. (No real data — connect Meta Ads for live insights.)"
+      ),
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+    );
+  } catch (err) {
+    cookies().set(
+      "meta_action_msg",
+      setMetaActionMsg.error(
+        err instanceof Error ? err.message : "Demo connect failed"
+      ),
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+    );
+  }
+  revalidatePath("/dashboard");
 }
 
 /** Disconnect — clears tokens at rest + sets status=revoked. */
