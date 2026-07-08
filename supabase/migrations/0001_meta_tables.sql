@@ -7,6 +7,24 @@
 --     https://supabase.com/dashboard/project/dyfeolrotkjmeauiknbx/sql/new
 
 -- ============================================================================
+-- Maintainer note — read this BEFORE changing meta_connections schema.
+--
+-- meta_connections_safe (below) projects only the safe columns, so the
+-- view remains safe EVEN WITHOUT the column GRANT hardening below.
+-- The REVOKE/GRANT block is belt-and-braces: defense-in-depth against
+-- a future regression that forgets to update the view's projection
+-- when adding a NEW sensitive column.
+--
+-- If you add a new column to meta_connections, you MUST update BOTH:
+--   1. The column list in meta_connections_safe (further below)
+--   2. The column list in the GRANT statement (further below)
+-- A column added to the GRANT but NOT the view is invisible to the
+-- client (defense-in-depth saving you). A column added to NEITHER is
+-- also invisible (which may surprise readers). Default: add to the
+-- base table ONLY, then explicitly choose which list to update.
+-- ============================================================================
+
+-- ============================================================================
 -- meta_connections: per-user Meta Marketing API connection.
 -- Plaintext tokens at rest (RLS-scoped). For production, migrate to
 -- Supabase Vault or a dedicated KMS in a follow-up; see the Phase-3
@@ -162,21 +180,5 @@ grant select (
 -- auth state, so even an anon call is meaningless here — we don't
 -- grant SELECT to anon at all.
 
--- ============================================================================
--- Maintainer note:
--- meta_connections_safe (above in this file) projects only the safe
--- columns, so the view remains safe EVEN WITHOUT the column GRANT
--- hardening above. The REVOKE/GRANT block is belt-and-braces:
--- defense-in-depth against a future regression that forgets to
--- update the view's projection when adding a NEW sensitive column.
--- If you add a new column to meta_connections, you MUST update
--- BOTH:
---   1. The column list in meta_connections_safe (above)
---   2. The column list in the GRANT statement (above)
--- A column added to the GRANT is leaked to the client unless it is
--- also added to the view (defense-in-depth saving you). A column
--- added to neither is invisible to the client (which may surprise
--- readers). Default: add to the base table ONLY, then explicitly
--- choose which list (view + GRANT) to update.
--- Phase-4 TODO: also gate meta_accounts + meta_campaigns on a similar
--- pattern if we ever expose campaign-budget or spend columns.
+-- (Maintainer note lives at the TOP of this file — read it before
+-- changing meta_connections schema.)

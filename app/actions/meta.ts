@@ -36,7 +36,7 @@ import {
   upsertMyMetaConnection,
   disconnectMyMetaConnection
 } from "@/lib/supabase/meta-connections";
-import type { MetaConnectionWithSecrets } from "@/lib/supabase/meta-connections";
+
 import { createServiceClient } from "@/lib/supabase/server";
 import { setMetaActionMsg } from "@/lib/action-msg";
 
