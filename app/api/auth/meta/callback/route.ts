@@ -41,8 +41,10 @@ export async function GET(req: Request) {
   const cookieStore = cookies();
 
   const flashError = (text: string, redirectTo: string) => {
+    // httpOnly: true — these are read only by Server Components, never
+    // by client JS. Defense-in-depth against trivial exfil via XSS.
     cookieStore.set("meta_action_msg", setMetaActionMsg.error(text), {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "lax",
       maxAge: FLASH_MAX_AGE,
       path: "/"
@@ -51,7 +53,7 @@ export async function GET(req: Request) {
   };
   const flashSuccess = (text: string, redirectTo: string) => {
     cookieStore.set("meta_action_msg", setMetaActionMsg.success(text), {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "lax",
       maxAge: FLASH_MAX_AGE,
       path: "/"
@@ -94,7 +96,13 @@ export async function GET(req: Request) {
     data: { user }
   } = await anon.auth.getUser();
   if (!user) {
-    cookieStore.delete("meta_action_msg");
+    cookieStore.set(
+      "meta_action_msg",
+      setMetaActionMsg.error(
+        "Sign in to your GrowthAds account first, then reconnect Meta."
+      ),
+      { httpOnly: true, sameSite: "lax", maxAge: FLASH_MAX_AGE, path: "/" }
+    );
     return NextResponse.redirect(new URL("/login?next=/dashboard", req.url));
   }
 

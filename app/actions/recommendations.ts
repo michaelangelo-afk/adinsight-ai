@@ -37,7 +37,7 @@ export async function updateRecommendationStatus(
       setMetaActionMsg.success(
         newStatus === "applied" ? "Recommendation applied." : "Recommendation dismissed."
       ),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
     revalidatePath("/dashboard");
     return;
@@ -51,7 +51,7 @@ export async function updateRecommendationStatus(
     cookies().set(
       "meta_action_msg",
       setMetaActionMsg.error("Sign in to update recommendations."),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
     revalidatePath("/dashboard");
     return;
@@ -77,7 +77,7 @@ export async function updateRecommendationStatus(
       setMetaActionMsg.error(
         error?.message ?? "Recommendation not found or you don't have permission."
       ),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   } else {
     cookies().set(
@@ -85,7 +85,7 @@ export async function updateRecommendationStatus(
       setMetaActionMsg.success(
         newStatus === "applied" ? "Recommendation applied." : "Recommendation dismissed."
       ),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   }
   revalidatePath("/dashboard");

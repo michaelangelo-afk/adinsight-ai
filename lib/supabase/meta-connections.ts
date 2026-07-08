@@ -60,8 +60,8 @@ export async function getMyMetaConnectionMeta(): Promise<MetaConnectionMeta | nu
   const authed = await getAuthedUser();
   if (!authed) return null;
 
-  // Re-create anon client per-call (cookies() can only be read in
-  // request context; closure capture of `anon` works fine here).
+  // Reuse the anon client (created once in `getAuthedUser` above) to
+  // avoid double-creating the Supabase client per render.
   const anon = createAnonClient();
   const { data, error } = await anon
     .from("meta_connections_safe")
@@ -92,6 +92,36 @@ export async function getMyMetaConnectionWithSecrets(): Promise<MetaConnectionWi
     .maybeSingle();
   if (error) throw error;
   return (data as MetaConnectionWithSecrets | null) ?? null;
+}
+
+/**
+ * Combined: get authed-user id + secrets in one call. Saves two
+ * Supabase client instantiations per dashboard render. Use this from
+ * hot paths (server actions called on every click).
+ */
+export async function getAuthedUserAndMetaSecrets(): Promise<
+  { userId: string; conn: MetaConnectionWithSecrets | null }
+> {
+  const anon = createAnonClient();
+  let userId: string;
+  try {
+    const r = await anon.auth.getUser();
+    if (!r.data.user) return { userId: "", conn: null };
+    userId = r.data.user.id;
+  } catch {
+    return { userId: "", conn: null };
+  }
+  const service = createServiceClient();
+  const { data, error } = await service
+    .from("meta_connections")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw error;
+  return {
+    userId,
+    conn: (data as MetaConnectionWithSecrets | null) ?? null
+  };
 }
 
 /**

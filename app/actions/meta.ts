@@ -36,6 +36,7 @@ import {
   upsertMyMetaConnection,
   disconnectMyMetaConnection
 } from "@/lib/supabase/meta-connections";
+import type { MetaConnectionWithSecrets } from "@/lib/supabase/meta-connections";
 import { createServiceClient } from "@/lib/supabase/server";
 import { setMetaActionMsg } from "@/lib/action-msg";
 
@@ -58,7 +59,7 @@ export async function connectMeta(): Promise<never> {
   const env = readMetaEnv();
   if (!env.ok) {
     cookies().set("meta_action_msg", setMetaActionMsg.error(formatMetaEnvError(env)), {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "lax",
       maxAge: 30,
       path: "/"
@@ -83,13 +84,13 @@ export async function syncInsights(): Promise<void> {
     cookies().set(
       "meta_action_msg",
       setMetaActionMsg.success("Meta accounts synced."),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   } else {
     cookies().set(
       "meta_action_msg",
       setMetaActionMsg.error(r.friendly),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   }
   revalidatePath("/dashboard");
@@ -150,11 +151,7 @@ async function syncInsightsImpl(): Promise<MetaActionResult> {
         { onConflict: "user_id,meta_account_id" }
       );
     }
-    return {
-      ok: true as const,
-      // success label could expose count; for now generic toast is fine
-      ...({} as { ok: true })
-    };
+    return { ok: true };
   } catch (err) {
     return {
       ok: false,
@@ -178,13 +175,13 @@ export async function updateCampaign(
           ? `Campaign paused on Meta.`
           : `Campaign resumed on Meta.`
       ),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   } else {
     cookies().set(
       "meta_action_msg",
       setMetaActionMsg.error(r.friendly),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   }
   revalidatePath("/dashboard");
@@ -219,7 +216,7 @@ async function updateCampaignImpl(
   }
   try {
     await updateCampaignStatus(conn.access_token, metaCampaignId, status);
-    return { ok: true as const } as MetaActionResult;
+    return { ok: true };
   } catch (err) {
     return {
       ok: false,
@@ -236,7 +233,7 @@ export async function disconnectMeta(): Promise<void> {
     cookies().set(
       "meta_action_msg",
       setMetaActionMsg.success("Meta account disconnected."),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   } catch (err) {
     cookies().set(
@@ -244,7 +241,7 @@ export async function disconnectMeta(): Promise<void> {
       setMetaActionMsg.error(
         err instanceof Error ? err.message : "Disconnect failed"
       ),
-      { httpOnly: false, sameSite: "lax", maxAge: 30, path: "/" }
+      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
     );
   }
   revalidatePath("/dashboard");
