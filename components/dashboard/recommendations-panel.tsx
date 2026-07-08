@@ -110,7 +110,7 @@ export function RecommendationsPanel({
                         type="button"
                         disabled
                         aria-label="Apply"
-                        title={`Demo action — would apply: ${r.title}`}
+                        title={`Phase 3 wiring pending — would apply: ${r.title}`}
                         className="inline-flex items-center gap-1.5 rounded-md bg-violet-600/70 px-3 py-1.5 text-xs font-medium text-white cursor-not-allowed"
                       >
                         <ArrowUpRight size={12} />
@@ -120,7 +120,7 @@ export function RecommendationsPanel({
                         type="button"
                         disabled
                         aria-label="Mark done"
-                        title="Demo action — would mark recommendation as done"
+                        title="Phase 3 wiring pending — would mark recommendation as done"
                         className="inline-flex items-center gap-1.5 rounded-md bg-mist-50/[0.02] hairline px-3 py-1.5 text-xs font-medium text-mist-400 cursor-not-allowed"
                       >
                         <Check size={12} />
@@ -130,7 +130,7 @@ export function RecommendationsPanel({
                         type="button"
                         disabled
                         aria-label="Dismiss"
-                        title="Demo action — would dismiss recommendation"
+                        title="Phase 3 wiring pending — would dismiss recommendation"
                         className="inline-flex items-center gap-1.5 rounded-md bg-mist-50/[0.02] hairline px-3 py-1.5 text-xs font-medium text-mist-400 cursor-not-allowed"
                       >
                         <X size={12} />

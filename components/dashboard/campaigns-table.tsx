@@ -182,7 +182,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         type="button"
                         aria-disabled="true"
                         aria-label={c.status === "active" ? "Pause campaign" : "Resume campaign"}
-                        title={`Demo action — would ${c.status === "active" ? "pause" : "resume"} ${c.name}`}
+                        title={`Phase 3 wiring pending — would ${c.status === "active" ? "pause" : "resume"} ${c.name}`}
                         onClick={(e) => e.preventDefault()}
                         className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity p-1 rounded text-mist-500 cursor-not-allowed"
                       >
@@ -196,7 +196,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         type="button"
                         aria-disabled="true"
                         aria-label="More actions"
-                        title={`Demo action — open details for ${c.name}`}
+                        title={`Phase 3 wiring pending — open details for ${c.name}`}
                         onClick={(e) => e.preventDefault()}
                         className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity p-1 rounded text-mist-500 cursor-not-allowed"
                       >

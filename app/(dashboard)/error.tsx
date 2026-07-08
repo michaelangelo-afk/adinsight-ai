@@ -44,11 +44,10 @@ export default function DashboardError({
             project with no data yet.
           </p>
 
-          {error.message && (
-            <pre className="mt-4 rounded-lg bg-ink-900/70 hairline p-3 text-[11px] text-mist-400 whitespace-pre-wrap break-words max-h-32 overflow-auto">
-              {error.message}
-            </pre>
-          )}
+          {/* Note: We deliberately do NOT render the raw error.message here
+              — it can leak Supabase URLs, JWT fragments, or table names. The
+              full error is logged server-side via the console.error above
+              and is also stored under error.digest (above). */}
 
           <div className="mt-6 flex flex-wrap gap-2">
             <button
@@ -67,12 +66,6 @@ export default function DashboardError({
               Open Supabase dashboard
             </a>
           </div>
-
-          {error.digest && (
-            <p className="mt-4 text-[10px] text-mist-500 font-mono">
-              digest: {error.digest}
-            </p>
-          )}
         </div>
       </div>
     </main>

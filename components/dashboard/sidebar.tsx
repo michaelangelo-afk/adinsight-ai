@@ -12,6 +12,7 @@ import {
   Plus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { signOut } from "@/app/actions/auth";
 
 const NAV = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard", active: true },
@@ -22,7 +23,12 @@ const NAV = [
   { label: "Settings", icon: Settings, href: "#" }
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  /** The signed-in user's organization/business name */
+  orgName: string;
+}
+
+export function Sidebar({ orgName }: SidebarProps) {
   return (
     <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-50/[0.04] bg-ink-900/40">
       <div className="px-5 py-5">
@@ -35,9 +41,9 @@ export function Sidebar() {
         <button className="w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 bg-violet-500/15 border border-violet-500/30 text-violet-200 hover:bg-violet-500/20 transition-colors">
           <span className="flex items-center gap-2 text-sm font-medium">
             <Plus size={16} />
-            Lagos Bites
+            <span className="truncate max-w-[10rem]">{orgName}</span>
           </span>
-          <span className="text-[10px] uppercase tracking-wider text-violet-300/70">
+          <span className="text-[10px] uppercase tracking-wider text-violet-300/70 shrink-0">
             switch
           </span>
         </button>
@@ -82,10 +88,20 @@ export function Sidebar() {
           </button>
         </div>
 
-        <button className="mt-4 flex items-center gap-2 text-sm text-mist-300 hover:text-mist-50 transition-colors">
-          <LogOut size={14} />
-          Sign out
-        </button>
+        {/*
+          Server-action form: posts to signOut() and redirects in middleware.
+          Server actions can be used directly via <form action={fn}> in
+          Next.js 14 without needing a client component.
+        */}
+        <form action={signOut} className="mt-4">
+          <button
+            type="submit"
+            className="flex items-center gap-2 text-sm text-mist-300 hover:text-mist-50 transition-colors"
+          >
+            <LogOut size={14} />
+            Sign out
+          </button>
+        </form>
       </div>
     </aside>
   );
