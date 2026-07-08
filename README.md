@@ -42,15 +42,37 @@ Node ≥ 20.
 
 1. Copy `.env.local.example` to `.env.local` and fill in:
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (your project's anon/jwt-format key)
    - `SUPABASE_SERVICE_ROLE_KEY` (server actions only — **never expose to client**)
-2. Run migrations against your project. **Order matters** — run them as two separate SQL batches:
+2. Run migrations against your project.
+
+### Option A: SQL Editor (simplest, fully under your control)
+Open https://supabase.com/dashboard/project/dyfeolrotkjmeauiknbx/sql and paste the contents of each file in order. Run them as **separate** statements (do not combine into one batch):
    ```
-   supabase/migrations/001_schema.sql    ← tables, enums, extensions only
-   supabase/migrations/002_policies.sql  ← RLS policies, indexes, triggers
+   1. supabase/migrations/001_schema.sql       ← tables + enums + extensions
+   2. supabase/migrations/002_policies.sql     ← RLS policies + triggers + indexes
+   3. supabase/migrations/003_fix_ad_accounts_access.sql ← column-level GRANTs + SELECT policy
    ```
-   *Why split?* The `organizations` RLS policy references `users`, but `users` references `auth.users`. Postgres rejects policies that reference tables not yet created. Splitting solves the chicken-and-egg.
-3. Set `USE_MOCK_DATA=false` in `.env.local` to flip the dashboard onto real Supabase reads.
+   *Why three separate files?* The `organizations` RLS policy references `users`, but `users` references `auth.users`. Postgres rejects policies that reference tables not yet created. The 003 migration is a follow-up fix because `security_invoker=true` views can't carry RLS policies on all PG versions.
+
+### Option B: Supabase CLI
+```
+supabase login                    # generate / paste a personal access token
+supabase link --project-ref dyfeolrotkjmeauiknbx
+supabase db push                  # apply all migrations in supabase/migrations/
+```
+
+### Option C: Management API (curl)
+```
+PAT=sbp_xxx...   # personal access token from https://supabase.com/dashboard/account/tokens
+for f in supabase/migrations/0*.sql; do
+  curl -X POST -H "Authorization: Bearer $PAT" -H "Content-Type: application/json" \
+    "https://api.supabase.com/v1/projects/dyfeolrotkjmeauiknbx/database/query" \
+    --data-binary "$(python3 -c "import json; print(json.dumps({'query': open('$f').read()}))")"
+done
+```
+
+3. Set `USE_MOCK_DATA=false` in `.env.local` to flip the dashboard onto real Supabase reads. Leave it as `true` for offline development.
 
 If env vars are missing or Supabase is unreachable, the middleware + layout fall through safely (the dashboard will redirect to `/login`).
 
@@ -140,7 +162,7 @@ All tokens live in `tailwind.config.ts`. The landing is light-mode by design; th
 | `recommendations` | AI-generated reallocation / pause suggestions | `organization_id` |
 | `reports` | Generated weekly PDF reports | `organization_id` |
 
-OAuth tokens in `ad_accounts.encrypted_token` are NOT exposed via RLS — there is no `SELECT` policy on the base table. Authenticated users query `ad_accounts_public` view (no token column); only `service_role` (via Edge Functions / server actions) decrypts tokens.
+OAuth tokens in `ad_accounts.encrypted_token` are protected by column-level GRANTs (set in migration 003) — the `authenticated` role has zero SELECT privilege on that column. Combined with the org-scoped SELECT RLS policy, users can read their own org's ad_accounts minus the token; `service_role` retains full access for Edge Function decryption flows.
 
 ## Roadmap notes
 
