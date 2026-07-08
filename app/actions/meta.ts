@@ -38,7 +38,7 @@ import {
 } from "@/lib/supabase/meta-connections";
 
 import { createServiceClient } from "@/lib/supabase/server";
-import { setMetaActionMsg } from "@/lib/action-msg";
+import { setMetaActionMsg, META_DEMO_COOKIE, META_DEMO_MAX_AGE } from "@/lib/action-msg";
 
 /** CSRF state cookie name + max-age (10 minutes is plenty for OAuth). */
 const STATE_COOKIE = "meta_oauth_state";
@@ -236,20 +236,28 @@ async function updateCampaignImpl(
 }
 
 /**
- * Demo connect — upserts a recognizable demo row into meta_connections
- * with synthetic scopes + a clearly-fake token. No real Meta API call.
- * The user_id unique constraint means a real OAuth callback later
- * simply overwrites the demo row, so the friend-test scenario tomorrow
- * transitions cleanly.
+ * Demo connect — sets the meta_demo flag cookie AND, when possible,
+ * upserts a recognizable demo row into meta_connections. The cookie
+ * is the source of truth for the dashboard UI; the DB row is the
+ * optional "real-mode" twin so that when the friend tests tomorrow,
+ * a future real OAuth upsert can cleanly overwrite via the user_id
+ * unique constraint.
+ *
+ * DB resilience: if the upsert throws (Supabase not configured, table
+ * missing, env token expired) we silently fall back to cookie-only
+ * demo mode. The user has explicitly chosen demo, so they shouldn't
+ * see a "DB error" toast — they get a successful demo-state UX either
+ * way. This avoids the failed-to-connect regression in environments
+ * where the Phase 3 migration hasn't been run yet.
  *
  * Demo vs production distinction:
  *   - meta_user_id is "demo-account-lagos-bites" (recognizable)
- *   - access_token is "demo:<uuid>" (obvious sentinel)
- *   - No readMetaEnv() check — demo mode intentionally bypasses env
- *     validation so users without META_APP_ID set can still preview
- *     the connected-state UI.
+ *   - access_token is "demo:<hex>" (obvious sentinel)
+ *   - meta_demo cookie is "1" — read by AccountsStrip via dashboard/page.tsx
  */
 export async function connectDemoMeta(): Promise<void> {
+  // Attempt the DB upsert in cookie-only mode we still want to succeed —
+  // but we never surface DB errors to the demo user.
   try {
     await upsertMyMetaConnection({
       meta_user_id: DEMO_META_USER_ID,
@@ -264,27 +272,36 @@ export async function connectDemoMeta(): Promise<void> {
       expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       scopes: ["ads_management", "ads_read"]
     });
-    cookies().set(
-      "meta_action_msg",
-      setMetaActionMsg.success(
-        "Demo Meta account connected. (No real data — connect Meta Ads for live insights.)"
-      ),
-      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
-    );
-  } catch (err) {
-    cookies().set(
-      "meta_action_msg",
-      setMetaActionMsg.error(
-        err instanceof Error ? err.message : "Demo connect failed"
-      ),
-      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
-    );
+  } catch {
+    // Swallow: the cookie below is the source of truth for the dashboard
+    // UI. Demo mode is meant to work even when Supabase isn't configured.
   }
+  // Always set the demo flag so AccountsStrip renders the Demo pill.
+  cookies().set(META_DEMO_COOKIE, "1", {
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: META_DEMO_MAX_AGE,
+    path: "/"
+  });
+  cookies().set(
+    "meta_action_msg",
+    setMetaActionMsg.success(
+      "Demo Meta account connected. (No real data — connect Meta Ads for live insights.)"
+    ),
+    { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+  );
   revalidatePath("/dashboard");
 }
 
-/** Disconnect — clears tokens at rest + sets status=revoked. */
+/** Helper to clear the demo cookie when disconnecting. */
+function clearDemoCookie() {
+  cookies().delete(META_DEMO_COOKIE);
+}
+
+/** Disconnect — clears tokens at rest + sets status=revoked. Also clears
+ *  the demo cookie so a demo-only connection round-trips cleanly. */
 export async function disconnectMeta(): Promise<void> {
+  clearDemoCookie();
   try {
     await disconnectMyMetaConnection();
     cookies().set(

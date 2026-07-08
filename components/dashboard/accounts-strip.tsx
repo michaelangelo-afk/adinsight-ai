@@ -8,9 +8,37 @@ const PLATFORM_META: Record<string, { name: string; color: string }> = {
   tiktok: { name: "TikTok Ads", color: "#5ee5ad" }
 };
 
-export function AccountsStrip({ accounts }: { accounts: AdAccount[] }) {
+export function AccountsStrip({
+  accounts,
+  hasDemo
+}: {
+  accounts: AdAccount[];
+  /**
+   * When true, render a synthetic "Demo Meta Ads" pill using the same
+   * visual language as a real connected account. Source of truth is the
+   * META_DEMO_COOKIE flag set by connectDemoMeta; the dashboard page
+   * reads it server-side and forwards the boolean here so we don't have
+   * to import `cookies()` into a client-or-bare component.
+   */
+  hasDemo?: boolean;
+}) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
+      {hasDemo && (
+        <div
+          data-demo-pill="1"
+          className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-violet-500/15 hairline text-xs"
+        >
+          <span className="h-2 w-2 rounded-full bg-violet-400" />
+          <span className="text-mist-100">Meta Ads</span>
+          <span
+            title="Demo mode — no real Meta OAuth. Connect Meta Ads to swap to live data."
+            className="chip px-2 py-0 text-[9px] uppercase tracking-wider bg-violet-500/30 text-violet-100 border border-violet-500/40"
+          >
+            demo · live
+          </span>
+        </div>
+      )}
       {accounts.map((a) => {
         const meta = PLATFORM_META[a.platform] ?? {
           name: a.platform,

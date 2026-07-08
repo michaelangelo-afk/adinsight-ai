@@ -1,6 +1,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { Bell, Calendar, ChevronDown, Search } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export interface TopbarProfile {
   /** 1–3 letter initials or single character shown in the avatar circle */
@@ -13,11 +15,30 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
   return (
     <div className="sticky top-0 z-30 backdrop-blur-xl bg-ink-950/60 border-b border-mist-50/[0.04]">
       <div className="px-6 md:px-8 py-4 flex items-center gap-4">
-        {/* Title */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Brand — Logo + breadcrumb. The Logo is essential on screens
+            where the sidebar is hidden (below lg) so the brand is
+            visible at every breakpoint. Same Logo component the landing
+            nav uses; the SVG adapts to light/dark via `dark:` overrides
+            in the Logo component itself. */}
+        <Link
+          href="/"
+          className="
+            shrink-0 rounded-lg transition-all duration-200
+            hover:opacity-90 active:scale-[0.98]
+            focus-visible:outline-none focus-visible:ring-2
+            focus-visible:ring-violet-300/70 focus-visible:ring-offset-2
+            focus-visible:ring-offset-ink-950
+          "
+          aria-label="GrowthAds home"
+        >
+          <Logo />
+        </Link>
+
+        {/* Breadcrumb kept as a quieter secondary line under the Logo */}
+        <div className="hidden md:flex items-center gap-2 ml-2 text-sm">
           <Link
             href="/dashboard"
-            className="text-sm text-mist-400 hover:text-mist-200"
+            className="text-mist-400 hover:text-mist-200 transition-colors"
           >
             /
           </Link>
@@ -42,6 +63,20 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
             ⌘K
           </kbd>
         </button>
+
+        {/* Theme toggle — same ThemeToggle as the landing nav. Sits
+            alongside the other header controls so light/dark switching
+            is reachable from the persisted header, not just landing. */}
+        <div
+          className="
+            inline-flex h-11 w-11 items-center justify-center rounded-lg
+            bg-mist-50/[0.04] hairline text-mist-200
+            hover:bg-mist-50/[0.08] hover:border-violet-500/40
+            transition-all duration-200
+          "
+        >
+          <ThemeToggle />
+        </div>
 
         {/* Notifications */}
         <button type="button" className="relative inline-flex h-11 w-11 items-center justify-center rounded-lg bg-mist-50/[0.04] hairline text-mist-200 hover:bg-mist-50/[0.08] hover:border-violet-500/40 transition-all duration-200 tap-press touch-target">

@@ -38,3 +38,20 @@ export function parseMetaActionMsg(
     return null;
   }
 }
+
+// ============================================================================
+// Demo-mode cookie — a long-lived boolean flag that lets the dashboard
+// show a connected Meta Ads pill without requiring the Supabase / OAuth
+// path. Used by the "Try demo" button when the user has no real Meta Ads
+// account yet (or env vars aren't configured).
+//
+// Reads from a Server Component via cookies(). The cookie is intentionally
+// httpOnly so a leaked client token cannot synthesize demo state.
+// ============================================================================
+export const META_DEMO_COOKIE = "meta_demo";
+export const META_DEMO_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+
+/** Returns true when the user has previously clicked Try demo. */
+export function parseMetaDemoFlag(raw: string | undefined): boolean {
+  return raw === "1";
+}

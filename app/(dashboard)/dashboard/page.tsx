@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { AutoRefresh } from "@/components/dashboard/auto-refresh";
 import {
   Topbar,
@@ -18,6 +19,10 @@ import {
 } from "@/app/actions/dashboard";
 import { getCurrentUser } from "@/app/actions/auth";
 import { resolveOrgName } from "@/lib/auth/user-profile";
+import {
+  META_DEMO_COOKIE,
+  parseMetaDemoFlag
+} from "@/lib/action-msg";
 
 /**
  * Phase 2 — Real-Supabase dashboard page.
@@ -43,6 +48,12 @@ export default async function DashboardPage() {
       getRecommendations(),
       getConnectedAccounts()
     ]);
+
+  // Read the demo flag server-side so AccountsStrip can render the
+  // "Demo Meta Ads" pill without coupling to cookies() itself.
+  const hasDemo = parseMetaDemoFlag(
+    cookies().get(META_DEMO_COOKIE)?.value
+  );
 
   // Topbar profile from the joined auth.users + public.users + organizations.
   // (resolveOrgName lives in app/actions/auth.ts and is shared with
@@ -107,7 +118,7 @@ export default async function DashboardPage() {
                 )}
               </p>
             </div>
-            <AccountsStrip accounts={accounts ?? []} />
+            <AccountsStrip accounts={accounts ?? []} hasDemo={hasDemo} />
           </div>
 
           <MetricsGrid summary={summary} />
