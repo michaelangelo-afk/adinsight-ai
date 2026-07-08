@@ -28,7 +28,7 @@ import {
   META_OAUTH_SCOPES
 } from "@/lib/meta/client";
 import { upsertMyMetaConnection } from "@/lib/supabase/meta-connections";
-import { setMetaActionMsg } from "@/lib/action-msg";
+import { setMetaActionMsg, META_DEMO_COOKIE } from "@/lib/action-msg";
 
 const STATE_COOKIE = "meta_oauth_state";
 const FLASH_MAX_AGE = 30;
@@ -145,7 +145,13 @@ export async function GET(req: Request) {
     );
   }
 
-  // ---- 7. Success redirect — MetaActionToast on the next render picks
+  // ---- 7. Clear the demo flag if it lingered — the real OAuth path
+  // is now the source of truth. Without this clear, AccountsStrip
+  // would render BOTH the synthetic Demo pill AND the real Meta Ads
+  // pill side-by-side after the friend-test tomorrow. ----
+  cookieStore.delete(META_DEMO_COOKIE);
+
+  // ---- 8. Success redirect — MetaActionToast on the next render picks
   // up the meta_action_msg cookie below. ----
   return flashSuccess(
     "Meta account connected.",

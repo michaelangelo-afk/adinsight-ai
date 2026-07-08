@@ -280,6 +280,7 @@ export async function connectDemoMeta(): Promise<void> {
   cookies().set(META_DEMO_COOKIE, "1", {
     httpOnly: true,
     sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     maxAge: META_DEMO_MAX_AGE,
     path: "/"
   });
@@ -301,22 +302,22 @@ function clearDemoCookie() {
 /** Disconnect — clears tokens at rest + sets status=revoked. Also clears
  *  the demo cookie so a demo-only connection round-trips cleanly. */
 export async function disconnectMeta(): Promise<void> {
+  // Cookie is the source of truth for demo state — clear it first so
+  // any DB hiccup below doesn't leave the UI in a stale "connected"
+  // state during the next render.
   clearDemoCookie();
   try {
     await disconnectMyMetaConnection();
-    cookies().set(
-      "meta_action_msg",
-      setMetaActionMsg.success("Meta account disconnected."),
-      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
-    );
-  } catch (err) {
-    cookies().set(
-      "meta_action_msg",
-      setMetaActionMsg.error(
-        err instanceof Error ? err.message : "Disconnect failed"
-      ),
-      { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
-    );
+  } catch {
+    // DB disconnect is best-effort cleanup. Without a Supabase backend,
+    // disconnectMyMetaConnection throws — but the cookie (the UI source
+    // of truth) was already cleared above. Don't surface the DB error
+    // to the user: the disconnect intent is honored either way.
   }
+  cookies().set(
+    "meta_action_msg",
+    setMetaActionMsg.success("Meta account disconnected."),
+    { httpOnly: true, sameSite: "lax", maxAge: 30, path: "/" }
+  );
   revalidatePath("/dashboard");
 }

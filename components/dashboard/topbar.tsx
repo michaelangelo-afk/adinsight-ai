@@ -66,17 +66,11 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
 
         {/* Theme toggle — same ThemeToggle as the landing nav. Sits
             alongside the other header controls so light/dark switching
-            is reachable from the persisted header, not just landing. */}
-        <div
-          className="
-            inline-flex h-11 w-11 items-center justify-center rounded-lg
-            bg-mist-50/[0.04] hairline text-mist-200
-            hover:bg-mist-50/[0.08] hover:border-violet-500/40
-            transition-all duration-200
-          "
-        >
-          <ThemeToggle />
-        </div>
+            is reachable from the persisted header, not just landing.
+            ThemeToggle is already a self-styled 44px touch-target with
+            its own bg + border, so no outer wrapper is needed — adding
+            one would visually swamp the button's own affordance. */}
+        <ThemeToggle />
 
         {/* Notifications */}
         <button type="button" className="relative inline-flex h-11 w-11 items-center justify-center rounded-lg bg-mist-50/[0.04] hairline text-mist-200 hover:bg-mist-50/[0.08] hover:border-violet-500/40 transition-all duration-200 tap-press touch-target">

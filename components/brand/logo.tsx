@@ -10,7 +10,7 @@ export function Logo({
 }) {
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white ring-1 ring-mist-200 overflow-hidden">
+      <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white dark:bg-ink-800 ring-1 ring-mist-200 dark:ring-ink-700 overflow-hidden">
         <svg
           viewBox="0 0 36 36"
           fill="none"

@@ -35,7 +35,7 @@ export function AccountsStrip({
             title="Demo mode — no real Meta OAuth. Connect Meta Ads to swap to live data."
             className="chip px-2 py-0 text-[9px] uppercase tracking-wider bg-violet-500/30 text-violet-100 border border-violet-500/40"
           >
-            demo · live
+            demo
           </span>
         </div>
       )}
