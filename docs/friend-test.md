@@ -258,3 +258,64 @@ restart, click Connect, walk her through the oauth dance.
 Post-test: `select * from meta_connections where user_id = auth.uid();`
 and `select count(*) from meta_accounts where user_id = auth.uid();`
 to confirm the rows. The dashboard re-render is the user-visible proof.
+
+---
+
+## 8. Automated CI test (covers everything below the surface)
+
+`tests/e2e/meta-oauth.spec.ts` drives the **same** roundtrip against
+Facebook's Test User sandbox (developers.facebook.com → app → Roles →
+Test Users → API) and runs on every PR + push to `main` via
+`.github/workflows/e2e.yml`. When it passes, the only remaining
+unknowns are the three app-config items above (Tester role, redirect
+URI whitelisted, basic app settings filled in) — friend-test is only
+worth escalating when the spec itself fails.
+
+Run locally:
+
+```bash
+# Need a TEST Supabase project (NOT production) + a real Meta app
+# whose Valid OAuth Redirect URIs includes http://localhost:3000/api/auth/meta/callback.
+export NEXT_PUBLIC_SUPABASE_URL=https://<test-ref>.supabase.co
+export NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+export SUPABASE_SERVICE_ROLE_KEY=...
+export META_APP_ID=...
+export META_APP_SECRET=...
+# Optional:
+export META_REDIRECT_URI=http://localhost:3000/api/auth/meta/callback
+npm run e2e
+```
+
+The spec auto-skips (no red bar) when any of those env vars are
+missing, so a vanilla dev shell stays green. Skipping is loud —
+`test.skip()` reports why in the output.
+
+What's covered:
+
+1. Pre-flight `GET /api/health/meta` is ready + redirect URI matches.
+2. Sign in to Supabase (using a freshly-admin-provisioned user so the
+   callback isn't redirected to `/login`).
+3. Create a Facebook test user (`POST /{appId}/accounts/test-users`)
+   with `ads_read`, `ads_management`, `read_insights` pre-granted.
+4. Drive the OAuth dialog through Playwright Chromium — sign in as
+   the test user via `login_url`, click Connect, click the consent
+   confirm button.
+5. Assert the redirect lands on `/dashboard?meta_connect=ok`, the
+   `meta_oauth_state` + `meta_demo` cookies are cleared, and the
+   `meta_connections` row was written via service-role Supabase read
+   (`meta_user_id` = test user FB id, `status` = `active`,
+   `access_token.length > 100`).
+6. Teardown: delete the Facebook test user + the Supabase user in
+   `afterAll` (best-effort; CI cancellation mustn't leak orphan FB
+   users).
+
+What it does NOT cover:
+
+- Tester/Developer role on the Meta app (this is a static,
+  admin-side configuration; the test API auto-handles test users
+  themselves).
+- Redirect URI whitelist — pre-flight checks the configured value
+  matches what the server reports, but only Meta can confirm the
+  whitelist is real.
+- The demo-mode flow (`connectDemoMeta`) — covered by the manual
+  checklist.

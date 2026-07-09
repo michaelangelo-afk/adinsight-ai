@@ -174,4 +174,24 @@ What's NOT yet built:
 - AI recommendations pipeline
 
 These can all be slotted in without breaking the existing component tree.
+
+## End-to-end tests
+
+```bash
+npm run e2e            # Playwright; auto-spawns `next dev` locally /
+                       # `next build + next start` on CI, exits cleanly when env is missing
+npm run e2e:ui         # Playwright UI for debugging
+
+Required env (the spec auto-skips without these):
+  NEXT_PUBLIC_SUPABASE_URL  + ANON_KEY + SUPABASE_SERVICE_ROLE_KEY
+  META_APP_ID + META_APP_SECRET
+  META_REDIRECT_URI=http://localhost:3000/api/auth/meta/callback  (optional override)
+```
+
+The spec at `tests/e2e/meta-oauth.spec.ts` drives the full Meta OAuth
+roundtrip against Facebook's Test User sandbox via `chromium`. CI runs
+it on every PR + push to `main` (`.github/workflows/e2e.yml`). See
+`docs/friend-test.md` §8 for the coverage matrix vs. the manual
+runbook.
+
 # Generated 2026-07-08: triggered redeploy so Supabase env vars take effect.

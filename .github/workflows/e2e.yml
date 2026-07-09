@@ -1,0 +1,102 @@
+name: E2E — Meta OAuth roundtrip
+
+# Triggers the Playwright spec that drives the Facebook test-user sandbox
+# roundtrip end-to-end. When this passes locally + on CI, the only
+# remaining risk surfaces are app-config on Meta's side (Tester role,
+# whitelisted redirect URI), which are the only friend-test runbook items
+# that remain manual.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # Docs-only PRs skip the suite to save 5 min of CI bill on average.
+  # The push-to-main path still runs always — branch protection needs it
+  # for the merge gate.
+  paths-ignore:
+    - "**/*.md"
+    - "docs/**"
+
+# Cancel in-progress runs on the same branch — saves ~5 min on rapid pushes.
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    env:
+      # Test Supabase project — kept strictly separate from production.
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.E2E_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.E2E_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.E2E_SUPABASE_SERVICE_ROLE_KEY }}
+      # Real Meta app credentials — restricted to secrets, never echoed.
+      META_APP_ID: ${{ secrets.E2E_META_APP_ID }}
+      META_APP_SECRET: ${{ secrets.E2E_META_APP_SECRET }}
+      META_REDIRECT_URI: ${{ secrets.E2E_META_REDIRECT_URI }}
+      # API version: pin to a known-good default; future bump is a deliberate change.
+      META_API_VERSION: "v18.0"
+      # CI vars used by the spec + Playwright config.
+      E2E_BASE_URL: http://localhost:3000
+      CI: "true"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install postgresql-client (migration runner)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client
+
+      - name: Apply migrations to E2E Supabase
+        env:
+          E2E_SUPABASE_DB_URL: ${{ secrets.E2E_SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$E2E_SUPABASE_DB_URL" ]; then
+            echo "E2E_SUPABASE_DB_URL not set — assuming migrations are already applied."
+            exit 0
+          fi
+          # Apply base schema first, then Phase 3 meta tables. The 0001_
+          # prefix sorts BEFORE 001/002/003 numerically but MUST run AFTER
+          # them (depends on auth.users existing), so list explicitly.
+          for f in 001_schema.sql 002_policies.sql 003_fix_ad_accounts_access.sql 0001_meta_tables.sql; do
+            echo "::group::Apply supabase/migrations/$f"
+            psql "$E2E_SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f "supabase/migrations/$f"
+            echo "::endgroup::"
+          done
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright e2e
+        run: npm run e2e
+
+      - name: Upload Playwright HTML report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright trace (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7
