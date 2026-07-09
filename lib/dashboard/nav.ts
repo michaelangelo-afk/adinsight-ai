@@ -48,7 +48,15 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     badge: 3
   },
   { label: "Reports", icon: FileText, href: "/reports" },
-  { label: "Influencers", icon: Users, href: "/influencers" },
+  {
+    label: "Influencers",
+    icon: Users,
+    href: "/influencers",
+    // Surface the creator marketplace count to make the entry-point
+    // visually distinguishable from the other dashboard rail items;
+    // matches the "12 vetted creators" copy on the /influencers hero.
+    badge: 12
+  },
   { label: "Billing", icon: Wallet, href: "/billing" },
   { label: "Settings", icon: Settings, href: "#", stub: true }
 ];

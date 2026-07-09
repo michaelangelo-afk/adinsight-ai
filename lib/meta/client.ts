@@ -101,7 +101,17 @@ export function buildOAuthUrl(
     // with no auth permission notification" in the friend-test.
     auth_type: "rerequest",
     // Keep the dialog in the mobile browser, not the native app.
-    display: "page"
+    display: "page",
+    // Belt-and-braces: force Meta to ALWAYS show the consent screen,
+    // even for users with an active facebook.com SSO session whose
+    // browser cookie would silently auto-confirm a previously-granted
+    // app on return-redirect. `auth_type=rerequest` is the documented
+    // Meta fix for the previously-granted case;
+    // `prompt=consent` is the documented Meta fix for the SSO-during-
+    // dialog case. Layering both covers the friend-test scenario on
+    // both axes (previously-granted user on mobile native SSO; previously-
+    // granted user returning via web SSO cookie).
+    prompt: "consent"
   });
   return `${OAUTH_BASE}/${env.apiVersion}/dialog/oauth?${params.toString()}`;
 }
