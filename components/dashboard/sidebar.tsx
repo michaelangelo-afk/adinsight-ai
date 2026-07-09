@@ -27,10 +27,15 @@ import { signOut } from "@/app/actions/auth";
  */
 const NAV_BASE = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Recommendations", icon: Sparkles, href: "#", badge: 3 },
-  { label: "Reports", icon: FileText, href: "#" },
+  {
+    label: "Recommendations",
+    icon: Sparkles,
+    href: "/recommendations",
+    badge: 3
+  },
+  { label: "Reports", icon: FileText, href: "/reports" },
   { label: "Influencers", icon: Users, href: "/influencers" },
-  { label: "Billing", icon: Wallet, href: "#" },
+  { label: "Billing", icon: Wallet, href: "/billing" },
   { label: "Settings", icon: Settings, href: "#" }
 ] as const;
 

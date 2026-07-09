@@ -119,3 +119,51 @@ export interface DashboardSummary {
   trend: { date: string; spend: number; conversions: number }[];
   platformBreakdown: { platform: Platform; spend: number; conversions: number }[];
 }
+
+// ============================================================================
+// Phase 5 — Billing types
+// ============================================================================
+
+export type BillingInterval = "monthly" | "annual";
+export type PlanTier = "free" | "starter" | "pro" | "scale";
+
+export interface Plan {
+  id: PlanTier;
+  name: string;
+  priceMonthly: number; // NGN
+  priceAnnual: number; // NGN / year (pre-discount)
+  perks: string[];
+  limits: {
+    campaignsMax: number;
+    recommendationsPerMonth: number;
+    seatsIncluded: number;
+  };
+  badge?: string; // e.g. "Most popular"
+}
+
+export interface Invoice {
+  id: string;
+  date: string; // ISO
+  amount: number; // NGN
+  status: "paid" | "due" | "refunded";
+  description: string;
+  pdfUrl?: string;
+}
+
+export interface UsageMetric {
+  id: string;
+  label: string;
+  used: number;
+  total: number;
+  unit: string; // e.g. "campaigns", "recs", "sync / min"
+  hint?: string;
+}
+
+export interface ScheduledReport {
+  id: string;
+  cadence: "daily" | "weekly" | "monthly";
+  recipients: string[];
+  nextRunAt: string; // ISO
+  format: "pdf" | "csv" | "html";
+  enabled: boolean;
+}
