@@ -57,7 +57,33 @@ export interface MetaInsight {
   conversions?: string;
 }
 
-/** Build the URL the user is redirected to in order to start OAuth. */
+/**
+ * Build the URL the user is redirected to in order to start OAuth.
+ *
+ * Required extra params (vs the bare minimum):
+ *   - `auth_type=rerequest` — WITHOUT this, Meta's OAuth dialog auto-
+ *     redirects any user who has *ever* granted our app permissions back
+ *     to `redirect_uri` without showing the consent screen. On a mobile
+ *     browser this is exactly what the previous bug looked like:
+ *     "clicking Connect just opens my Meta Ads account, no auth
+ *     notification". `rerequest` docs from Meta FORCES the dialog to
+ *     re-appear every time, regardless of prior grants OR the user's
+ *     current facebook.com login state. This is the documented
+ *     developers.facebook.com/docs/facebook-login/permissions/requesting
+ *     way to make the consent step un-skippable for non-admin/developer
+ *     tester roles too.
+ *   - `display=page` — explicitly keeps the dialog in the mobile
+ *     browser. The implicit default on mobile is `touch`, which iOS /
+ *     Android deep-link into the native Facebook app. Inside the native
+ *     app, the previously-saved SSO cookie can silently auto-confirm
+ *     the second grant and bounce back to our redirect_uri without
+ *     rendering the consent dialog at all. `display=page` is the
+ *     canonical web dialog and is what we want on both desktop and
+ *     mobile.
+ *
+ * State CSRF + callback signature are unchanged — Meta still returns
+ * the same `code` + `state` pair downstream.
+ */
 export function buildOAuthUrl(
   stateToken: string,
   scopes: readonly string[] = META_OAUTH_SCOPES
@@ -69,7 +95,13 @@ export function buildOAuthUrl(
     redirect_uri: env.redirectUri,
     state: stateToken,
     scope: scopes.join(","),
-    response_type: "code"
+    response_type: "code",
+    // Force Meta's consent dialog every time — see block-comment above.
+    // This is the bug-class that produced "opens Meta Ads on phone
+    // with no auth permission notification" in the friend-test.
+    auth_type: "rerequest",
+    // Keep the dialog in the mobile browser, not the native app.
+    display: "page"
   });
   return `${OAUTH_BASE}/${env.apiVersion}/dialog/oauth?${params.toString()}`;
 }

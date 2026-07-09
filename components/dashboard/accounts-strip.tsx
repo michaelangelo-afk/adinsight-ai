@@ -128,10 +128,15 @@ export function AccountsStrip({
           {/* Connect — server action sets a CSRF state cookie + redirects
               to Facebook OAuth. The form's "contents" class lets the
               button participate in the parent flex layout as if it
-              weren't wrapped. */}
+              weren't wrapped. The `title` attribute explicitly previews
+              what'll appear next so non-developer testers don't read a
+              "no permission dialog was shown" bug into Meta's normal
+              consent screen. */}
           <form action={connectMeta} className="contents">
             <button
               type="submit"
+              title="We'll redirect you to Meta so you can approve the app to read your ad accounts."
+              aria-label="Connect your Meta Ads account (opens Meta's permission screen)"
               className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-700 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-violet-200"
             >
               <Plus
