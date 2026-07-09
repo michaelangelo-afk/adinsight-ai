@@ -90,28 +90,60 @@ export function buildOAuthUrl(
 ): string {
   const env = readMetaEnv();
   if (!env.ok) throw new Error("Meta not configured");
+  // Production-safety: a localhost META_REDIRECT_URI in NODE_ENV=production
+  // means Meta will redirect back to http://localhost:3000/api/auth/meta/callback
+  // — which Vercel-hosted users can never reach. The friend-test scenario
+  // "clicks Connect → opens Meta Ads manager, no consent dialog" is
+  // PARTIALLY explained by this: Meta sees a redirect_uri it can't
+  // honour, falls back to its own /adsmanager page, and the user reads
+  // that as "no auth was requested". This explicit check makes the
+  // misconfiguration loud at the connectMeta boundary rather than
+  // mysterious on the receiving end.
+  if (
+    process.env.NODE_ENV === "production" &&
+    /localhost|127\.0\.0\.1/i.test(env.redirectUri)
+  ) {
+    throw new Error(
+      `META_REDIRECT_URI is set to a localhost address (${env.redirectUri}) ` +
+        `in a production deploy. Facebook will redirect back to an address ` +
+        `no real user can reach. Set META_REDIRECT_URI to the public HTTPS ` +
+        `URL of /api/auth/meta/callback (e.g. https://your-app.vercel.app/` +
+        `api/auth/meta/callback) AND register the same URL under "Valid ` +
+        `OAuth Redirect URIs" on your Meta app dashboard.`
+    );
+  }
   const params = new URLSearchParams({
     client_id: env.appId,
     redirect_uri: env.redirectUri,
     state: stateToken,
     scope: scopes.join(","),
     response_type: "code",
-    // Force Meta's consent dialog every time — see block-comment above.
-    // This is the bug-class that produced "opens Meta Ads on phone
-    // with no auth permission notification" in the friend-test.
+    // Force Meta's consent dialog every time. See the block-comment on
+    // this function above. `auth_type=rerequest` is the documented
+    // Meta parameter (developers.facebook.com/docs/facebook-login/
+    // permissions/requesting) that re-renders the OAuth dialog for
+    // users who have previously granted the app — directly addresses
+    // the friend-test "opens my Ads account with no consent prompt"
+    // bug class. r
     auth_type: "rerequest",
-    // Keep the dialog in the mobile browser, not the native app.
-    display: "page",
-    // Belt-and-braces: force Meta to ALWAYS show the consent screen,
-    // even for users with an active facebook.com SSO session whose
-    // browser cookie would silently auto-confirm a previously-granted
-    // app on return-redirect. `auth_type=rerequest` is the documented
-    // Meta fix for the previously-granted case;
-    // `prompt=consent` is the documented Meta fix for the SSO-during-
-    // dialog case. Layering both covers the friend-test scenario on
-    // both axes (previously-granted user on mobile native SSO; previously-
-    // granted user returning via web SSO cookie).
-    prompt: "consent"
+    // Keep the dialog in the mobile browser, not the native app. Meta's
+    // implicit mobile default is `display=touch`, which deep-links into
+    // the native Facebook app. Inside the native app, the cached SSO
+    // cookie can silently auto-confirm the previous grant and bounce
+    // back to our redirect_uri without ever rendering the consent
+    // dialog. `display=page` is the canonical web-mode dialog.
+    display: "page"
+    // NOTE on `prompt`: an earlier draft added `prompt=consent` here,
+    // thinking it was the OpenID-Connect "force consent" param. Meta's
+    // OAuth 2.0 dialog does NOT honour the OIDC `prompt` parameter —
+    // it silently ignores it. We deliberately do NOT send it, because
+    // shipping an undocumented param risks confusing the Meta-side
+    // rate-limiter / signature checks in some app configs. If you
+    // find you need a stronger "force fresh login + consent" hammer
+    // than `rerequest`, the only Meta-documented option is
+    // `auth_type=reauthenticate` — but that forces the user to enter
+    // their Facebook password every connect, which is generally a
+    // worse UX than re-confirming the consent checkbox.
   });
   return `${OAUTH_BASE}/${env.apiVersion}/dialog/oauth?${params.toString()}`;
 }

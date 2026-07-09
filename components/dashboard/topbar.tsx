@@ -30,7 +30,14 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Calendar, ChevronDown, Search } from "lucide-react";
+import {
+  Bell,
+  Calendar,
+  ChevronDown,
+  Menu,
+  Search,
+  X
+} from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { NAV_ITEMS, isNavActive } from "@/lib/dashboard/nav";
@@ -45,6 +52,35 @@ export interface TopbarProfile {
 
 export function Topbar({ profile }: { profile: TopbarProfile }) {
   const pathname = usePathname();
+  // Mobile-nav sheet open state. Phones (<sm, 640px) have neither the
+  // sidebar rail (lg+) nor the horizontal nav strip (sm+) — before
+  // this state, there was literally no way to reach /influencers /
+  // /recommendations / /reports / /billing from a phone-sized
+  // dashboard viewport. The hamburger below toggles this; the
+  // pathname effect auto-closes it on successful navigation so the
+  // sheet doesn't linger over the destination page.
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
+  // Auto-close the sheet whenever the active route changes — a
+  // successful Next.js client-side route swap means the user just
+  // tapped a link, so the menu should disappear instead of covering
+  // the new page's content with the old menu state.
+  React.useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  // Esc-key close — keyboard / SR users can dismiss the sheet without
+  // reaching for the close button. Listener is only attached while the
+  // sheet is open so the cost is one keydown check at most.
+  React.useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   return (
     <div className="sticky top-0 z-30 backdrop-blur-xl bg-ink-950/60 border-b border-mist-50/[0.04]">
       <div className="px-4 md:px-6 lg:px-8 py-4 flex items-center gap-3 md:gap-4">
@@ -66,6 +102,24 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
         >
           <Logo />
         </Link>
+
+        {/* Hamburger — visible ONLY on phones (<sm). The horizontal
+            nav strip below takes over at sm+ (Phase 7 lower the
+            breakpoint from md to sm, AND added a hamburger sheet so
+            the Influencers / Reports / Recommendations entries are
+            equally reachable from a 360px viewport as they are from
+            a 1440px one). aria-expanded / aria-controls wire the
+            button to the sheet below for screen readers. */}
+        <button
+          type="button"
+          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={menuOpen}
+          aria-controls="dashboard-mobile-nav"
+          onClick={() => setMenuOpen((v) => !v)}
+          className="sm:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg bg-mist-50/[0.04] hairline text-mist-200 hover:bg-mist-50/[0.08] hover:border-violet-500/40 transition-all duration-200 tap-press touch-target"
+        >
+          {menuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
 
         {/* Breadcrumb kept as a quieter secondary line under the Logo */}
         <div className="hidden md:flex items-center gap-2 ml-2 text-sm">
@@ -89,7 +143,7 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
         <nav
           aria-label="Main navigation"
           className="
-            hidden md:flex items-center gap-1 rounded-xl
+            hidden sm:flex items-center gap-1 rounded-xl
             bg-mist-50/[0.04] hairline px-1.5 py-1
             mx-2 lg:mx-4
           "
@@ -191,6 +245,74 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
           <ChevronDown size={12} className="text-mist-400 hidden md:block transition-transform group-hover:rotate-180 duration-300" />
         </button>
       </div>
+
+      {/* Mobile-nav sheet — hamburger-controlled, visible at <sm.
+          Slides in DIRECTLY below the topbar header so the user sees
+          a single visual seam (no modal overlay over the page body).
+          backdrop-blur gives a clean glass feel that matches the
+          topbar's own glass surface. The render-guard ensures it
+          only contributes DOM cost when open. */}
+      {menuOpen && (
+        <div
+          id="dashboard-mobile-nav"
+          className="sm:hidden border-t border-mist-50/[0.04] bg-ink-950/85 backdrop-blur-xl"
+          role="dialog"
+          aria-label="Dashboard navigation"
+        >
+          <nav
+            aria-label="Mobile navigation"
+            className="px-3 py-3 space-y-1"
+          >
+            {NAV_ITEMS.map((n) => {
+              const Icon = n.icon;
+              const active = isNavActive(pathname, n.href);
+              return (
+                <Link
+                  key={n.label}
+                  href={n.href}
+                  aria-current={active ? "page" : undefined}
+                  aria-label={n.label}
+                  title={n.label}
+                  onClick={(e) => {
+                    if (n.stub) e.preventDefault();
+                  }}
+                  className={cn(
+                    "tap-press touch-target group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                    active
+                      ? "bg-violet-500/15 text-mist-50"
+                      : "text-mist-300 hover:bg-mist-50/[0.06] hover:text-mist-50",
+                    n.stub && "opacity-70"
+                  )}
+                >
+                  <Icon
+                    size={16}
+                    className={cn(
+                      "shrink-0 transition-transform duration-200",
+                      active
+                        ? "text-violet-300"
+                        : "group-hover:scale-110 group-hover:text-violet-300"
+                    )}
+                  />
+                  <span className="flex-1">{n.label}</span>
+                  {n.badge !== undefined && (
+                    <span className="inline-flex items-center justify-center rounded-md bg-violet-500 px-1.5 h-5 text-[10px] font-semibold text-white animate-pulse-soft">
+                      {n.badge}
+                    </span>
+                  )}
+                  {n.stub && (
+                    <span
+                      className="text-[9px] uppercase tracking-wider text-mist-600"
+                      title="Coming soon"
+                    >
+                      soon
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </div>
   );
 }
