@@ -58,7 +58,7 @@ export function RecommendationsPanel({
               <span>{formatNaira(totalSavings)} on the table.</span>
             </MetricTooltip>
           </h3>
-          <p className="mt-1 text-sm text-mist-300">
+          <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">
             Tap &ldquo;Apply&rdquo; to jump straight to Ads Manager with the change queued.
           </p>
         </div>
@@ -109,12 +109,12 @@ export function RecommendationsPanel({
                     </span>
                   </MetricTooltip>
                 </div>
-                <p className="mt-1.5 text-xs text-mist-300 leading-relaxed">
+                <p className="mt-1.5 text-xs text-mist-600 dark:text-mist-300 leading-relaxed">
                   {r.body}
                 </p>
                 {r.estimatedSavings && (
                   <div className="mt-2.5 inline-flex items-center gap-1.5 text-xs">
-                    <span className="text-mist-400">Estimated value:</span>
+                    <span className="text-mist-600 dark:text-mist-400">Estimated value:</span>
                     <span className="text-naira-400 font-semibold tabular-nums">
                       {formatNaira(r.estimatedSavings)}
                     </span>
@@ -182,7 +182,7 @@ export function RecommendationsPanel({
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="text-center text-sm text-mist-400 py-10">
+          <div className="text-center text-sm text-mist-600 dark:text-mist-400 py-10">
             No recommendations in this view.
           </div>
         )}

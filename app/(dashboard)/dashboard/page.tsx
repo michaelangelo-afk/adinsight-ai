@@ -79,7 +79,11 @@ export default async function DashboardPage() {
     <>
       <Topbar profile={profile} />
       <AutoRefresh interval={60_000}>
-        <div className="flex-1 p-6 md:p-8 space-y-6">
+        {/* overflow-x-hidden is defense-in-depth: even though MetricTooltip
+            is now portalled + clamped to the viewport, it keeps any
+            (possibly forgotten) horizontal overflow from scrolling the
+            body on narrow mobile breakpoints. */}
+        <div className="flex-1 p-6 md:p-8 space-y-6 overflow-x-hidden">
           {/* Phase 3.1 — flash-cookie-driven action feedback. The cookie
               has maxAge=30 so it auto-clears on next page read; the toast
               renders once per rendered action. */}

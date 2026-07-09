@@ -29,13 +29,13 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
     <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <div className="text-xs uppercase tracking-wider text-mist-400">
+          <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
             Spend vs. conversions · 30 days
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink-900 dark:text-mist-50">
             You spent less and got more.
           </h3>
-          <p className="mt-1 text-sm text-mist-300">
+          <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">
             Daily trajectory across all connected platforms.
           </p>
         </div>

@@ -177,7 +177,7 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
               </span>
             </div>
             <div className="mt-3">
-              <div className="text-xs text-mist-400">
+              <div className="text-xs text-mist-600 dark:text-mist-400">
                 <MetricTooltip
                   content={c.tooltip}
                   label={c.tooltipLabel}
@@ -186,11 +186,11 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
                   <span>{c.label}</span>
                 </MetricTooltip>
               </div>
-              <div className="mt-1 text-2xl font-semibold tracking-tight text-mist-50 tabular-nums animate-count-up">
+              <div className="mt-1 text-2xl font-semibold tracking-tight text-ink-900 dark:text-mist-50 tabular-nums animate-count-up">
                 {c.value}
               </div>
               {c.sub && (
-                <div className="mt-0.5 text-[11px] text-mist-500">{c.sub}</div>
+                <div className="mt-0.5 text-[11px] text-mist-600 dark:text-mist-500">{c.sub}</div>
               )}
             </div>
             <div className="mt-3">

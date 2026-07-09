@@ -93,7 +93,7 @@ export function AccountsStrip({
       })}
 
       {accounts.length === 0 && (
-        <div className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-400">
+        <div className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-600 dark:text-mist-400">
           <Link2 size={12} />
           No accounts connected yet
         </div>
@@ -105,7 +105,7 @@ export function AccountsStrip({
       <form action={connectMeta} className="contents">
         <button
           type="submit"
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-200 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-700 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-violet-200"
         >
           <Plus size={12} className="transition-transform duration-300 group-hover:rotate-90" />
           Connect
@@ -120,9 +120,9 @@ export function AccountsStrip({
           type="submit"
           aria-label="Connect a demo Meta ad account (no real OAuth)"
           title="Demo mode — populates the connected-state UI without real Meta OAuth. Connect Meta Ads later to swap to live insights."
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
         >
-          <Sparkles size={12} className="transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-200" />
+          <Sparkles size={12} className="transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-700 dark:group-hover:text-violet-200" />
           Try demo
         </button>
       </form>
@@ -131,7 +131,7 @@ export function AccountsStrip({
       <form action={syncInsights} className="contents">
         <button
           type="submit"
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-300 hover:text-mist-100 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
         >
           <RefreshCw size={12} className="transition-transform duration-500 group-hover:rotate-180" />
           Sync

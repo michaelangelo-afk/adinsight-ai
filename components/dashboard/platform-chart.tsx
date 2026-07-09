@@ -41,14 +41,14 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
   return (
     <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="mb-4">
-        <div className="text-xs uppercase tracking-wider text-mist-400">
+        <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
           Platform mix
         </div>
-        <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+        <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink-900 dark:text-mist-50">
           Where every naira goes
         </h3>
-        <p className="mt-1 text-sm text-mist-300">
-          Total: <span className="text-mist-50 font-medium">{formatNaira(totalSpend)}</span>
+        <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">
+          Total: <span className="text-ink-900 dark:text-mist-50 font-medium">{formatNaira(totalSpend)}</span>
         </p>
       </div>
 
@@ -133,7 +133,7 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
                   aria-hidden="true"
                 />
               )}
-              <span className="text-sm text-mist-200 flex-1">
+              <span className="text-sm text-ink-800 dark:text-mist-200 flex-1">
                 {tip ? (
                   <MetricTooltip
                     content={tip}
@@ -146,10 +146,10 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
                   p.platform
                 )}
               </span>
-              <span className="text-sm text-mist-50 font-medium tabular-nums">
+              <span className="text-sm text-ink-900 dark:text-mist-50 font-medium tabular-nums">
                 {p.conversions} conv
               </span>
-              <span className="text-xs text-mist-400 tabular-nums w-12 text-right">
+              <span className="text-xs text-mist-600 dark:text-mist-400 tabular-nums w-12 text-right">
                 {formatPercent(p.share, 0)}
               </span>
             </div>
@@ -157,8 +157,8 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
         })}
       </div>
 
-      <div className="mt-4 rounded-lg bg-violet-500/[0.06] border border-violet-500/20 p-3 text-xs text-mist-200">
-        <strong className="text-violet-300">
+      <div className="mt-4 rounded-lg bg-violet-500/[0.06] border border-violet-500/20 p-3 text-xs text-ink-800 dark:text-mist-200">
+        <strong className="text-violet-700 dark:text-violet-300">
           <MetricTooltip
             content={BestCostPerConvTip}
             label="What best cost-per-conversion means"

@@ -42,7 +42,7 @@ function TipBody({
     <div className="space-y-2 block">
       <div className="font-semibold text-violet-200 text-[13px]">{title}</div>
       <div className="text-mist-100">{definition}</div>
-      <div className="font-mono text-[11px] text-mist-300 bg-ink-950/70 px-2 py-1 rounded-md border border-mist-50/[0.04]">
+      <div className="font-mono text-[11px] font-medium text-mist-700 bg-mist-100 border border-mist-200/60 px-2 py-1 rounded-md dark:text-mist-300 dark:bg-ink-950/70 dark:border-mist-50/[0.04]">
         {formula}
       </div>
       <div className="text-[11px] text-naira-300 italic">{goodFor}</div>

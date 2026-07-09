@@ -80,13 +80,13 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
     <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <div className="text-xs uppercase tracking-wider text-mist-400">
+          <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
             Campaigns
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink-900 dark:text-mist-50">
             How every campaign is performing
           </h3>
-          <p className="mt-1 text-sm text-mist-300">
+          <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">
             Sort by spend, conversions or CPC. Click a campaign for drill-down.
           </p>
         </div>
@@ -120,7 +120,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-xs text-mist-400 border-b border-mist-50/[0.06]">
+            <tr className="text-xs text-mist-600 dark:text-mist-400 border-b border-mist-50/[0.06]">
               <th className="text-left py-3 px-2 font-medium">Campaign</th>
               <th className="text-right py-3 px-2 font-medium">
                 <span className="inline-flex items-baseline justify-end w-full">
@@ -172,7 +172,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
           <tbody>
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-sm text-mist-400">
+                <td colSpan={6} className="py-12 text-center text-sm text-mist-600 dark:text-mist-400">
                   No campaigns yet. Connect an ad account to begin syncing.
                 </td>
               </tr>
@@ -196,7 +196,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         {c.name}
                       </span>
                     </div>
-                    <div className="text-[11px] text-mist-500 ml-4.5 mt-0.5 capitalize">
+                    <div className="text-[11px] text-mist-600 dark:text-mist-500 ml-4.5 mt-0.5 capitalize">
                       {c.platform} · {formatPercent(c.ctr, 2)} CTR
                     </div>
                   </td>
