@@ -40,7 +40,7 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="chip bg-violet-500/10 text-violet-300 border border-violet-500/30">
+          <span className="chip bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-500/30">
             <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
             <MetricTooltip
               content={SpendLegendTip}
@@ -50,7 +50,7 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
               <span>Spend</span>
             </MetricTooltip>
           </span>
-          <span className="chip bg-naira-500/10 text-naira-300 border border-naira-500/30">
+          <span className="chip bg-naira-500/10 text-naira-700 dark:text-naira-300 border border-naira-500/30">
             <span className="h-1.5 w-1.5 rounded-full bg-naira-400" />
             <MetricTooltip
               content={ConversionsLegendTip}

@@ -50,7 +50,7 @@ export function AccountsStrip({
           className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-violet-500/15 hairline text-xs"
         >
           <MetaLogo size="xs" />
-          <span className="text-mist-100">
+          <span className="text-ink-900 dark:text-mist-100">
             <MetricTooltip
               content={DemoPillTip}
               label="What demo mode means"
