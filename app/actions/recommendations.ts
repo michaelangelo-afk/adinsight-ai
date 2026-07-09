@@ -12,7 +12,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { setMetaActionMsg } from "@/lib/action-msg";
+import { setMetaActionMsg, isDemoMode } from "@/lib/action-msg";
 
 const USE_MOCK = process.env.USE_MOCK_DATA === "true";
 
@@ -31,7 +31,7 @@ export async function updateRecommendationStatus(
   newStatus: RecommendationStatusUpdate,
   _formData: FormData
 ): Promise<void> {
-  if (USE_MOCK) {
+  if (USE_MOCK || isDemoMode()) {
     cookies().set(
       "meta_action_msg",
       setMetaActionMsg.success(

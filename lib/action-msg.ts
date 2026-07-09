@@ -5,6 +5,8 @@
 // The dashboard renders the cookie value as a toast via
 // components/dashboard/meta-action-toast.tsx.
 
+import { cookies } from "next/headers";
+
 export interface MetaActionMsg {
   tone: "success" | "error";
   text: string;
@@ -54,4 +56,26 @@ export const META_DEMO_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 /** Returns true when the user has previously clicked Try demo. */
 export function parseMetaDemoFlag(raw: string | undefined): boolean {
   return raw === "1";
+}
+
+/**
+ * Server-side demo-mode guard. Reads the META_DEMO_COOKIE on demand and
+ * returns true when the user has clicked Try demo in the dashboard.
+ *
+ * Centralized so every data-source action routes through the same
+ * check — branching on the cookie in app/actions/dashboard.ts and
+ * app/actions/recommendations.ts becomes a one-liner, and the cookie
+ * name lives in exactly one place.
+ *
+ * The returned boolean drives:
+ *   - The same mock-data set that USE_MOCK_DATA=true already returns
+ *     (so the demo path doesn't introduce a third state machine).
+ *   - getConnectedAccounts() filtering Meta out of the synthetic
+ *     account list to avoid the demo pill double-printing beside a
+ *     mock Meta entry.
+ *   - Recommendations Apply/Dismiss silently succeeding without
+ *     round-tripping to Supabase (cookie reverts to mock on refresh).
+ */
+export function isDemoMode(): boolean {
+  return cookies().get(META_DEMO_COOKIE)?.value === "1";
 }

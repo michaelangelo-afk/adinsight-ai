@@ -8,14 +8,25 @@ import {
   recommendations as mockRecommendations,
   connectedAccounts as mockAccounts
 } from "@/lib/mock-data";
+import { isDemoMode } from "@/lib/action-msg";
 
 const USE_MOCK = process.env.USE_MOCK_DATA === "true";
+
+/**
+ * Demo-mode account list. We strip Meta out of the rich mock set so the
+ * dashboard's AccountsStrip doesn't render the Demo meta pill side-by-side
+ * with a synthetic "Meta Ads" entry — Meta is shown via the demo pill,
+ * Google + TikTok show as the only other connected accounts (consistent
+ * with a real Meta-only production connection).
+ */
+const demoAccounts: AdAccount[] =
+  mockAccounts.filter((a) => a.platform !== "meta");
 
 /**
  * Fetches the dashboard summary from Supabase or falls back to mock data.
  */
 export async function getDashboardSummary(): Promise<DashboardSummary> {
-  if (USE_MOCK) return mockSummary;
+  if (USE_MOCK || isDemoMode()) return mockSummary;
 
   const supabase = createClient();
   const {
@@ -97,7 +108,7 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
  * Fetches campaigns from Supabase or falls back to mock data.
  */
 export async function getCampaigns(): Promise<CampaignSummary[]> {
-  if (USE_MOCK) return mockCampaigns;
+  if (USE_MOCK || isDemoMode()) return mockCampaigns;
 
   const supabase = createClient();
   const {
@@ -149,7 +160,7 @@ export async function getCampaigns(): Promise<CampaignSummary[]> {
  * Fetches recommendations from Supabase or falls back to mock data.
  */
 export async function getRecommendations(): Promise<Recommendation[]> {
-  if (USE_MOCK) return mockRecommendations;
+  if (USE_MOCK || isDemoMode()) return mockRecommendations;
 
   const supabase = createClient();
   const {
@@ -190,6 +201,7 @@ export async function getRecommendations(): Promise<Recommendation[]> {
  */
 export async function getConnectedAccounts(): Promise<AdAccount[]> {
   if (USE_MOCK) return mockAccounts;
+  if (isDemoMode()) return demoAccounts;
 
   const supabase = createClient();
   const {
