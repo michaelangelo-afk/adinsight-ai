@@ -1,8 +1,40 @@
+// components/dashboard/topbar.tsx
+//
+// Dashboard top-bar — sticky glass header with brand on the left,
+// horizontal nav strip in the centre, utility cluster on the right.
+//
+// Phase 6 changes (this rewrite):
+//   1. Converted to a client component (`"use client"`) so it can
+//      consume `usePathname()` + share the active-state helper with
+//      `components/dashboard/sidebar.tsx`. The previous version was a
+//      server component that only knew about a single "Overview"
+//      breadcrumb — on tablets and narrow laptops the sidebar is
+//      `hidden lg:flex` and there was zero route to /influencers /
+//      /recommendations / /reports / /billing. The horizontal strip
+//      below is the fix.
+//   2. The strip imports `NAV_ITEMS` + `isNavActive` from
+//      `lib/dashboard/nav.ts` — same source as the sidebar, so the
+//      two surfaces can never drift and the active link highlights
+//      identically on both.
+//   3. `aria-current="page"` on the active nav link is the canonical
+//      screen-reader affordance. Each link also carries an explicit
+//      `aria-label` + `title` so the icon+label cluster reads
+//      correctly when focused by SR users.
+//
+// At `lg+` the sidebar still owns the primary visual; the topbar strip
+// remains visible as a quick-jump rail. Below `md` (phone) the strip is
+// hidden — see suggest_followups for a follow-up hamburger menu.
+
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bell, Calendar, ChevronDown, Search } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { NAV_ITEMS, isNavActive } from "@/lib/dashboard/nav";
+import { cn } from "@/lib/utils";
 
 export interface TopbarProfile {
   /** 1–3 letter initials or single character shown in the avatar circle */
@@ -12,9 +44,10 @@ export interface TopbarProfile {
 }
 
 export function Topbar({ profile }: { profile: TopbarProfile }) {
+  const pathname = usePathname();
   return (
     <div className="sticky top-0 z-30 backdrop-blur-xl bg-ink-950/60 border-b border-mist-50/[0.04]">
-      <div className="px-6 md:px-8 py-4 flex items-center gap-4">
+      <div className="px-4 md:px-6 lg:px-8 py-4 flex items-center gap-3 md:gap-4">
         {/* Brand — Logo + breadcrumb. The Logo is essential on screens
             where the sidebar is hidden (below lg) so the brand is
             visible at every breakpoint. Same Logo component the landing
@@ -45,8 +78,72 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
           <div className="text-sm font-medium text-mist-100">Overview</div>
         </div>
 
-        {/* Spacer */}
-        <div className="flex-1" />
+        {/* Phase 6 — Horizontal nav strip. Visible at md and above so
+            the dashboard pages have a persistent top nav even when the
+            left sidebar is hidden (below `lg`, ~1024px). Identical
+            active-state styling to the sidebar (violet-500/15 bg +
+            mist-50 text) so users see WHERE they are on either
+            surface. aria-current="page" lights up the active link for
+            screen readers. Each <Link> uses Next.js client routing +
+            prefetch for snappier navigation than plain anchors. */}
+        <nav
+          aria-label="Main navigation"
+          className="
+            hidden md:flex items-center gap-1 rounded-xl
+            bg-mist-50/[0.04] hairline px-1.5 py-1
+            mx-2 lg:mx-4
+          "
+        >
+          {NAV_ITEMS.map((n) => {
+            const Icon = n.icon;
+            const active = isNavActive(pathname, n.href);
+            return (
+              <Link
+                key={n.label}
+                href={n.href}
+                aria-current={active ? "page" : undefined}                  aria-label={n.label}
+                  title={n.label}
+                  onClick={(e) => {
+                    if (n.stub) e.preventDefault();
+                  }}
+                  className={cn(
+                    "tap-press touch-target group inline-flex items-center gap-1.5 rounded-lg px-2 lg:px-2.5 py-1.5 text-xs font-medium transition-all duration-200",
+                    active
+                      ? "bg-violet-500/15 text-mist-50"
+                      : "text-mist-300 hover:bg-mist-50/[0.06] hover:text-mist-50",
+                    n.stub && "opacity-70"
+                  )}
+                >
+                  <Icon
+                    size={14}
+                    className={cn(
+                      "shrink-0 transition-transform duration-200",
+                      active
+                        ? "text-violet-300"
+                        : "group-hover:scale-110 group-hover:text-violet-300"
+                    )}
+                  />
+                  {/* Phase 6 viewport fix — labels were crowding the
+                      768px md row visually. Icons-only at md (so even
+                      on narrow tablets 6 chips fit), full label tips
+                      in at lg+. Badge pills are reserved for xl+
+                      where horizontal space is plentiful. The
+                      aria-label / title above carry the full label
+                      for screen readers at every breakpoint. */}
+                  <span className="hidden lg:inline">{n.label}</span>
+                  {n.badge !== undefined && (
+                    <span className="hidden xl:inline-flex ml-0.5 items-center justify-center rounded-md bg-violet-500 px-1.5 h-4 text-[9px] font-semibold text-white animate-pulse-soft">
+                      {n.badge}
+                    </span>
+                  )}
+                </Link>
+            );
+          })}
+        </nav>
+
+        {/* Spacer — on phones the horizontal nav is hidden; the
+            spacer pushes the utility cluster to the right. */}
+        <div className="flex-1 md:flex-initial" />
 
         {/* Date range pill */}
         <button type="button" className="hidden sm:flex items-center gap-2 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-sm text-mist-200 hover:bg-mist-50/[0.08] hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group">

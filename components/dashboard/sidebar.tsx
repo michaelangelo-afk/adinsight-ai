@@ -2,43 +2,31 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Logo } from "@/components/brand/logo";
 import {
-  LayoutDashboard,
-  Sparkles,
-  FileText,
-  Users,
-  Wallet,
-  Settings,
-  LogOut,
-  Plus
+  Plus,
+  LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/app/actions/auth";
+import { Logo } from "@/components/brand/logo";
+import { NAV_ITEMS, isNavActive } from "@/lib/dashboard/nav";
+import { usePathname } from "next/navigation";
 
 /**
  * Sidebar nav. Phase 4 wires the Influencers entry to the real
  * `/influencers` route and uses Next's `usePathname()` to drive the
  * active state — keeping the dashboard's Overview active when on
- * `/dashboard` AND when on any nested filter URL on `/influencers`
- * (so users browsing the influencer sector get the right rail
- * highlight without losing context).
+ * `/dashboard` AND on any nested filter URL on `/influencers` (so
+ * users browsing the influencer sector get the right rail highlight
+ * without losing context).
+ *
+ * Phase 6 — NAV_ITEMS + isNavActive now live in
+ * `lib/dashboard/nav.ts` and are SHARED with the Topbar's horizontal
+ * nav strip (`components/dashboard/topbar.tsx`). Both surfaces
+ * consume the same source so the active state is consistent on
+ * either (e.g. expanding the Influencers drawer from /influencers?c=
+ * lights the same Influencers entry on both surfaces).
  */
-const NAV_BASE = [
-  { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
-  {
-    label: "Recommendations",
-    icon: Sparkles,
-    href: "/recommendations",
-    badge: 3
-  },
-  { label: "Reports", icon: FileText, href: "/reports" },
-  { label: "Influencers", icon: Users, href: "/influencers" },
-  { label: "Billing", icon: Wallet, href: "/billing" },
-  { label: "Settings", icon: Settings, href: "#" }
-] as const;
-
 interface SidebarProps {
   /** The signed-in user's organization/business name */
   orgName: string;
@@ -46,13 +34,6 @@ interface SidebarProps {
 
 export function Sidebar({ orgName }: SidebarProps) {
   const pathname = usePathname();
-  const NAV = NAV_BASE.map((n) => {
-    const isRealLink = n.href !== "#";
-    const active =
-      isRealLink &&
-      (pathname === n.href || pathname.startsWith(n.href + "/"));
-    return { ...n, active };
-  });
   return (
     <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-50/[0.04] bg-ink-900/40">
       <div className="px-5 py-5">
@@ -73,35 +54,55 @@ export function Sidebar({ orgName }: SidebarProps) {
         </button>
       </div>
 
-      <nav className="mt-6 px-3 flex-1 space-y-1">
-        {NAV.map((n) => {
+      <nav
+        className="mt-6 px-3 flex-1 space-y-1"
+        aria-label="Workspace navigation"
+      >
+        {NAV_ITEMS.map((n) => {
           const Icon = n.icon;
+          const active = isNavActive(pathname, n.href);
           return (
-            <a
+            <Link
               key={n.label}
               href={n.href}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "nav-indicator group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200 hover:translate-x-0.5",
-                n.active
+                active
                   ? "bg-violet-500/10 text-mist-50 is-active"
-                  : "text-mist-300 hover:bg-mist-50/[0.04] hover:text-mist-50"
+                  : "text-mist-300 hover:bg-mist-50/[0.04] hover:text-mist-50",
+                n.stub && "opacity-70 cursor-not-allowed"
               )}
-            >                <Icon size={16} className={cn("transition-transform duration-300", n.active ? "text-violet-300" : "group-hover:scale-110 group-hover:text-violet-300")} />
-                {n.href === "#" && (
-                  <span
-                    className="text-[9px] uppercase tracking-wider text-mist-600 ml-auto"
-                    title="Coming soon"
-                  >
-                    soon
-                  </span>
+              onClick={(e) => {
+                if (n.stub) e.preventDefault();
+              }}
+            >
+              <Icon
+                size={16}
+                className={cn(
+                  "transition-transform duration-300",
+                  active
+                    ? "text-violet-300"
+                    : "group-hover:scale-110 group-hover:text-violet-300"
                 )}
-              <span className="flex-1">{n.label}</span>
-              {(n as { badge?: number }).badge !== undefined && (
-                <span className="inline-flex items-center justify-center rounded-md bg-violet-500 px-1.5 h-5 text-[10px] font-semibold text-white animate-pulse-soft">
-                  {(n as { badge?: number }).badge}
+              />
+              {n.stub && (
+                <span
+                  className="text-[9px] uppercase tracking-wider text-mist-600 ml-auto"
+                  title="Coming soon"
+                >
+                  soon
                 </span>
               )}
-            </a>
+              <span className={cn("flex-1", n.stub && "ml-auto")}>
+                {n.label}
+              </span>
+              {n.badge !== undefined && (
+                <span className="inline-flex items-center justify-center rounded-md bg-violet-500 px-1.5 h-5 text-[10px] font-semibold text-white animate-pulse-soft">
+                  {n.badge}
+                </span>
+              )}
+            </Link>
           );
         })}
       </nav>
