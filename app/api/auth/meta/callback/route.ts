@@ -18,6 +18,16 @@
 //   6. Redirects to /dashboard?meta_connect=ok (or =failed with the
 //      unified meta_action_msg flash cookie consumed by MetaActionToast).
 
+// Belt-and-braces: explicitly force this route to evaluate on every
+// request, never at build time. cookies()/headers() inherited below
+// already trigger dynamic rendering, but declare it explicitly so a
+// future refactor doesn't accidentally strip the only dynamic
+// signal — without these, a static prerender pass that evaluated
+// `readMetaEnv()` with empty META_APP_ID could cache a permanent
+// "not configured" failure that survives adding env vars.
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
@@ -25,6 +35,7 @@ import { readMetaEnv, formatMetaEnvError } from "@/lib/meta/env";
 import {
   exchangeCodeForToken,
   fetchAdAccounts,
+  fetchMe,
   META_OAUTH_SCOPES
 } from "@/lib/meta/client";
 import { upsertMyMetaConnection } from "@/lib/supabase/meta-connections";
@@ -117,21 +128,39 @@ export async function GET(req: Request) {
     );
   }
 
-  // ---- 5. Verify scopes by hitting /me once (gives us meta_user_id) ----
+  // ---- 5. Resolve the Meta USER id + display name via /me ----
+  // The previous code used `accounts[0].id.split("_")[0]` but that
+  // just returns the literal string "act" — Meta ad-account ids are
+  // formatted `act_<digits>`; the user-id half is only on /me.
+  // /me also returns the display name we want to keep in
+  // meta_connections.meta_user_name (so the AccountsStrip and any
+  // future "Connected as: <name>" UI can show it).
   let metaUserId: string | null = null;
+  let metaUserName: string | null = null;
   try {
-    const accounts = await fetchAdAccounts(token.access_token);
-    if (accounts.length > 0) {
-      metaUserId = accounts[0].id.split("_")[0] ?? null;
-    }
+    const me = await fetchMe(token.access_token);
+    metaUserId = me.id;
+    metaUserName = me.name;
   } catch {
+    // Non-fatal: fall through to write the row with sentinel id.
     metaUserId = null;
+    metaUserName = null;
+  }
+
+  // ---- 5b. Verify scopes by hitting /me/adaccounts once ----
+  // Failure is non-fatal — we keep the connection row regardless
+  // and let the next sync attempt surface a real ad-accounts error.
+  try {
+    await fetchAdAccounts(token.access_token);
+  } catch {
+    /* non-fatal */
   }
 
   // ---- 6. Persist via service role (bypasses RLS) ----
   try {
     await upsertMyMetaConnection({
       meta_user_id: metaUserId ?? "unknown",
+      meta_user_name: metaUserName,
       access_token: token.access_token,
       expires_at: new Date(Date.now() + token.expires_in * 1000).toISOString(),
       scopes: [...META_OAUTH_SCOPES]

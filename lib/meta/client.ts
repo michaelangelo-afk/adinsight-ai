@@ -131,6 +131,44 @@ export async function exchangeForLongLivedToken(
   return (await r.json()) as MetaTokenResponse;
 }
 
+/**
+ * Fetch the authenticated Meta USER's id + display name.
+ *
+ * The OAuth callback used to infer the user id from
+ * `accounts[0].id.split("_")[0]` — but Meta ad accounts are formatted
+ * `act_<ad-account-id>`, so `split("_")[0]` just returns the literal
+ * `"act"`. The actual Facebook user id only comes from /me. /me also
+ * gives us the display name we want to write into
+ * `meta_connections.meta_user_name`.
+ *
+ * Throws on missing env OR on a non-2xx response OR on a malformed
+ * body. The caller (the OAuth callback) treats failure as
+ * non-fatal: meta_user_id falls back to "unknown" so the row still
+ * lands, with a separate diagnostic if the access token is invalid.
+ */
+export async function fetchMe(
+  accessToken: string
+): Promise<{ id: string; name: string }> {
+  const env = readMetaEnv();
+  if (!env.ok) throw new Error("Meta not configured");
+  const url =
+    `${GRAPH_BASE}/${env.apiVersion}/me` +
+    `?fields=id,name` +
+    `&access_token=${encodeURIComponent(accessToken)}`;
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) {
+    const text = await r.text();
+    throw new Error(
+      `Meta /me fetch failed: HTTP ${r.status} ${text.slice(0, 200)}`
+    );
+  }
+  const j = (await r.json()) as { id?: string; name?: string };
+  if (!j.id || !j.name) {
+    throw new Error("Meta /me response missing id or name");
+  }
+  return { id: j.id, name: j.name };
+}
+
 /** Fetch the user's Meta ad accounts (after OAuth, used in the callback + Sync). */
 export async function fetchAdAccounts(accessToken: string): Promise<MetaAdAccount[]> {
   const env = readMetaEnv();
