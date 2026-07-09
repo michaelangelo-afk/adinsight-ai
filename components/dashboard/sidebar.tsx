@@ -35,7 +35,7 @@ interface SidebarProps {
 export function Sidebar({ orgName }: SidebarProps) {
   const pathname = usePathname();
   return (
-    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-50/[0.04] bg-ink-900/40">
+    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-200 dark:border-mist-50/[0.04] bg-white/80 dark:bg-ink-900/40">
       <div className="px-5 py-5">
         <Link href="/" className="inline-flex">
           <Logo />
@@ -69,8 +69,8 @@ export function Sidebar({ orgName }: SidebarProps) {
               className={cn(
                 "nav-indicator group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200 hover:translate-x-0.5",
                 active
-                  ? "bg-violet-500/10 text-mist-50 is-active"
-                  : "text-mist-300 hover:bg-mist-50/[0.04] hover:text-mist-50",
+                  ? "bg-violet-100 text-violet-900 is-active dark:bg-violet-500/10 dark:text-mist-50"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-mist-300 dark:hover:bg-mist-50/[0.04] dark:hover:text-mist-50",
                 n.stub && "opacity-70 cursor-not-allowed"
               )}
               onClick={(e) => {
@@ -82,13 +82,13 @@ export function Sidebar({ orgName }: SidebarProps) {
                 className={cn(
                   "transition-transform duration-300",
                   active
-                    ? "text-violet-300"
-                    : "group-hover:scale-110 group-hover:text-violet-300"
+                    ? "text-violet-700 dark:text-violet-300"
+                    : "group-hover:scale-110 group-hover:text-violet-700 dark:group-hover:text-violet-300"
                 )}
               />
               {n.stub && (
                 <span
-                  className="text-[9px] uppercase tracking-wider text-mist-600 ml-auto"
+                  className="text-[9px] uppercase tracking-wider text-slate-400 ml-auto dark:text-mist-600"
                   title="Coming soon"
                 >
                   soon
@@ -108,13 +108,13 @@ export function Sidebar({ orgName }: SidebarProps) {
       </nav>
 
       <div className="px-4 pb-5">
-        <div className="rounded-xl p-4 bg-gradient-to-br from-violet-500/15 to-naira-500/15 border border-violet-500/30 hover-lift hover:border-violet-400/50 relative overflow-hidden">
+        <div className="rounded-xl p-4 bg-gradient-to-br from-violet-100 to-emerald-100 border border-violet-200 dark:from-violet-500/15 dark:to-naira-500/15 dark:border-violet-500/30 hover-lift hover:border-violet-400/50 relative overflow-hidden">
           <div aria-hidden className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-violet-500/15 blur-2xl" />
-          <div className="text-[11px] uppercase tracking-wider text-violet-200">
+          <div className="text-[11px] uppercase tracking-wider text-violet-700 dark:text-violet-200">
             Pro plan
           </div>
-          <p className="mt-1 text-xs text-mist-200 leading-relaxed">
-            Priority AI insights unlock in <strong className="text-mist-50">2 days</strong>.
+          <p className="mt-1 text-xs text-slate-600 dark:text-mist-200 leading-relaxed">
+            Priority AI insights unlock in <strong className="text-slate-900 dark:text-mist-50">2 days</strong>.
           </p>
           <button className="mt-3 w-full rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold py-2 tap-press touch-target hover:shadow-[0_0_24px_-4px_rgba(167,139,250,0.7)] transition-shadow duration-300">
             Upgrade
@@ -129,7 +129,7 @@ export function Sidebar({ orgName }: SidebarProps) {
         <form action={signOut} className="mt-4">
           <button
             type="submit"
-            className="flex items-center gap-2 text-sm text-mist-300 hover:text-rose-300 transition-colors duration-200 tap-press touch-target py-1.5 group"
+            className="flex items-center gap-2 text-sm text-slate-500 hover:text-rose-600 dark:text-mist-300 dark:hover:text-rose-300 transition-colors duration-200 tap-press touch-target py-1.5 group"
           >
             <LogOut size={14} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             Sign out

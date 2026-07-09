@@ -136,10 +136,10 @@ export function MarketplaceKpis({ stats }: { stats: MarketplaceStats }) {
             style={{ animationDelay: `${i * 60}ms` }}
           >
             <div className="flex items-center justify-between">
-              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-mist-50/[0.04] hairline transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-500/15 group-hover:border-violet-500/40">
+              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-100 group-hover:border-violet-300 dark:group-hover:bg-violet-500/15 dark:group-hover:border-violet-500/40">
                 <Icon
                   size={16}
-                  className="text-violet-300 transition-transform duration-300 group-hover:rotate-[8deg]"
+                  className="text-violet-700 dark:text-violet-300 transition-transform duration-300 group-hover:rotate-[8deg]"
                 />
               </div>
               {c.badgeTone && c.badgeText && (
@@ -147,13 +147,13 @@ export function MarketplaceKpis({ stats }: { stats: MarketplaceStats }) {
               )}
             </div>
             <div className="mt-3">
-              <div className="text-xs text-mist-600 dark:text-mist-400">
+              <div className="text-xs text-slate-600 dark:text-mist-400">
                 {c.label}
               </div>
-              <div className="mt-1 text-2xl font-semibold tracking-tight text-ink-900 dark:text-mist-50 tabular-nums animate-count-up">
+              <div className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-mist-50 tabular-nums animate-count-up">
                 {c.value}
               </div>
-              <div className="mt-0.5 text-[11px] text-mist-600 dark:text-mist-500">
+              <div className="mt-0.5 text-[11px] text-slate-500 dark:text-mist-500">
                 {c.hint}
               </div>
             </div>

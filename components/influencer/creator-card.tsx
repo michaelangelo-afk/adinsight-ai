@@ -122,6 +122,7 @@ function CreatorAvatar({
       : size === "sm"
       ? "h-9 w-9 text-[11px]"
       : "h-11 w-11 text-xs";
+
   return (
     <div className="relative inline-flex items-center justify-center">
       <div
@@ -153,12 +154,16 @@ function StatPill({
   label: string;
   value: string;
 }) {
+  // Phase 7 — light-mode parity: opaque slate-100 chip with explicit
+  // mist-200 border + dark-mode twin (was `bg-mist-50/[0.04] hairline`
+  // on hardcoded mist-* text — illegible on light surfaces and the
+  // hairline border would visually stack with adjacent badges).
   return (
-    <span className="inline-flex items-baseline gap-1.5 rounded-md bg-mist-50/[0.04] hairline px-2.5 py-1 text-[11px] text-mist-300">
-      <span className="text-mist-400 uppercase tracking-wider text-[9px]">
+    <span className="inline-flex items-baseline gap-1.5 rounded-md bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 px-2.5 py-1 text-[11px] text-slate-700 dark:text-mist-300">
+      <span className="text-slate-500 dark:text-mist-400 uppercase tracking-wider text-[9px]">
         {label}
       </span>
-      <span className="text-mist-50 font-semibold tabular-nums">{value}</span>
+      <span className="text-slate-900 dark:text-mist-50 font-semibold tabular-nums">{value}</span>
     </span>
   );
 }
@@ -173,7 +178,7 @@ export function CreatorCard(props: CreatorCardProps) {
       href={href}
       aria-label={`View ${creator.fullName} (${creator.handle}) — fit score ${fit.overall} out of 100`}
       className={
-        "group glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+        "group glass-card dark:shadow-card-elevated-dark shadow-card-elevated rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-ink-950"
       }
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -202,17 +207,17 @@ export function CreatorCard(props: CreatorCardProps) {
           />
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-mist-50 truncate">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-mist-50 truncate">
                 {creator.fullName}
               </h3>
             </div>
-            <div className="mt-0.5 text-[12px] text-mist-400 truncate">
+            <div className="mt-0.5 text-[12px] text-slate-500 dark:text-mist-400 truncate">
               {creator.handle}
             </div>
-            <div className="mt-1 flex items-center gap-1.5 text-[11px] text-mist-500">
+            <div className="mt-1 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-mist-500">
               <MapPin size={10} aria-hidden />
               <span>{creator.city}</span>
-              <span className="text-mist-600">·</span>
+              <span className="text-slate-400 dark:text-mist-600">·</span>
               <span aria-hidden>★</span>
               <span className="tabular-nums">{creator.rating.toFixed(1)}</span>
             </div>
@@ -231,14 +236,14 @@ export function CreatorCard(props: CreatorCardProps) {
 
           {isFeatured ? (
             <>
-              <p className="text-sm text-mist-200 leading-relaxed">
-                <span className="text-emerald-300 font-medium">
+              <p className="text-sm text-slate-700 dark:text-mist-200 leading-relaxed">
+                <span className="text-emerald-700 dark:text-emerald-300 font-medium">
                   Why this fits:
                 </span>{" "}
                 {props.whyFit ?? <WhyFitLine fit={fit} />}
               </p>
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-mist-500 mb-1">
+                <div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-mist-500 mb-1">
                   12-month engagement
                 </div>
                 <MiniErSpark
@@ -274,7 +279,7 @@ export function CreatorCard(props: CreatorCardProps) {
           />
           <span
             aria-hidden
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-mist-50/[0.04] hairline text-mist-300 transition-all duration-300 group-hover:text-violet-200 group-hover:bg-violet-500/15 group-hover:border-violet-500/40 group-hover:translate-x-0.5"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-slate-500 dark:text-mist-300 transition-all duration-300 group-hover:text-violet-700 group-hover:bg-violet-100 group-hover:border-violet-300 dark:group-hover:text-violet-200 dark:group-hover:bg-violet-500/15 dark:group-hover:border-violet-500/40 group-hover:translate-x-0.5 shadow-sm"
           >
             <ArrowUpRight size={14} />
           </span>
