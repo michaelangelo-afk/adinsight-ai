@@ -172,6 +172,34 @@ const config: Config = {
         "bg-shimmer-fade": {
           "0%, 100%": { opacity: "0" },
           "50%": { opacity: "1" }
+        },
+        "aurora-drift": {
+          "0%, 100%": { transform: "translate3d(0,0,0) scale(1)" },
+          "33%": { transform: "translate3d(4%, -3%, 0) scale(1.08)" },
+          "66%": { transform: "translate3d(-3%, 4%, 0) scale(0.95)" }
+        },
+        "halo-breathing": {
+          "0%, 100%": {
+            boxShadow:
+              "0 0 0 0 rgba(16, 185, 129, 0.0), 0 0 24px -2px rgba(16, 185, 129, 0.35)"
+          },
+          "50%": {
+            boxShadow:
+              "0 0 0 6px rgba(16, 185, 129, 0.10), 0 0 38px -2px rgba(16, 185, 129, 0.55)"
+          }
+        },
+        "shimmer-stripes": {
+          "0%": { backgroundPosition: "120% 0" },
+          "100%": { backgroundPosition: "-120% 0" }
+        },
+        "wiggle-3d": {
+          "0%, 100%": { transform: "translate3d(0,0,0) rotate(-1.5deg)" },
+          "50%": { transform: "translate3d(0,-2px,0) rotate(1.5deg)" }
+        },
+        "logo-leaf-grow": {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "50%": { transform: "translate(0px, -3px) scale(1.08)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" }
         }
       },
       animation: {
@@ -192,7 +220,14 @@ const config: Config = {
         "count-up": "count-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both",
         "slide-in-right":
           "slide-in-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) both",
-        "bg-shimmer-fade": "bg-shimmer-fade 1.6s ease-in-out infinite"
+        "bg-shimmer-fade": "bg-shimmer-fade 1.6s ease-in-out infinite",
+        "aurora-drift-a": "aurora-drift 22s ease-in-out infinite",
+        "aurora-drift-b": "aurora-drift 28s ease-in-out infinite reverse",
+        "aurora-drift-c": "aurora-drift 34s ease-in-out infinite",
+        "halo-breathing": "halo-breathing 3.4s ease-in-out infinite",
+        "shimmer-stripes": "shimmer-stripes 2.8s linear infinite",
+        "wiggle-3d": "wiggle-3d 3.6s ease-in-out infinite",
+        "logo-leaf-grow": "logo-leaf-grow 4.4s ease-in-out infinite"
       }
     }
   },

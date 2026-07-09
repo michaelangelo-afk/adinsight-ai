@@ -12,6 +12,11 @@ import {
   Zap,
   CircleDot
 } from "lucide-react";
+import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
+import { ParticleField } from "@/components/motion/particle-field";
+import { AnimatedIcon3D } from "@/components/motion/animated-icon-3d";
+import { MagneticCTA } from "@/components/motion/magnetic-cta";
+import { motion } from "framer-motion";
 
 const PLATFORMS = [
   { name: "Meta", short: "M", tone: "#1877F2", lightText: false },
@@ -380,22 +385,9 @@ function LiveActivityToast() {
   );
 }
 
-/** Animated mesh-gradient hero background — three radial gradients that drift. */
+/** Premium hero background — four drifting emerald orbs + grain. */
 function MeshBackground() {
-  return (
-    <>
-      <div className="absolute inset-0 grid-bg pointer-events-none" />
-      <div
-        aria-hidden
-        className="
-          absolute inset-x-0 top-0 -z-10 h-[680px] pointer-events-none
-          bg-mesh-gradient-light animate-mesh-shift
-          dark:bg-mesh-gradient-dark
-        "
-        style={{ backgroundSize: "140% 140%" }}
-      />
-    </>
-  );
+  return <AuroraOrbsBackground variant="light" />;
 }
 
 export function Hero() {
@@ -489,15 +481,17 @@ export function Hero() {
         className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 animate-fade-up w-full sm:w-auto"
         style={{ animationDelay: "480ms", animationFillMode: "both" }}
       >
-              <LinkButton
-                href="/dashboard"
-                variant="primary"
-                size="lg"
-                className="shadow-glow-emerald shadow-[0_0_50px_-5px_rgba(16,185,129,0.55)] hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] touch-target group"
-              >
-                Start free 14-day trial
-                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </LinkButton>
+              <MagneticCTA>
+                <LinkButton
+                  href="/dashboard"
+                  variant="primary"
+                  size="lg"
+                  className="shadow-glow-emerald shadow-[0_0_50px_-5px_rgba(16,185,129,0.55)] hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] touch-target group"
+                >
+                  Start free 14-day trial
+                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </LinkButton>
+              </MagneticCTA>
               <LinkButton href="#workflow" variant="secondary" size="lg">
                 See how it works
               </LinkButton>
@@ -530,6 +524,23 @@ export function Hero() {
             style={{ animationDelay: "120ms", animationFillMode: "both" }}
           >
             <LiveActivityToast />
+            {/* Orbiting badge floating above the dashboard preview — adds a
+                motion-path anchor above the HeroPreview. */}
+            <motion.div
+              className="absolute -top-6 -right-6 z-20 hidden lg:block"
+              animate={{
+                y: [0, -6, 0],
+                rotate: [-3, 3, -3]
+              }}
+              transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <div className="rounded-full bg-violet-700/15 border border-violet-700/30 px-3 py-1.5 shadow-[0_0_20px_-2px_rgba(16,185,129,0.55)] backdrop-blur-md dark:bg-violet-700/20 dark:border-violet-700/30">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-violet-700 dark:text-violet-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse-soft" />
+                  LIVE
+                </span>
+              </div>
+            </motion.div>
             <HeroPreview />
           </div>
         </div>

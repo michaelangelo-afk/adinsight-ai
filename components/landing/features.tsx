@@ -6,6 +6,8 @@ import {
   Users,
   type LucideIcon
 } from "lucide-react";
+import { AnimatedIcon3D } from "@/components/motion/animated-icon-3d";
+import { ParticleField } from "@/components/motion/particle-field";
 
 type Feature = {
   icon: LucideIcon;
@@ -153,20 +155,17 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
       <div
         className={"relative z-10 " + (isHero ? "p-7 md:p-8" : "p-6")}
       >
-        <div
-          className={
-            "inline-flex items-center justify-center rounded-xl border transition-all duration-300 group-hover:scale-110 group-hover:rotate-[8deg] group-hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.4)] " +
-            feature.iconHalo +
-            " " +
-            (isHero ? "h-12 w-12" : "h-11 w-11")
+        <AnimatedIcon3D
+          icon={
+            <Icon
+              size={isHero ? 22 : 20}
+              strokeWidth={2}
+              className="text-violet-700 dark:text-violet-300"
+            />
           }
-        >
-          <Icon
-            size={isHero ? 22 : 20}
-            className="text-violet-700 dark:text-violet-300 transition-transform duration-300"
-            strokeWidth={2}
-          />
-        </div>
+          size={isHero ? "h-12 w-12" : "h-11 w-11"}
+          tone="emerald"
+        />
         <h3
           className={
             "mt-5 font-bold tracking-tight text-mist-600 dark:text-mist-50 " +

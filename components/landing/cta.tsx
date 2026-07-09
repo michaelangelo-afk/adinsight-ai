@@ -1,5 +1,8 @@
 import { LinkButton } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
+import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
+import { ParticleField } from "@/components/motion/particle-field";
+import { MagneticCTA } from "@/components/motion/magnetic-cta";
 
 export function Cta() {
   return (
@@ -9,7 +12,7 @@ export function Cta() {
         bg-surface-50 dark:bg-ink-950
       "
     >
-      <div className="absolute inset-0 bg-glow-emerald blur-3xl opacity-50 dark:opacity-30 pointer-events-none" />
+      <AuroraOrbsBackground variant="dark" intensity={1.15} />
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div
@@ -63,15 +66,17 @@ export function Cta() {
                 across Meta, Google, and TikTok — from one dashboard.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <LinkButton
-                  href="/dashboard"
-                  variant="primary"
-                  size="lg"
-                  className="touch-target group hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] transition-shadow duration-300"
-                >
-                  Start free 14-day trial
-                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </LinkButton>
+                <MagneticCTA>
+                  <LinkButton
+                    href="/dashboard"
+                    variant="primary"
+                    size="lg"
+                    className="touch-target group hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] transition-shadow duration-300"
+                  >
+                    Start free 14-day trial
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </LinkButton>
+                </MagneticCTA>
                 <LinkButton
                   href="#"
                   aria-label="Chat on WhatsApp (demo link — phone number configured post-launch)"

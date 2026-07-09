@@ -1,6 +1,7 @@
 import { LinkButton } from "@/components/ui/button";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ParticleField } from "@/components/motion/particle-field";
 
 type Tier = {
   name: string;
@@ -101,7 +102,7 @@ export function Pricing() {
             <div
               key={t.name}
               className={cn(
-                "relative rounded-2xl p-7 transition-all duration-300 hover-lift group",
+                "relative rounded-2xl overflow-hidden p-7 transition-all duration-300 hover-lift group",
                 t.highlight
                   ? "bg-white border-2 border-violet-700/60 shadow-glow-forest dark:border-violet-500/60 dark:shadow-glow-emerald-dark dark:bg-ink-900"
                   : "bg-white border border-mist-200 shadow-card-flat dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark hover:border-violet-300/60"
@@ -126,6 +127,26 @@ export function Pricing() {
                       "radial-gradient(80% 60% at 50% 0%, rgba(16,185,129,0.18), transparent 70%)"
                   }}
                 />
+              )}
+              {t.highlight && (
+                <ParticleField
+                  count={28}
+                  seed={t.name.length * 7 + 7}
+                  variant="light"
+                  className="[&>span]:opacity-40"
+                />
+              )}
+              {t.highlight && (
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute top-6 right-6"
+                >
+                  <Crown
+                    size={20}
+                    strokeWidth={2.2}
+                    className="text-emerald-500 animate-wiggle-3d"
+                  />
+                </div>
               )}
               <div className="flex items-center justify-between">
                 <h3

@@ -1,4 +1,5 @@
 import { Plug, Sparkles, LineChart, Check } from "lucide-react";
+import { GradientBeam } from "@/components/motion/gradient-beam";
 
 const STEPS = [
   {
@@ -128,34 +129,35 @@ export function Workflow() {
                   ))}
                 </ul>
                 {i < STEPS.length - 1 && (
-                  <svg
-                    aria-hidden
-                    className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 pointer-events-none"
-                    width="56"
-                    height="24"
-                    viewBox="0 0 56 24"
-                    fill="none"
-                  >
-                    <path
+                  <>
+                    <GradientBeam
                       d="M 0 12 Q 28 -2, 56 12"
-                      stroke="rgb(21 128 61 / 0.45)"
-                      className="dark:stroke-[rgb(16,185,129,0.5)]"
-                      strokeWidth="1.5"
-                      strokeDasharray="4 4"
-                      strokeLinecap="round"
-                      fill="none"
+                      width={56}
+                      height={24}
+                      duration={4.5}
+                      color="#10B981"
+                      className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 z-10"
                     />
-                    <path
-                      d="M 46 4 L 54 12 L 46 20"
-                      stroke="rgb(21 128 61 / 0.8)"
-                      className="dark:stroke-[rgb(16,185,129,0.85)]"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                    <svg
+                      aria-hidden
+                      className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 pointer-events-none"
+                      width="56"
+                      height="24"
+                      viewBox="0 0 56 24"
                       fill="none"
-                    />
-                    <circle cx="56" cy="12" r="2" fill="rgb(22 163 74)" className="dark:fill-[rgb(16,185,129)]" />
-                  </svg>
+                    >
+                      <path
+                        d="M 46 4 L 54 12 L 46 20"
+                        stroke="rgb(21 128 61 / 0.8)"
+                        className="dark:stroke-[rgb(16,185,129,0.85)]"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="none"
+                      />
+                      <circle cx="56" cy="12" r="2" fill="rgb(22 163 74)" className="dark:fill-[rgb(16,185,129)]" />
+                    </svg>
+                  </>
                 )}
               </div>
             );
