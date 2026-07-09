@@ -100,7 +100,7 @@ export function RecommendationsPanel({
                   <MetricTooltip
                     content={ImpactTip}
                     label="What impact level means"
-                    side="left"
+                    side="bottom"
                   >
                     <span>
                       <Badge tone={impactTone(r.impact)}>

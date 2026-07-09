@@ -163,7 +163,7 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
                 <MetricTooltip
                   content={DeltaTip}
                   label="What the period-vs-period delta means"
-                  side="left"
+                  side="bottom"
                 >
                   <span className="inline-flex items-center gap-1">
                     {isPositive ? (
