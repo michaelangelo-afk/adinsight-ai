@@ -1,7 +1,11 @@
+"use client";
+
 // components/billing/invoice-list.tsx
 //
-// Server-rendered invoice list. Simple table — recent invoices at
-// top, with a quiet hover-only PDF preview/download affordance.
+// Client-rendered invoice list. Each row carries its own download
+// button (uses an inline onClick handler to surface the demo PDF
+// alert), so the component must live on the client side of the RSC
+// boundary.
 
 import { Download, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";

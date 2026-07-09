@@ -105,10 +105,6 @@ export default async function ReportsPage() {
                 <Button
                   variant="primary"
                   size="md"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("Generator wizard — coming next sprint");
-                  }}
                 >
                   <FileText size={13} aria-hidden />
                   Generate report

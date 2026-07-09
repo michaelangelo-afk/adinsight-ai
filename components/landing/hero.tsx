@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Logo } from "@/components/brand/logo";
 import { LinkButton } from "@/components/ui/button";
