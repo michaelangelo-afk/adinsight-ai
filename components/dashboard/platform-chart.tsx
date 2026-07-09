@@ -12,6 +12,13 @@ import {
 import type { DashboardSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
 import { MetaLogo } from "@/components/brand/meta-logo";
+import { MetricTooltip } from "@/components/ui/tooltip";
+import {
+  MetaBriefTip,
+  GoogleBriefTip,
+  TiktokBriefTip,
+  BestCostPerConvTip
+} from "@/lib/metric-tooltips";
 
 const PLATFORM_META: Record<string, { name: string; color: string }> = {
   meta: { name: "Meta", color: "#9b6cff" },
@@ -98,31 +105,67 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
 
       {/* Conversion rate per platform */}
       <div className="mt-4 pt-4 border-t border-mist-50/[0.04] space-y-3">
-        {chartData.map((p) => (
-          <div key={p.platform} className="flex items-center gap-3">
-            {p.orig === "meta" ? (
-              <MetaLogo size="xs" />
-            ) : (
-              <span
-                className="h-2 w-2 rounded-full shrink-0"
-                style={{ background: p.color }}
-                aria-hidden="true"
-              />
-            )}
-            <span className="text-sm text-mist-200 flex-1">{p.platform}</span>
-            <span className="text-sm text-mist-50 font-medium tabular-nums">
-              {p.conversions} conv
-            </span>
-            <span className="text-xs text-mist-400 tabular-nums w-12 text-right">
-              {formatPercent(p.share, 0)}
-            </span>
-          </div>
-        ))}
+        {chartData.map((p) => {
+          const tip =
+            p.orig === "meta"
+              ? MetaBriefTip
+              : p.orig === "google"
+              ? GoogleBriefTip
+              : p.orig === "tiktok"
+              ? TiktokBriefTip
+              : null;
+          const ariaLabel =
+            p.orig === "meta"
+              ? "What Meta Ads means"
+              : p.orig === "google"
+              ? "What Google Ads means"
+              : p.orig === "tiktok"
+              ? "What TikTok Ads means"
+              : `What ${p.platform} Ads means`;
+          return (
+            <div key={p.platform} className="flex items-center gap-3">
+              {p.orig === "meta" ? (
+                <MetaLogo size="xs" />
+              ) : (
+                <span
+                  className="h-2 w-2 rounded-full shrink-0"
+                  style={{ background: p.color }}
+                  aria-hidden="true"
+                />
+              )}
+              <span className="text-sm text-mist-200 flex-1">
+                {tip ? (
+                  <MetricTooltip
+                    content={tip}
+                    label={ariaLabel}
+                    side="top"
+                  >
+                    <span>{p.platform}</span>
+                  </MetricTooltip>
+                ) : (
+                  p.platform
+                )}
+              </span>
+              <span className="text-sm text-mist-50 font-medium tabular-nums">
+                {p.conversions} conv
+              </span>
+              <span className="text-xs text-mist-400 tabular-nums w-12 text-right">
+                {formatPercent(p.share, 0)}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-4 rounded-lg bg-violet-500/[0.06] border border-violet-500/20 p-3 text-xs text-mist-200">
         <strong className="text-violet-300">
-          Best cost-per-conversion:
+          <MetricTooltip
+            content={BestCostPerConvTip}
+            label="What best cost-per-conversion means"
+            side="top"
+          >
+            <span>Best cost-per-conversion:</span>
+          </MetricTooltip>
         </strong>{" "}
         Meta Retargeting — ₦362/c. Lean into it.
       </div>

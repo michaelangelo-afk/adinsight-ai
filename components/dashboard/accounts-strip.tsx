@@ -2,6 +2,8 @@ import { Plus, RefreshCw, Link2, Sparkles } from "lucide-react";
 import type { AdAccount } from "@/lib/types";
 import { connectMeta, connectDemoMeta, syncInsights } from "@/app/actions/meta";
 import { MetaLogo } from "@/components/brand/meta-logo";
+import { MetricTooltip } from "@/components/ui/tooltip";
+import { DemoPillTip } from "@/lib/metric-tooltips";
 
 const PLATFORM_META: Record<string, { name: string; color: string }> = {
   meta: { name: "Meta Ads", color: "#9b6cff" },
@@ -48,7 +50,15 @@ export function AccountsStrip({
           className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-violet-500/15 hairline text-xs"
         >
           <MetaLogo size="xs" />
-          <span className="text-mist-100">Meta Ads</span>
+          <span className="text-mist-100">
+            <MetricTooltip
+              content={DemoPillTip}
+              label="What demo mode means"
+              side="bottom"
+            >
+              <span>Meta Ads</span>
+            </MetricTooltip>
+          </span>
           <span
             title="Demo mode — no real Meta OAuth. Connect Meta Ads to swap to live data."
             className="chip px-2 py-0 text-[9px] uppercase tracking-wider bg-violet-500/30 text-violet-100 border border-violet-500/40"

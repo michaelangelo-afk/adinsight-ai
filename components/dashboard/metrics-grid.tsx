@@ -8,6 +8,14 @@ import {
 } from "lucide-react";
 import { formatDelta, formatNaira } from "@/lib/utils";
 import type { DashboardSummary } from "@/lib/types";
+import { MetricTooltip } from "@/components/ui/tooltip";
+import {
+  SpendTip,
+  ConversionsTip,
+  CpcTip,
+  RoiTip,
+  DeltaTip
+} from "@/lib/metric-tooltips";
 
 type Card = {
   label: string;
@@ -17,6 +25,10 @@ type Card = {
   icon: LucideIcon;
   series: number[];
   sub?: string;
+  /** Tooltip body (definition + formula + heuristic) for the metric label */
+  tooltip: React.ReactNode;
+  /** aria-label for the MetricTooltip's info button */
+  tooltipLabel: string;
 };
 
 function buildCards(s: DashboardSummary): Card[] {
@@ -32,7 +44,9 @@ function buildCards(s: DashboardSummary): Card[] {
       invertColor: true, // negative is good
       icon: Banknote,
       series: seriesFor("spend"),
-      sub: "last 30 days"
+      sub: "last 30 days",
+      tooltip: SpendTip,
+      tooltipLabel: "What total spend means"
     },
     {
       label: "Conversions",
@@ -41,7 +55,9 @@ function buildCards(s: DashboardSummary): Card[] {
       invertColor: false,
       icon: Users,
       series: seriesFor("conversions"),
-      sub: "last 30 days"
+      sub: "last 30 days",
+      tooltip: ConversionsTip,
+      tooltipLabel: "What conversions means"
     },
     {
       label: "Avg CPC",
@@ -50,7 +66,9 @@ function buildCards(s: DashboardSummary): Card[] {
       invertColor: true,
       icon: Coins,
       series: seriesFor("spend").map((v) => v / 40),
-      sub: "across all campaigns"
+      sub: "across all campaigns",
+      tooltip: CpcTip,
+      tooltipLabel: "What cost-per-click means"
     },
     {
       label: "ROI",
@@ -59,7 +77,9 @@ function buildCards(s: DashboardSummary): Card[] {
       invertColor: false,
       icon: TrendingUp,
       series: seriesFor("conversions").map((v) => v * 8),
-      sub: "return per ₦1 spent"
+      sub: "return per ₦1 spent",
+      tooltip: RoiTip,
+      tooltipLabel: "What ROI means"
     }
   ];
 }
@@ -140,16 +160,32 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
                     : "bg-rose-500/15 text-rose-400")
                 }
               >
-                {isPositive ? (
-                  <TrendingUp size={10} />
-                ) : (
-                  <TrendingDown size={10} />
-                )}
-                {formatDelta(c.delta).replace(/^[▲▼]\s*/, "")}
+                <MetricTooltip
+                  content={DeltaTip}
+                  label="What the period-vs-period delta means"
+                  side="left"
+                >
+                  <span className="inline-flex items-center gap-1">
+                    {isPositive ? (
+                      <TrendingUp size={10} />
+                    ) : (
+                      <TrendingDown size={10} />
+                    )}
+                    {formatDelta(c.delta).replace(/^[▲▼]\s*/, "")}
+                  </span>
+                </MetricTooltip>
               </span>
             </div>
             <div className="mt-3">
-              <div className="text-xs text-mist-400">{c.label}</div>
+              <div className="text-xs text-mist-400">
+                <MetricTooltip
+                  content={c.tooltip}
+                  label={c.tooltipLabel}
+                  side="top"
+                >
+                  <span>{c.label}</span>
+                </MetricTooltip>
+              </div>
               <div className="mt-1 text-2xl font-semibold tracking-tight text-mist-50 tabular-nums animate-count-up">
                 {c.value}
               </div>

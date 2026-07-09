@@ -12,6 +12,8 @@ import {
 } from "recharts";
 import type { DashboardSummary } from "@/lib/types";
 import { formatCompactNumber, formatNaira } from "@/lib/utils";
+import { MetricTooltip } from "@/components/ui/tooltip";
+import { SpendLegendTip, ConversionsLegendTip } from "@/lib/metric-tooltips";
 
 export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
   // Format date for x-axis
@@ -40,11 +42,23 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
         <div className="flex items-center gap-2">
           <span className="chip bg-violet-500/10 text-violet-300 border border-violet-500/30">
             <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-            Spend
+            <MetricTooltip
+              content={SpendLegendTip}
+              label="What the daily spend line means"
+              side="bottom"
+            >
+              <span>Spend</span>
+            </MetricTooltip>
           </span>
           <span className="chip bg-naira-500/10 text-naira-300 border border-naira-500/30">
             <span className="h-1.5 w-1.5 rounded-full bg-naira-400" />
-            Conversions
+            <MetricTooltip
+              content={ConversionsLegendTip}
+              label="What the daily conversions line means"
+              side="bottom"
+            >
+              <span>Conversions</span>
+            </MetricTooltip>
           </span>
         </div>
       </div>

@@ -3,9 +3,16 @@
 import { useState } from "react";
 import { Pause, Play, ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { MetricTooltip } from "@/components/ui/tooltip";
 import type { CampaignSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
 import { updateCampaign } from "@/app/actions/meta";
+import {
+  ColumnSpendTip,
+  ColumnConversionsTip,
+  ColumnCpcTip,
+  TrendSparklineTip
+} from "@/lib/metric-tooltips";
 
 function Sparkline({ data, tone }: { data: number[]; tone: "good" | "warn" | "bad" }) {
   const w = 80;
@@ -115,14 +122,50 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
           <thead>
             <tr className="text-xs text-mist-400 border-b border-mist-50/[0.06]">
               <th className="text-left py-3 px-2 font-medium">Campaign</th>
-              <th className="text-right py-3 px-2 font-medium">Spend</th>
-              <th className="text-right py-3 px-2 font-medium hidden md:table-cell">
-                Conversions
+              <th className="text-right py-3 px-2 font-medium">
+                <span className="inline-flex items-baseline justify-end w-full">
+                  <MetricTooltip
+                    content={ColumnSpendTip}
+                    label="What spend means"
+                    side="bottom"
+                  >
+                    <span>Spend</span>
+                  </MetricTooltip>
+                </span>
               </th>
               <th className="text-right py-3 px-2 font-medium hidden md:table-cell">
-                CPC
+                <span className="inline-flex items-baseline justify-end w-full">
+                  <MetricTooltip
+                    content={ColumnConversionsTip}
+                    label="What conversions means"
+                    side="bottom"
+                  >
+                    <span>Conversions</span>
+                  </MetricTooltip>
+                </span>
               </th>
-              <th className="text-right py-3 px-2 font-medium">Trend</th>
+              <th className="text-right py-3 px-2 font-medium hidden md:table-cell">
+                <span className="inline-flex items-baseline justify-end w-full">
+                  <MetricTooltip
+                    content={ColumnCpcTip}
+                    label="What CPC means"
+                    side="bottom"
+                  >
+                    <span>CPC</span>
+                  </MetricTooltip>
+                </span>
+              </th>
+              <th className="text-right py-3 px-2 font-medium">
+                <span className="inline-flex items-baseline justify-end w-full">
+                  <MetricTooltip
+                    content={TrendSparklineTip}
+                    label="What the trend sparkline means"
+                    side="bottom"
+                  >
+                    <span>Trend</span>
+                  </MetricTooltip>
+                </span>
+              </th>
               <th className="text-right py-3 px-2 font-medium">Status</th>
             </tr>
           </thead>

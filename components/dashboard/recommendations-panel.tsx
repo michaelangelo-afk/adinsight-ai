@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Sparkles, Check, X, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { MetricTooltip } from "@/components/ui/tooltip";
 import type { Recommendation } from "@/lib/types";
 import { formatNaira } from "@/lib/utils";
 import { updateRecommendationStatus } from "@/app/actions/recommendations";
+import { SavingsOnTableTip, ImpactTip } from "@/lib/metric-tooltips";
 
 type Filter = "all" | "pending" | "applied" | "dismissed";
 
@@ -48,7 +50,13 @@ export function RecommendationsPanel({
             AI Recommendations
           </div>
           <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
-            {formatNaira(totalSavings)} on the table.
+            <MetricTooltip
+              content={SavingsOnTableTip}
+              label="What ₦ on the table means"
+              side="bottom"
+            >
+              <span>{formatNaira(totalSavings)} on the table.</span>
+            </MetricTooltip>
           </h3>
           <p className="mt-1 text-sm text-mist-300">
             Tap &ldquo;Apply&rdquo; to jump straight to Ads Manager with the change queued.
@@ -89,9 +97,17 @@ export function RecommendationsPanel({
                   <h4 className="text-sm font-semibold text-mist-50 leading-snug">
                     {r.title}
                   </h4>
-                  <Badge tone={impactTone(r.impact)}>
-                    {r.impact} impact
-                  </Badge>
+                  <MetricTooltip
+                    content={ImpactTip}
+                    label="What impact level means"
+                    side="left"
+                  >
+                    <span>
+                      <Badge tone={impactTone(r.impact)}>
+                        {r.impact} impact
+                      </Badge>
+                    </span>
+                  </MetricTooltip>
                 </div>
                 <p className="mt-1.5 text-xs text-mist-300 leading-relaxed">
                   {r.body}
