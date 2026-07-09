@@ -22,6 +22,7 @@
 //      THIS MUST BE MOVED TO SUPABASE VAULT before any production push.
 
 import "server-only";
+import { cache } from "react";
 import { createClient as createAnonClient } from "./server";
 import { createServiceClient } from "./server";
 
@@ -42,15 +43,31 @@ export interface MetaConnectionWithSecrets extends MetaConnectionMeta {
   refresh_token: string | null;
 }
 
-async function getAuthedUser(): Promise<{ id: string } | null> {
-  const anon = createAnonClient();
-  try {
-    const r = await anon.auth.getUser();
-    return r.data.user ? { id: r.data.user.id } : null;
-  } catch {
-    return null;
+/**
+ * Resolve the currently-signed-in Supabase user.
+ *
+ * Wrapped in React.cache() so the four call sites below (meta lookup,
+ * secrets lookup, upsert, disconnect) all share the SAME auth.getUser()
+ * roundtrip per server-action / route-handler request. Without the
+ * cache() wrap, each call would hit Supabase auth independently, and a
+ * token-refresh race could fire inside an action that already settled
+ * its own cookies() — a silent failure mode during the OAuth callback
+ * upsert that loses the state cookie in the middle of the upsert.
+ *
+ * Returns a fresh object literal each call, so callers may safely
+ * destructure; dedupe is at the promise level, not the value level.
+ */
+const getAuthedUser = cache(
+  async (): Promise<{ id: string } | null> => {
+    const anon = createAnonClient();
+    try {
+      const r = await anon.auth.getUser();
+      return r.data.user ? { id: r.data.user.id } : null;
+    } catch {
+      return null;
+    }
   }
-}
+);
 
 /**
  * User-safe metadata — read from the RLS-exposed view. Never includes

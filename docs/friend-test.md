@@ -68,7 +68,17 @@ Send her this message verbatim or copy-paste the relevant lines:
 >    later.)
 > 4. Make sure you're **logged into facebook.com** as the user whose
 >    ad account you want to test with.
-> 5. Send me back:
+> 5. **Add me as a Developer or Tester** on your app:
+>    your app → **Settings → Roles → Roles** →
+>    **Add → Admin / Developer / Tester**, paste my Facebook
+>    profile URL or uid. This is required because a Meta app in
+>    *Development* mode (the default for every new app) blocks the
+>    OAuth login flow for any user outside the Admin / Developer /
+>    Tester list — the dialog opens, the consent screen appears,
+>    then Meta redirects back with `error=access_denied` and we see
+>    *“Meta denied: access_denied”*. Skipping this step is the
+>    single most common silent failure for the friend-test.
+> 6. Send me back:
 >    - the **App ID**,
 >    - the **App Secret** (treat carefully — I'll put it in
 >      `.env.local` only, never commit it),
