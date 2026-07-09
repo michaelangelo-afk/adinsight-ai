@@ -175,10 +175,6 @@ export default async function RecommendationsPage({
                 <Button
                   variant="primary"
                   size="md"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert(`Applied top ${Math.min(3, appliedCount)} recommendations (demo)`);
-                  }}
                 >
                   <Zap size={13} aria-hidden />
                   Apply top 3

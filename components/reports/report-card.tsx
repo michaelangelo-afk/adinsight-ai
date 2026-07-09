@@ -1,9 +1,17 @@
+"use client";
+
 // components/reports/report-card.tsx
 //
-// Server-rendered card for a single perf report. Two variants:
+// Client-rendered card for a single perf report. Two variants:
 //  - "hero" : spans 2 cols on lg+, used for the most recent report;
 //             includes a stack-of-pages decorative element.
 //  - "row"  : compact card with date + size + download CTA.
+//
+// Marked "use client" because the inline onClick handlers on the
+// Download / Email buttons need a client-side boundary \u2014 these are
+// real interactive affordances, not placeholders, so promoting the
+// whole card to a client component is the right scope (the card is
+// inherently interactive).
 
 import Link from "next/link";
 import {
