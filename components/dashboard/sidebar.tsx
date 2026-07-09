@@ -1,5 +1,8 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/logo";
 import {
   LayoutDashboard,
@@ -14,14 +17,22 @@ import {
 import { cn } from "@/lib/utils";
 import { signOut } from "@/app/actions/auth";
 
-const NAV = [
-  { label: "Overview", icon: LayoutDashboard, href: "/dashboard", active: true },
+/**
+ * Sidebar nav. Phase 4 wires the Influencers entry to the real
+ * `/influencers` route and uses Next's `usePathname()` to drive the
+ * active state — keeping the dashboard's Overview active when on
+ * `/dashboard` AND when on any nested filter URL on `/influencers`
+ * (so users browsing the influencer sector get the right rail
+ * highlight without losing context).
+ */
+const NAV_BASE = [
+  { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
   { label: "Recommendations", icon: Sparkles, href: "#", badge: 3 },
   { label: "Reports", icon: FileText, href: "#" },
-  { label: "Influencers", icon: Users, href: "#" },
+  { label: "Influencers", icon: Users, href: "/influencers" },
   { label: "Billing", icon: Wallet, href: "#" },
   { label: "Settings", icon: Settings, href: "#" }
-];
+] as const;
 
 interface SidebarProps {
   /** The signed-in user's organization/business name */
@@ -29,6 +40,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ orgName }: SidebarProps) {
+  const pathname = usePathname();
+  const NAV = NAV_BASE.map((n) => {
+    const isRealLink = n.href !== "#";
+    const active =
+      isRealLink &&
+      (pathname === n.href || pathname.startsWith(n.href + "/"));
+    return { ...n, active };
+  });
   return (
     <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-50/[0.04] bg-ink-900/40">
       <div className="px-5 py-5">
@@ -62,8 +81,15 @@ export function Sidebar({ orgName }: SidebarProps) {
                   ? "bg-violet-500/10 text-mist-50 is-active"
                   : "text-mist-300 hover:bg-mist-50/[0.04] hover:text-mist-50"
               )}
-            >
-              <Icon size={16} className={cn("transition-transform duration-300", n.active ? "text-violet-300" : "group-hover:scale-110 group-hover:text-violet-300")} />
+            >                <Icon size={16} className={cn("transition-transform duration-300", n.active ? "text-violet-300" : "group-hover:scale-110 group-hover:text-violet-300")} />
+                {n.href === "#" && (
+                  <span
+                    className="text-[9px] uppercase tracking-wider text-mist-600 ml-auto"
+                    title="Coming soon"
+                  >
+                    soon
+                  </span>
+                )}
               <span className="flex-1">{n.label}</span>
               {(n as { badge?: number }).badge !== undefined && (
                 <span className="inline-flex items-center justify-center rounded-md bg-violet-500 px-1.5 h-5 text-[10px] font-semibold text-white animate-pulse-soft">
