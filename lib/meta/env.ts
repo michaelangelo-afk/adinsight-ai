@@ -109,6 +109,11 @@ export function formatMetaEnvError(status: {
     `Server detected — META_APP_ID: ${status.appIdSet ? "set" : "(empty)"}, ` +
     `META_APP_SECRET: ${status.appSecretSet ? "set" : "(empty)"}. ` +
     `If both look set, restart \`npm run dev\` so Next.js reloads .env.local. ` +
-    `Verify with GET /api/health/meta.`
+    `Verify with GET /api/health/meta. ` +
+    `Note: the redirect URI above must be reachable from Meta's servers — ` +
+    `localhost only works if your dev server is reachable from the open ` +
+    `internet. If you're on a VPD / SSH / cloud sandbox, run ` +
+    `\`ngrok http 3000\` (see docs/friend-test.md §9), then paste the ` +
+    `public HTTPS URL here AND in your Meta app's Valid OAuth Redirect URIs.`
   );
 }

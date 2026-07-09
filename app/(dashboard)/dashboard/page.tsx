@@ -23,6 +23,7 @@ import {
   META_DEMO_COOKIE,
   parseMetaDemoFlag
 } from "@/lib/action-msg";
+import { readMetaEnv } from "@/lib/meta/env";
 
 /**
  * Phase 2 — Real-Supabase dashboard page.
@@ -54,6 +55,13 @@ export default async function DashboardPage() {
   const hasDemo = parseMetaDemoFlag(
     cookies().get(META_DEMO_COOKIE)?.value
   );
+
+  // Detect Meta env readiness so AccountsStrip can swap the dead-end
+  // Connect button for a 'Set up your Meta app' deep-link to the Meta
+  // developer portal when META_APP_ID / META_APP_SECRET aren't yet on
+  // the server. Cheaper than letting the user click into a wall-of-text
+  // toast — and matches the actionable nudge the runbook recommends.
+  const metaEnvReady = readMetaEnv().ok;
 
   // Topbar profile from the joined auth.users + public.users + organizations.
   // (resolveOrgName lives in app/actions/auth.ts and is shared with
@@ -122,7 +130,11 @@ export default async function DashboardPage() {
                 )}
               </p>
             </div>
-            <AccountsStrip accounts={accounts ?? []} hasDemo={hasDemo} />
+            <AccountsStrip
+              accounts={accounts ?? []}
+              hasDemo={hasDemo}
+              metaEnvReady={metaEnvReady}
+            />
           </div>
 
           <MetricsGrid summary={summary} />

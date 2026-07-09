@@ -1,9 +1,15 @@
-import { Plus, RefreshCw, Link2, Sparkles } from "lucide-react";
+import { Plus, RefreshCw, Link2, Sparkles, ExternalLink } from "lucide-react";
 import type { AdAccount } from "@/lib/types";
 import { connectMeta, connectDemoMeta, syncInsights } from "@/app/actions/meta";
 import { MetaLogo } from "@/components/brand/meta-logo";
 import { MetricTooltip } from "@/components/ui/tooltip";
 import { DemoPillTip } from "@/lib/metric-tooltips";
+
+/** Deep-link to the Meta app creation wizard — opened when env vars are
+ *  missing so users get pointed at the actual setup instead of a
+ *  dead-end Connect button. Use `target=_blank` so they keep their
+ *  dashboard context. */
+const META_APP_CREATE_URL = "https://developers.facebook.com/apps/create";
 
 const PLATFORM_META: Record<string, { name: string; color: string }> = {
   meta: { name: "Meta Ads", color: "#9b6cff" },
@@ -30,7 +36,8 @@ function PlatformMark({ platform }: { platform: string }) {
 
 export function AccountsStrip({
   accounts,
-  hasDemo
+  hasDemo,
+  metaEnvReady = true
 }: {
   accounts: AdAccount[];
   /**
@@ -41,7 +48,24 @@ export function AccountsStrip({
    * to import `cookies()` into a client-or-bare component.
    */
   hasDemo?: boolean;
+  /**
+   * Whether the META_APP_ID / META_APP_SECRET env vars are set on the
+   * server. When false, the Connect / Sync server actions would dead-end
+   * with the env-config toast; better to replace them with a 'Set up
+   * your Meta app' CTA pointing at developers.facebook.com/apps/create.
+   * The dashboard reads `readMetaEnv()` server-side and forwards the
+   * boolean here so the component stays a pure Server Component.
+   *
+   * Default true to keep legacy call sites backwards-compatible — only
+   * the dashboard page wires this prop today.
+   */
+  metaEnvReady?: boolean;
 }) {
+  // Sync is meaningful only when a real Meta connection exists; on a
+  // bare dashboard (no accounts) it's a dead button that fires the
+  // env-config error.
+  const hasMetaAccount = accounts.some((a) => a.platform === "meta");
+
   return (
     <div className="flex items-center gap-2 flex-wrap">
       {hasDemo && (
@@ -99,44 +123,84 @@ export function AccountsStrip({
         </div>
       )}
 
-      {/* Connect — server action sets a CSRF state cookie + redirects to
-          Facebook OAuth. The form's "contents" class lets the button
-          participate in the parent flex layout as if it weren't wrapped. */}
-      <form action={connectMeta} className="contents">
-        <button
-          type="submit"
+      {metaEnvReady ? (
+        <>
+          {/* Connect — server action sets a CSRF state cookie + redirects
+              to Facebook OAuth. The form's "contents" class lets the
+              button participate in the parent flex layout as if it
+              weren't wrapped. */}
+          <form action={connectMeta} className="contents">
+            <button
+              type="submit"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-700 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-violet-200"
+            >
+              <Plus
+                size={12}
+                className="transition-transform duration-300 group-hover:rotate-90"
+              />
+              Connect
+            </button>
+          </form>
+          {/* Try demo — secondary action for users without a real Meta
+              Ads account today. Upserts a row into meta_connections with
+              a recognizable demo sentinel so a future real OAuth upsert
+              can cleanly overwrite it via the user_id unique constraint.
+              DemoMode is also the right answer on env-not-ready states
+              when the user wants to explore the dashboard before they
+              have time to set up Meta. */}
+          <form action={connectDemoMeta} className="contents">
+            <button
+              type="submit"
+              aria-label="Connect a demo Meta ad account (no real OAuth)"
+              title="Demo mode — populates the connected-state UI without real Meta OAuth. Connect Meta Ads later to swap to live insights."
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
+            >
+              <Sparkles
+                size={12}
+                className="transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-700 dark:group-hover:text-violet-200"
+              />
+              Try demo
+            </button>
+          </form>
+          {/* Sync — only meaningful after a real Meta connection has
+              established an access_token; the action would fire an
+              env-config or no_connection toast otherwise. Hidden on
+              empty accounts to avoid the dead-button UX. */}
+          {hasMetaAccount && (
+            <form action={syncInsights} className="contents">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
+              >
+                <RefreshCw
+                  size={12}
+                  className="transition-transform duration-500 group-hover:rotate-180"
+                />
+                Sync
+              </button>
+            </form>
+          )}
+        </>
+      ) : (
+        // Env not ready: Connect / Sync would dead-end with the same
+        // env-config toast we've already deemed unhelpful. Surface a CTA
+        // that points the user at the actual setup wizard. Anchor
+        // (target=_blank) so the dashboard context is preserved.
+        <a
+          href={META_APP_CREATE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Set up a Meta developer app (opens in new tab)"
+          title="Open the Meta developer portal to create the App ID + Secret — opens in a new tab so you keep your dashboard state."
           className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-700 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-violet-200"
         >
-          <Plus size={12} className="transition-transform duration-300 group-hover:rotate-90" />
-          Connect
-        </button>
-      </form>
-      {/* Try demo — secondary action for users without a real Meta Ads
-          account today. Upserts a row into meta_connections with a
-          recognizable demo sentinel so a future real OAuth upsert can
-          cleanly overwrite it via the user_id unique constraint. */}
-      <form action={connectDemoMeta} className="contents">
-        <button
-          type="submit"
-          aria-label="Connect a demo Meta ad account (no real OAuth)"
-          title="Demo mode — populates the connected-state UI without real Meta OAuth. Connect Meta Ads later to swap to live insights."
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
-        >
-          <Sparkles size={12} className="transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-700 dark:group-hover:text-violet-200" />
-          Try demo
-        </button>
-      </form>
-      {/* Sync — server action re-fetches Meta insights and revalidates
-          /dashboard so the auto-refresh tick picks up the change. */}
-      <form action={syncInsights} className="contents">
-        <button
-          type="submit"
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
-        >
-          <RefreshCw size={12} className="transition-transform duration-500 group-hover:rotate-180" />
-          Sync
-        </button>
-      </form>
+          <ExternalLink
+            size={12}
+            className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
+          Set up Meta Ads
+        </a>
+      )}
     </div>
   );
 }

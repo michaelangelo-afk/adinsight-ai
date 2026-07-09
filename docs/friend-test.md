@@ -319,3 +319,78 @@ What it does NOT cover:
   whitelist is real.
 - The demo-mode flow (`connectDemoMeta`) — covered by the manual
   checklist.
+
+---
+
+## 9. Remote Dev Environments — ngrok / Cloudflare Tunnel / Vercel
+
+If your dev server runs on a machine that isn't directly reachable
+from the open internet (a Virtual Private Desktop / VDI, an
+SSH-only box, an AWS EC2 with locked-down security-group ingress, or
+most cloud dev sandboxes), `http://localhost:3000` — *and* your
+machine's bare public IP, e.g. `http://198.105.126.188:3000` — **won't
+work** as `META_REDIRECT_URI`. After you click "Allow" on the
+Facebook consent screen, Meta's servers POST back to that URL, the
+connection times out, and you'd see "Meta denied: …" or a stuck
+loading spinner.
+
+You need a public HTTPS URL that tunnels back to your local port.
+Three options, ordered by ease:
+
+### Option A — ngrok (~2 min, recommended for the friend-test)
+
+```bash
+# Install once (any package manager works).
+brew install ngrok          # macOS
+sudo apt install ngrok      # Debian/Ubuntu
+winget install ngrok        # Windows
+
+# Start the tunnel against your dev server.
+ngrok http 3000
+
+# Output:
+#   Forwarding  https://abc1234.ngrok.app → http://localhost:3000
+```
+
+In `.env.local`:
+
+```
+META_REDIRECT_URI=https://abc1234.ngrok.app/api/auth/meta/callback
+```
+
+In your Meta app dashboard: **Facebook Login → Settings → Valid
+OAuth Redirect URIs**, paste the same URL. Restart `npm run dev`.
+
+Ngrok free tier generates a new URL per restart — fine for the
+friend-test, but if you want URLs to stick across restarts, pay for a
+reserved subdomain.
+
+### Option B — Cloudflare Tunnel (~3 min, requires free account)
+
+```bash
+brew install cloudflared
+# or: curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+cloudflared tunnel --url http://localhost:3000
+# Output: https://<random>.trycloudflare.com
+```
+
+Same `.env.local` + Meta dashboard steps as ngrok. Cloudflare
+reserves the URL within a single session for free; pay for a named
+tunnel if you want URLs to stick.
+
+### Option C — Deploy to Vercel (production-shape, ~30 min)
+
+Best when you also want the rest of the app on a real domain. Set
+the production `META_REDIRECT_URI` to your Vercel URL on the project's
+env-vars page (Dashboard → Project → Settings → Environment
+Variables). Same URL shape as ngrok but server-side — no tunnel
+needed, and you'll have a public base URL for the rest of the spec,
+docs, and demos.
+
+---
+
+**TL;DR:** the redirect URI must be reachable from `graph.facebook.com`.
+Pick whichever of A / B / C matches your setup, paste the public
+HTTPS URL into BOTH `.env.local.META_REDIRECT_URI` AND your Meta
+app's *Valid OAuth Redirect URIs*, restart `npm run dev`, retry
+Connect.
