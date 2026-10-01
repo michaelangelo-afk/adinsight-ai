@@ -98,7 +98,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
           >
             <header className="sticky top-0 z-10 bg-ink-950/85 backdrop-blur-xl border-b border-mist-50/[0.06] px-5 sm:px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs text-mist-400">
-                <FileText size={11} aria-hidden className="text-emerald-300" />
+                <FileText size={11} aria-hidden className="text-brand-300" />
                 {report.title}
               </div>
               <button
@@ -106,7 +106,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
                 type="button"
                 onClick={close}
                 aria-label="Close report preview"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-rose-500/40 hover:bg-rose-500/10 tap-press touch-target"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-rose-500/40 hover:bg-rose-500/10 tap-press touch-target"
               >
                 <X size={14} aria-hidden />
               </button>
@@ -114,7 +114,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
 
             <div className="px-5 sm:px-6 py-6 space-y-6">
               <section>
-                <Badge tone="violet">
+                <Badge tone="brand">
                   <Calendar size={10} aria-hidden className="mr-1" />
                   {new Date(report.dateRangeStart).toLocaleDateString(
                     "en-NG",
@@ -142,7 +142,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
                     )}
                   </time>
                   . {report.size} · delivered to{" "}
-                  <code className="text-xs rounded bg-mist-50/[0.05] px-1.5 py-0.5">
+                  <code className="text-xs rounded-2xl bg-mist-50/[0.05] px-1.5 py-0.5">
                     {dashboardSummary.trend.length} datapoints
                   </code>{" "}
                   across {campaigns.length} campaigns.
@@ -169,22 +169,22 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
                 ].map((m) => (
                   <div
                     key={m.k}
-                    className="rounded-xl hairline p-4 bg-ink-900/40 text-center"
+                    className="rounded-2xl hairline p-4 bg-ink-900/40 text-center"
                   >
-                    <div className="text-[10px] uppercase tracking-wider text-mist-500">
+                    <div className="text-xs uppercase tracking-wider text-mist-500">
                       {m.k}
                     </div>
                     <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums">
                       {m.v}
                     </div>
-                    <div className="mt-1 text-[11px] text-emerald-300 font-semibold">
+                    <div className="mt-1 text-xs text-brand-300 font-semibold">
                       {m.d}
                     </div>
                   </div>
                 ))}
               </section>
 
-              <section className="rounded-xl bg-ink-900/40 hairline p-4">
+              <section className="rounded-2xl bg-ink-900/40 hairline p-4">
                 <h3 className="text-sm font-semibold text-mist-50 mb-3">
                   Top campaigns this period
                 </h3>
@@ -219,11 +219,11 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
                 </ul>
               </section>
 
-              <section className="rounded-xl bg-emerald-500/[0.06] border border-emerald-500/30 p-4">
-                <div className="text-[10px] uppercase tracking-wider text-emerald-300 mb-1">
+              <section className="rounded-2xl bg-brand-500/[0.06] border border-brand-500/30 p-4">
+                <div className="text-xs uppercase tracking-wider text-brand-300 mb-1">
                   This week's highlights
                 </div>
-                <ul className="text-sm text-mist-200 space-y-1.5 list-disc list-inside marker:text-emerald-300">
+                <ul className="text-sm text-mist-200 space-y-1.5 list-disc list-inside marker:text-brand-300">
                   <li>
                     Net −₦60k spend week-over-week, with conversions{" "}
                     <strong className="text-mist-50">+18%</strong>.
@@ -241,7 +241,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
 
               {/* Action row */}
               <div className="sticky bottom-0 -mx-5 sm:-mx-6 px-5 sm:px-6 py-4 bg-ink-950/85 backdrop-blur-xl border-t border-mist-50/[0.06] flex items-center justify-between gap-3">
-                <span className="text-[11px] text-mist-400">
+                <span className="text-xs text-mist-400">
                   Full PDF includes the cohort summary, campaign
                   breakdown and 90-day trend.
                 </span>
@@ -252,7 +252,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
                       e.preventDefault();
                       alert(`Email queued for ${report.title} (demo)`);
                     }}
-                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-violet-500/40 hover:text-violet-200 tap-press touch-target"
+                    className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-brand-500/40 hover:text-brand-200 tap-press touch-target"
                   >
                     <Send size={12} aria-hidden />
                     Email

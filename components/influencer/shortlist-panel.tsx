@@ -45,13 +45,13 @@ export function ShortlistPanel({
 
   return (
     <section
-      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up"
+      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift "
       style={{ animationDelay: "200ms" }}
       aria-label="Creator shortlist"
     >
       <header className="flex items-start justify-between gap-3 mb-3">
         <div>
-          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-violet-300">
+          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-brand-300">
             <Heart size={11} aria-hidden />
             Creator shortlist
           </div>
@@ -69,7 +69,7 @@ export function ShortlistPanel({
           <button
             type="button"
             onClick={removeAll}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 px-3 py-1.5 text-xs font-medium text-rose-300 hover:bg-rose-500/20 tap-press touch-target"
+            className="inline-flex items-center gap-1.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 px-3 py-1.5 text-xs font-medium text-rose-300 hover:bg-rose-500/20 tap-press touch-target"
           >
             <Trash2 size={11} aria-hidden />
             Clear
@@ -89,13 +89,13 @@ export function ShortlistPanel({
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-16 rounded-lg hairline skeleton-shimmer"
+              className="h-16 rounded-2xl hairline skeleton-shimmer"
               aria-hidden
             />
           ))}
         </div>
       ) : saved.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-mist-50/10 p-6 text-center">
+        <div className="rounded-2xl border border-dashed border-mist-50/10 p-6 text-center">
           <Heart size={20} aria-hidden className="mx-auto text-mist-500 mb-2" />
           <p className="text-sm text-mist-300">
             No creators shortlisted yet. Tap the heart on any card.
@@ -115,7 +115,7 @@ export function ShortlistPanel({
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 8 }}
                   transition={{ duration: 0.2 }}
-                  className="rounded-lg bg-ink-900/40 hairline p-3 flex items-center gap-3 hover:border-violet-500/40 transition-colors"
+                  className="rounded-2xl bg-ink-900/40 hairline p-3 flex items-center gap-3 hover:border-brand-500/40 transition-colors"
                 >
                   <Link
                     href={`/influencers?c=${c.id}`}
@@ -123,7 +123,7 @@ export function ShortlistPanel({
                   >
                     <div
                       aria-hidden
-                      className="h-9 w-9 rounded-full bg-brand-gradient flex items-center justify-center text-[11px] font-semibold text-white shrink-0"
+                      className="h-9 w-9 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold text-white shrink-0"
                     >
                       {c.avatar}
                     </div>
@@ -131,7 +131,7 @@ export function ShortlistPanel({
                       <div className="text-sm font-semibold text-mist-50 truncate">
                         {c.fullName}
                       </div>
-                      <div className="text-[11px] text-mist-400 truncate">
+                      <div className="text-xs text-mist-400 truncate">
                         {c.handle} · {c.city}
                       </div>
                     </div>
@@ -145,7 +145,7 @@ export function ShortlistPanel({
                     onClick={() => toggle(c.id)}
                     aria-label={`Remove ${c.fullName} from shortlist`}
                     title="Remove from shortlist"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-mist-500 hover:text-rose-300 hover:bg-rose-500/10 tap-press touch-target"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-2xl text-mist-500 hover:text-rose-300 hover:bg-rose-500/10 tap-press touch-target"
                   >
                     <HeartOff size={13} aria-hidden />
                   </button>
@@ -157,7 +157,7 @@ export function ShortlistPanel({
       )}
 
       {hydrated && saved.length > 0 && (
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-lg bg-emerald-500/[0.06] border border-emerald-500/20 p-3">
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-brand-500/[0.06] border border-brand-500/20 p-3">
           <div className="text-xs text-mist-200">
             Combined projected reach:{" "}
             <strong className="text-mist-50 tabular-nums">
@@ -183,7 +183,7 @@ export function ShortlistPanel({
                 `Brief sent to ${saved.length} creator${saved.length === 1 ? "" : "s"}. (Demo: no email is actually sent.)`
               );
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-3 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 hover:border-emerald-400/50 tap-press touch-target"
+            className="inline-flex items-center gap-1.5 rounded-2xl bg-brand-500/15 border border-brand-500/30 px-3 py-2 text-xs font-semibold text-brand-200 hover:bg-brand-500/25 hover:border-brand-400/50 tap-press touch-target"
           >
             <Send size={12} aria-hidden />
             Brief all
@@ -202,8 +202,8 @@ function KPI({
   value: string;
 }) {
   return (
-    <div className="rounded-lg bg-mist-50/[0.04] hairline px-3 py-2">
-      <div className="text-[10px] uppercase tracking-wider text-mist-500">
+    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2">
+      <div className="text-xs uppercase tracking-wider text-mist-500">
         {label}
       </div>
       <div className="text-base font-semibold text-mist-50 tabular-nums">

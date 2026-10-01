@@ -110,7 +110,7 @@ export function SignupForm() {
   };
 
   return (
-    <div className="rounded-2xl glass-card shadow-card-elevated dark:shadow-card-elevated-dark p-6 sm:p-8 animate-fade-up hover-lift">
+    <div className="rounded-2xl glass-card shadow-card dark:shadow-card p-6 sm:p-8  hover-lift">
       <div className="text-center mb-7 sm:mb-8">
         <h1 className="text-2xl sm:text-[1.7rem] font-bold tracking-tight text-mist-600 dark:text-mist-50">
           Create your account
@@ -122,20 +122,20 @@ export function SignupForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         {error && (
-          <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 space-y-2 animate-fade-up">
+          <div className="rounded-2xl bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 space-y-2 ">
             <p>{error}</p>
             {needsEmailConfirmation && !resendSent && (
               <button
                 type="button"
                 onClick={handleResend}
                 disabled={resendLoading}
-                className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 underline underline-offset-4 decoration-violet-400/60 hover:decoration-violet-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed tap-press touch-target"
+                className="font-medium text-brand-700 hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200 underline underline-offset-4 decoration-brand-400/60 hover:decoration-brand-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed tap-press touch-target"
               >
                 {resendLoading ? "Sending…" : "↻ Resend confirmation email"}
               </button>
             )}
             {resendSent && (
-              <p className="text-emerald-600 dark:text-emerald-400 font-medium animate-fade-up">
+              <p className="text-brand-600 dark:text-brand-400 font-medium ">
                 ✓ Confirmation email resent. Check your inbox and spam folder.
               </p>
             )}
@@ -149,7 +149,7 @@ export function SignupForm() {
           >
             Full name
           </label>
-          <div className="relative focus-glow rounded-lg">
+          <div className="relative focus-glow rounded-2xl">
             <User
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
@@ -161,7 +161,7 @@ export function SignupForm() {
               onChange={(e) => setFullName(e.target.value)}
               required
               placeholder="Adaeze Okafor"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
           </div>
         </div>
@@ -173,7 +173,7 @@ export function SignupForm() {
           >
             Email
           </label>
-          <div className="relative focus-glow rounded-lg">
+          <div className="relative focus-glow rounded-2xl">
             <Mail
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
@@ -185,7 +185,7 @@ export function SignupForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="adaeze@lagosbites.com"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
           </div>
         </div>
@@ -197,7 +197,7 @@ export function SignupForm() {
           >
             Password
           </label>
-          <div className="relative focus-glow rounded-lg">
+          <div className="relative focus-glow rounded-2xl">
             <Lock
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
@@ -210,13 +210,13 @@ export function SignupForm() {
               required
               minLength={8}
               placeholder="Min. 8 characters"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-mist-400 hover:text-violet-600 dark:hover:text-violet-300 tap-press transition-colors duration-200"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-mist-400 hover:text-brand-600 dark:hover:text-brand-300 tap-press transition-colors duration-200"
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -226,7 +226,7 @@ export function SignupForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-violet-700 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald hover:shadow-[0_0_50px_-5px_rgba(16,185,129,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target"
+          className="w-full rounded-2xl bg-brand-700 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card hover:shadow-[0_0_50px_-5px_rgba(16,185,129,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target"
         >
           {loading ? (
             <span className="inline-flex items-center justify-center gap-2">
@@ -242,7 +242,7 @@ export function SignupForm() {
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 transition-colors duration-200"
+            className="font-medium text-brand-700 hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200 transition-colors duration-200"
           >
             Sign in
           </Link>

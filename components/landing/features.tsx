@@ -6,8 +6,6 @@ import {
   Users,
   type LucideIcon
 } from "lucide-react";
-import { AnimatedIcon3D } from "@/components/motion/animated-icon-3d";
-import { ParticleField } from "@/components/motion/particle-field";
 
 type Feature = {
   icon: LucideIcon;
@@ -35,7 +33,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-2 md:row-span-2",
     iconHalo:
-      "bg-violet-700/15 border-violet-700/30 dark:bg-violet-700/15 dark:border-violet-700/30",
+      "bg-brand-700/15 border-brand-700/30 dark:bg-brand-700/15 dark:border-brand-700/30",
     delay: 0
   },
   {
@@ -50,7 +48,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-2",
     iconHalo:
-      "bg-naira-600/15 border-naira-600/30 dark:bg-emerald-500/15 dark:border-emerald-500/30",
+      "bg-brand-600/15 border-brand-600/30 dark:bg-brand-500/15 dark:border-brand-500/30",
     delay: 80
   },
   {
@@ -64,7 +62,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-1",
     iconHalo:
-      "bg-violet-700/15 border-violet-700/30 dark:bg-violet-700/15 dark:border-violet-700/30",
+      "bg-brand-700/15 border-brand-700/30 dark:bg-brand-700/15 dark:border-brand-700/30",
     delay: 140
   },
   {
@@ -78,7 +76,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-1",
     iconHalo:
-      "bg-naira-600/15 border-naira-600/30 dark:bg-emerald-500/15 dark:border-emerald-500/30",
+      "bg-brand-600/15 border-brand-600/30 dark:bg-brand-500/15 dark:border-brand-500/30",
     delay: 200
   },
   {
@@ -92,7 +90,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-1",
     iconHalo:
-      "bg-violet-700/15 border-violet-700/30 dark:bg-violet-700/15 dark:border-violet-700/30",
+      "bg-brand-700/15 border-brand-700/30 dark:bg-brand-700/15 dark:border-brand-700/30",
     delay: 260
   },
   {
@@ -106,7 +104,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-2",
     iconHalo:
-      "bg-naira-600/15 border-naira-600/30 dark:bg-emerald-500/15 dark:border-emerald-500/30",
+      "bg-brand-600/15 border-brand-600/30 dark:bg-brand-500/15 dark:border-brand-500/30",
     delay: 320
   }
 ];
@@ -125,9 +123,9 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
       className={`
         group relative rounded-2xl overflow-hidden
         bg-white border border-mist-200
-        hover:border-violet-700/50
+        hover:border-brand-700/50
         hover:-translate-y-1 hover:scale-[1.01]
-        hover:shadow-glow-forest dark:hover:shadow-glow-emerald-dark
+        hover:shadow-card dark:hover:shadow-card
         transition-all duration-300 ease-out
         dark:bg-ink-900 dark:border-ink-700
         ${feature.span}
@@ -146,26 +144,28 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
       <div
         className="
           pointer-events-none absolute inset-x-0 top-0 h-px
-          bg-gradient-to-r from-transparent via-violet-700/40 to-transparent
+          bg-gradient-to-r from-transparent via-brand-700/40 to-transparent
           opacity-0 group-hover:opacity-100 transition-opacity duration-300
-          dark:via-violet-400/40
+          dark:via-brand-400/40
         "
       />
 
       <div
         className={"relative z-10 " + (isHero ? "p-7 md:p-8" : "p-6")}
       >
-        <AnimatedIcon3D
-          icon={
-            <Icon
-              size={isHero ? 22 : 20}
-              strokeWidth={2}
-              className="text-violet-700 dark:text-violet-300"
-            />
+        <span
+          className={
+            "inline-flex items-center justify-center rounded-2xl border " +
+            feature.iconHalo + " " +
+            (isHero ? "h-12 w-12" : "h-11 w-11")
           }
-          size={isHero ? "h-12 w-12" : "h-11 w-11"}
-          tone="emerald"
-        />
+        >
+          <Icon
+            size={isHero ? 22 : 20}
+            strokeWidth={2}
+            className="text-brand-700 dark:text-brand-300"
+          />
+        </span>
         <h3
           className={
             "mt-5 font-bold tracking-tight text-mist-600 dark:text-mist-50 " +
@@ -188,10 +188,10 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
               key={p}
               className={
                 "flex items-start gap-2.5 text-mist-700 dark:text-mist-200 " +
-                (isHero ? "text-sm" : "text-[13px]")
+                (isHero ? "text-sm" : "text-sm")
               }
             >
-              <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-400 shrink-0" />
+              <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand-600 dark:bg-brand-400 shrink-0" />
               {p}
             </li>
           ))}
@@ -215,8 +215,8 @@ export function Features() {
           <span
             className="
               chip
-              bg-violet-700/10 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/10
-              dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
+              bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
+              dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
             "
           >
             The four pillars · now with automations
@@ -245,7 +245,7 @@ export function Features() {
           {FEATURES.map((f, i) => (
             <div
               key={f.title}
-              className="animate-fade-up"
+              className=""
               style={{
                 animationFillMode: "both",
                 animationDelay: `${f.delay}ms`

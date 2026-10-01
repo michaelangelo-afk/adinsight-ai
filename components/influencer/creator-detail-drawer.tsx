@@ -58,7 +58,7 @@ function AxisBreakdown({ fit }: { fit: FitBreakdown }) {
         const pct = (r.value / r.max) * 100;
         return (
           <li key={r.key}>
-            <div className="flex items-baseline justify-between text-[11px] text-mist-300 mb-0.5">
+            <div className="flex items-baseline justify-between text-xs text-mist-300 mb-0.5">
               <span>{r.label}</span>
               <span className="tabular-nums">
                 {Math.round(r.value)}/{r.max}
@@ -67,7 +67,7 @@ function AxisBreakdown({ fit }: { fit: FitBreakdown }) {
             <div className="relative h-1.5 rounded-full bg-mist-50/[0.06] overflow-hidden">
               <span
                 aria-hidden
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-300"
+                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-600 to-brand-300"
                 style={{ width: `${pct}%` }}
               />
             </div>
@@ -170,7 +170,7 @@ export function CreatorDetailDrawer({
             {/* Sticky top bar */}
             <header className="sticky top-0 z-10 bg-ink-950/85 backdrop-blur-xl border-b border-mist-50/[0.06] px-5 sm:px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs text-mist-400">
-                <Sparkles size={11} aria-hidden className="text-violet-300" />
+                <Sparkles size={11} aria-hidden className="text-brand-300" />
                 Creator profile · {creator.city}
               </div>
               <button
@@ -178,7 +178,7 @@ export function CreatorDetailDrawer({
                 type="button"
                 onClick={close}
                 aria-label="Close creator details"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-rose-500/40 hover:bg-rose-500/10 tap-press touch-target"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-rose-500/40 hover:bg-rose-500/10 tap-press touch-target"
               >
                 <X size={14} aria-hidden />
               </button>
@@ -193,7 +193,7 @@ export function CreatorDetailDrawer({
                 >
                   {creator.avatar}
                   {creator.isVerified && (
-                    <span className="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-ink-950">
+                    <span className="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 ring-2 ring-ink-950">
                       <BadgeCheck size={14} className="text-white" />
                     </span>
                   )}
@@ -208,7 +208,7 @@ export function CreatorDetailDrawer({
                   <div className="text-sm text-mist-400 mt-0.5">
                     {creator.handle}
                   </div>
-                  <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-mist-500">
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-mist-500">
                     <span className="inline-flex items-center gap-1">
                       <MapPin size={10} aria-hidden />
                       {creator.city}
@@ -233,15 +233,15 @@ export function CreatorDetailDrawer({
 
               {/* Fit breakdown */}
               <section
-                className="rounded-xl bg-ink-900/40 hairline p-4"
+                className="rounded-2xl bg-ink-900/40 hairline p-4"
                 aria-label="Why this fits"
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-semibold text-mist-50 inline-flex items-center gap-2">
-                    <ArrowLeftRight size={13} aria-hidden className="text-emerald-300" />
+                    <ArrowLeftRight size={13} aria-hidden className="text-brand-300" />
                     Why this fits
                   </h3>
-                  <span className="text-[11px] uppercase tracking-wider text-mist-500">
+                  <span className="text-xs uppercase tracking-wider text-mist-500">
                     Composite {fit.overall}/100
                   </span>
                 </div>
@@ -277,12 +277,12 @@ export function CreatorDetailDrawer({
                   {creator.samplePosts.map((p) => (
                     <li
                       key={p.id}
-                      className="aspect-square rounded-lg hairline bg-gradient-to-br from-violet-500/10 to-emerald-500/10 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                      className="aspect-square rounded-2xl hairline bg-gradient-to-br from-brand-500/10 to-brand-500/10 flex flex-col items-center justify-center text-center relative overflow-hidden"
                     >
                       <span aria-hidden className="text-3xl">
                         {p.thumbnailSeed}
                       </span>
-                      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/85 to-transparent px-2 py-1.5 text-[10px]">
+                      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/85 to-transparent px-2 py-1.5 text-xs">
                         <span className="block text-mist-200 uppercase tracking-wider">
                           {CONTENT_KIND_LABEL[p.kind as ContentKind]}
                         </span>
@@ -300,7 +300,7 @@ export function CreatorDetailDrawer({
 
               {/* Action row */}
               <div className="sticky bottom-0 -mx-5 sm:-mx-6 px-5 sm:px-6 py-4 bg-ink-950/85 backdrop-blur-xl border-t border-mist-50/[0.06] flex items-center gap-3">
-                <div className="text-[11px] text-mist-400">
+                <div className="text-xs text-mist-400">
                   <div className="uppercase tracking-wider">Base price</div>
                   <div className="text-mist-50 font-semibold tabular-nums">
                     {formatNaira(creator.basePrice)}
@@ -311,10 +311,10 @@ export function CreatorDetailDrawer({
                   onClick={() => creator.id && toggle(creator.id)}
                   aria-pressed={hydrated && shortlisted}
                   className={
-                    "inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2.5 text-sm font-semibold tap-press touch-target " +
+                    "inline-flex items-center justify-center gap-2 rounded-2xl px-3.5 py-2.5 text-sm font-semibold tap-press touch-target " +
                     (hydrated && shortlisted
                       ? "bg-rose-500/15 border border-rose-500/40 text-rose-200 hover:bg-rose-500/25"
-                      : "bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-emerald-500/40 hover:text-emerald-200")
+                      : "bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-brand-500/40 hover:text-brand-200")
                   }
                 >
                   <Heart

@@ -19,14 +19,14 @@ const TIER_GLOW: Record<Plan["id"], string> = {
   free: "rgba(148,163,184,0.30)",
   starter: "rgba(96,165,250,0.30)",
   pro: "rgba(16,185,129,0.40)",
-  scale: "rgba(167,139,250,0.40)"
+  scale: "rgba(21,128,61,0.40)"
 };
 
 const TIER_BG: Record<Plan["id"], string> = {
   free: "from-mist-50/[0.04] to-mist-50/[0.02]",
   starter: "from-blue-500/[0.06] to-blue-500/[0.02]",
-  pro: "from-emerald-500/[0.10] to-emerald-500/[0.02]",
-  scale: "from-violet-500/[0.10] to-violet-500/[0.02]"
+  pro: "from-brand-500/[0.10] to-brand-500/[0.02]",
+  scale: "from-brand-500/[0.10] to-brand-500/[0.02]"
 };
 
 export function CurrentPlanCard({
@@ -42,7 +42,7 @@ export function CurrentPlanCard({
 }) {
   return (
     <article
-      className="glass-card rounded-2xl p-6 sm:p-7 hover-lift animate-fade-up relative overflow-hidden"
+      className="glass-card rounded-2xl p-6 sm:p-7 hover-lift  relative overflow-hidden"
       style={{
         background: `linear-gradient(135deg, ${TIER_BG[plan.id]}, transparent)`
       }}
@@ -53,7 +53,7 @@ export function CurrentPlanCard({
         style={{ background: TIER_GLOW[plan.id] }}
       />
       <div className="relative">
-        <Badge tone="good" className="!text-[10px]">
+        <Badge tone="good" className="!text-xs">
           <Sparkles size={10} className="mr-1" aria-hidden />
           Current
         </Badge>
@@ -62,14 +62,14 @@ export function CurrentPlanCard({
           <span className="text-mist-400 text-base font-normal">plan</span>
         </h2>
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-3xl font-semibold text-mist-50 tabular-nums animate-count-up">
+          <span className="text-3xl font-semibold text-mist-50 tabular-nums ">
             {formatNaira(
               interval === "monthly" ? plan.priceMonthly : plan.priceAnnual / 12
             )}
           </span>
           <span className="text-sm text-mist-400">/ month</span>
           {interval === "annual" && (
-            <Badge tone="violet">
+            <Badge tone="brand">
               billed yearly · save ~17%
             </Badge>
           )}
@@ -87,7 +87,7 @@ export function CurrentPlanCard({
         </p>
 
         <div className="mt-5">
-          <div className="text-[10px] uppercase tracking-wider text-mist-500 mb-2">
+          <div className="text-xs uppercase tracking-wider text-mist-500 mb-2">
             What's included
           </div>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4" role="list">
@@ -98,7 +98,7 @@ export function CurrentPlanCard({
               >
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300"
+                  className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-500/15 border border-brand-500/40 text-brand-300"
                 >
                   <Check size={10} />
                 </span>
@@ -114,7 +114,7 @@ export function CurrentPlanCard({
               <CreditCard size={11} aria-hidden />
               {formatDelta(0).replace(/^[▲▼]\s*/, "")} saved vs Starter
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-wider text-mist-500">
+            <div className="mt-1 text-xs uppercase tracking-wider text-mist-500">
               Limits ·{" "}
               {plan.limits.campaignsMax} campaigns ·{" "}
               {plan.limits.recommendationsPerMonth} recs/mo
@@ -145,8 +145,8 @@ export function PlanMatrixCard({
   return (
     <article
       className={
-        "glass-card rounded-2xl p-5 hover-lift animate-fade-up relative overflow-hidden " +
-        (highlighted ? "ring-1 ring-emerald-500/40" : "")
+        "glass-card rounded-2xl p-5 hover-lift  relative overflow-hidden " +
+        (highlighted ? "ring-1 ring-brand-500/40" : "")
       }
     >
       <span
@@ -180,7 +180,7 @@ export function PlanMatrixCard({
             <li key={perk} className="flex items-start gap-2">
               <span
                 aria-hidden
-                className={"mt-0.5 h-1.5 w-1.5 rounded-full " + (highlighted ? "bg-emerald-400" : "bg-mist-400")}
+                className={"mt-0.5 h-1.5 w-1.5 rounded-full " + (highlighted ? "bg-brand-400" : "bg-mist-400")}
               />
               {perk}
             </li>

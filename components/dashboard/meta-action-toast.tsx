@@ -20,18 +20,18 @@ export function MetaActionToast() {
       role="status"
       aria-live="polite"
       className={
-        "rounded-xl border px-4 py-2.5 text-sm flex items-start gap-2 " +
+        "rounded-2xl border px-4 py-2.5 text-sm flex items-start gap-2 " +
         (isError
           ? "bg-rose-500/10 border-rose-500/30 text-rose-200"
-          : "bg-naira-500/10 border-naira-500/30 text-naira-200")
+          : "bg-brand-500/10 border-brand-500/30 text-brand-200")
       }
     >
       <span
         className={
-          "mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold " +
+          "mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-xs font-bold " +
           (isError
             ? "bg-rose-500/30 text-rose-100"
-            : "bg-naira-500/30 text-naira-100")
+            : "bg-brand-500/30 text-brand-100")
         }
         aria-hidden="true"
       >

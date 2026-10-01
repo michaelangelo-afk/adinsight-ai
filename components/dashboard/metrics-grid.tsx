@@ -84,7 +84,7 @@ function buildCards(s: DashboardSummary): Card[] {
   ];
 }
 
-function MiniSpark({ data, tone }: { data: number[]; tone: "violet" | "naira" }) {
+function MiniSpark({ data, tone }: { data: number[]; tone: "brand" | "accent" }) {
   const w = 100;
   const h = 24;
   const max = Math.max(...data);
@@ -97,11 +97,11 @@ function MiniSpark({ data, tone }: { data: number[]; tone: "violet" | "naira" })
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(" ");
-  // Positive deltas render in emerald ("naira" tone — green, growth).
+  // Positive deltas render in emerald ("accent" tone — green, growth).
   // Negative deltas render in rose so the chart stays semantically distinct
   // (\"down\" reads as a warning, not another shade of green).
-  const stroke = tone === "naira" ? "#10B981" : "#F43F5E";
-  const fill = tone === "naira" ? "#10B981" : "#F43F5E";
+  const stroke = tone === "accent" ? "#22C55E" : "#F43F5E";
+  const fill = tone === "accent" ? "#22C55E" : "#F43F5E";
   return (
     <svg
       viewBox={`0 0 ${w} ${h}`}
@@ -141,22 +141,22 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
         const Icon = c.icon;
         const isPositive =
           c.invertColor ? c.delta < 0 : c.delta > 0;
-        const tone = isPositive ? "naira" : "violet";
+        const tone = isPositive ? "accent" : "brand";
         return (
           <div
             key={c.label}
-            className="glass-card rounded-2xl p-5 sm:p-6 group hover-lift animate-fade-up"
+            className="glass-card rounded-2xl p-5 sm:p-6 group hover-lift "
             style={{ animationDelay: `${i * 60}ms` }}
           >
             <div className="flex items-center justify-between">
-              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-mist-50/[0.04] hairline transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-500/15 group-hover:border-violet-500/40">
-                <Icon size={16} className="text-violet-300 transition-transform duration-300 group-hover:rotate-[8deg]" />
+              <div className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-mist-50/[0.04] hairline transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-500/15 group-hover:border-brand-500/40">
+                <Icon size={16} className="text-brand-300 transition-transform duration-300 group-hover:rotate-[8deg]" />
               </div>
               <span
                 className={
-                  "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium " +
+                  "inline-flex items-center gap-1 rounded-2xl px-1.5 py-0.5 text-xs font-medium " +
                   (isPositive
-                    ? "bg-naira-500/15 text-naira-400"
+                    ? "bg-brand-500/15 text-brand-400"
                     : "bg-rose-500/15 text-rose-400")
                 }
               >
@@ -186,15 +186,15 @@ export function MetricsGrid({ summary }: { summary: DashboardSummary }) {
                   <span>{c.label}</span>
                 </MetricTooltip>
               </div>
-              <div className="mt-1 text-2xl font-semibold tracking-tight text-ink-900 dark:text-mist-50 tabular-nums animate-count-up">
+              <div className="mt-1 text-2xl font-semibold tracking-tight text-ink-900 dark:text-mist-50 tabular-nums ">
                 {c.value}
               </div>
               {c.sub && (
-                <div className="mt-0.5 text-[11px] text-mist-600 dark:text-mist-500">{c.sub}</div>
+                <div className="mt-0.5 text-xs text-mist-600 dark:text-mist-500">{c.sub}</div>
               )}
             </div>
             <div className="mt-3">
-              <MiniSpark data={c.series} tone={tone as "violet" | "naira"} />
+              <MiniSpark data={c.series} tone={tone as "brand" | "accent"} />
             </div>
           </div>
         );

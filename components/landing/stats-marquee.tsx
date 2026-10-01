@@ -59,23 +59,23 @@ export function StatsMarquee() {
           key={i}
           className="
             relative overflow-hidden shimmer-stripe flex items-center gap-2.5 rounded-full px-4 py-2 whitespace-nowrap
-            bg-white border border-mist-200 shadow-card-flat
-            dark:bg-ink-850 dark:border-ink-700 dark:shadow-card-flat-dark
+            bg-white border border-mist-200 shadow-card
+            dark:bg-ink-850 dark:border-ink-700 dark:shadow-card
           "
         >
               <span
                 className="
-                  inline-flex h-5 w-5 items-center justify-center rounded-md
-                  bg-violet-700/10 dark:bg-violet-700/15
+                  inline-flex h-5 w-5 items-center justify-center rounded-2xl
+                  bg-brand-700/10 dark:bg-brand-700/15
                 "
               >
                 <Icon
                   size={11}
                   strokeWidth={2.4}
-                  className="text-violet-700 dark:text-violet-300"
+                  className="text-brand-700 dark:text-brand-300"
                 />
               </span>
-              <span className="text-[13px] font-semibold text-mist-600 dark:text-mist-100">
+              <span className="text-sm font-semibold text-mist-600 dark:text-mist-100">
                 {s.text}
               </span>
             </div>

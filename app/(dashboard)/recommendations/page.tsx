@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
 import { TextureGrain } from "@/components/motion/texture-grain";
 
 import { Topbar } from "@/components/dashboard/topbar";
@@ -137,7 +136,6 @@ export default async function RecommendationsPage({
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <AuroraOrbsBackground variant="dark" />
         <TextureGrain />
       </div>
 
@@ -146,7 +144,7 @@ export default async function RecommendationsPage({
       <main className="flex-1 p-6 md:p-8 space-y-6">
         {/* Hero */}
         <section
-          className="relative rounded-3xl overflow-hidden hairline bg-gradient-to-br from-violet-700/15 via-ink-950/60 to-emerald-500/10 p-6 sm:p-8 animate-fade-up"
+          className="relative rounded-2xl overflow-hidden hairline bg-gradient-to-br from-brand-700/15 via-ink-950/60 to-brand-500/10 p-6 sm:p-8 "
           aria-label="Recommendations hero"
         >
           <div
@@ -155,7 +153,7 @@ export default async function RecommendationsPage({
           />
           <div className="relative grid lg:grid-cols-[1.4fr,1fr] gap-6 items-center">
             <div>
-              <Badge tone="violet" className="!text-[10px]">
+              <Badge tone="brand" className="!text-xs">
                 <Brain size={11} aria-hidden />
                 Phase 5 · AI Recommendation engine
               </Badge>
@@ -185,7 +183,7 @@ export default async function RecommendationsPage({
                 </Button>
               </div>
 
-              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-[11px] text-mist-400">
+              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-xs text-mist-400">
                 <KpiPill
                   label="Open savings"
                   value={`₦${totalSavings.toLocaleString()}`}
@@ -203,20 +201,20 @@ export default async function RecommendationsPage({
             </div>
 
             <div className="hidden lg:flex justify-end items-center">
-              <div className="relative h-44 w-44 rounded-full bg-violet-500/[0.06] hairline flex items-center justify-center">
+              <div className="relative h-44 w-44 rounded-full bg-brand-500/[0.06] hairline flex items-center justify-center">
                 <span
                   aria-hidden
-                  className="absolute inset-2 rounded-full bg-emerald-500/[0.10] animate-halo-breathing"
+                  className="absolute inset-2 rounded-full bg-brand-500/[0.10] "
                 />
                 <Brain
                   size={64}
-                  className="text-emerald-300 relative"
+                  className="text-brand-300 relative"
                   aria-hidden
                 />
                 <span
-                  className="absolute -top-2 right-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[10px] uppercase tracking-wider text-emerald-200"
+                  className="absolute -top-2 right-2 inline-flex items-center gap-1 rounded-full bg-brand-500/15 border border-brand-500/30 px-2 py-0.5 text-xs uppercase tracking-wider text-brand-200"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-400 " />
                   live
                 </span>
               </div>
@@ -227,9 +225,9 @@ export default async function RecommendationsPage({
         {/* Filter row */}
         <section
           aria-label="Filter recommendations"
-          className="glass-card rounded-2xl p-4 sm:p-5 hover-lift animate-fade-up flex flex-wrap items-center gap-3"
+          className="glass-card rounded-2xl p-4 sm:p-5 hover-lift  flex flex-wrap items-center gap-3"
         >
-          <span className="text-[11px] uppercase tracking-wider text-mist-500">
+          <span className="text-xs uppercase tracking-wider text-mist-500">
             Status
           </span>
           <FilterChips<StatusFilter>
@@ -239,7 +237,7 @@ export default async function RecommendationsPage({
             extra={{ r: searchParams.r, impact: searchParams.impact }}
             labelFn={(s) => STATUS_LABEL[s]}
           />
-          <span className="ml-3 text-[11px] uppercase tracking-wider text-mist-500">
+          <span className="ml-3 text-xs uppercase tracking-wider text-mist-500">
             Impact
           </span>
           <FilterChips<ImpactFilter>
@@ -251,7 +249,7 @@ export default async function RecommendationsPage({
               i === "all" ? "All" : i[0]?.toUpperCase() + i.slice(1)
             }
           />
-          <span className="ml-auto text-[11px] uppercase tracking-wider text-mist-500">
+          <span className="ml-auto text-xs uppercase tracking-wider text-mist-500">
             <span className="text-mist-50 font-semibold tabular-nums">
               {filtered.length}
             </span>{" "}
@@ -269,28 +267,28 @@ export default async function RecommendationsPage({
             value={`₦${totalSavings.toLocaleString()}`}
             icon={<Zap size={14} aria-hidden />}
             hint="Across pending queue"
-            tone="naira"
+            tone="accent"
           />
           <KpiTile
             label="Applied savings"
             value={`₦${appliedSavings.toLocaleString()}`}
             icon={<TrendingDown size={14} aria-hidden />}
             hint="Realised this cycle"
-            tone="violet"
+            tone="brand"
           />
           <KpiTile
             label="Insights applied"
             value={String(appliedCount)}
             icon={<ShieldCheck size={14} aria-hidden />}
             hint="Of 5 candidates"
-            tone="violet"
+            tone="brand"
           />
           <KpiTile
             label="AI confidence"
             value="86%"
             icon={<Brain size={14} aria-hidden />}
             hint="Avg across recs"
-            tone="naira"
+            tone="accent"
           />
         </section>
 
@@ -305,10 +303,10 @@ export default async function RecommendationsPage({
         />
 
         {/* Status breakdown */}
-        <footer className="text-[11px] text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-lg hairline px-4 py-3">
+        <footer className="text-xs text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-2xl hairline px-4 py-3">
           <span>
             Source of truth:{" "}
-            <code className="text-[10px] bg-mist-50/[0.05] rounded px-1.5 py-0.5">
+            <code className="text-xs bg-mist-50/[0.05] rounded-2xl px-1.5 py-0.5">
               ai_engine.queue
             </code>{" "}
             · recency 6h · min confidence 55%
@@ -351,8 +349,8 @@ function FilterChips<T extends string>({
           className={
             "rounded-full px-3 py-1 text-xs font-medium transition-colors tap-press touch-target " +
             (selected === opt
-              ? "bg-violet-500/20 border border-violet-500/40 text-violet-200"
-              : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-violet-500/30")
+              ? "bg-brand-500/20 border border-brand-500/40 text-brand-200"
+              : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-brand-500/30")
           }
         >
           {labelFn(opt)}
@@ -392,40 +390,40 @@ function KpiTile({
   value: string;
   icon: React.ReactNode;
   hint: string;
-  tone: "violet" | "naira";
+  tone: "brand" | "accent";
 }) {
   return (
-    <div className="glass-card rounded-2xl p-5 hover-lift animate-fade-up relative overflow-hidden">
+    <div className="glass-card rounded-2xl p-5 hover-lift  relative overflow-hidden">
       <span
         aria-hidden
         className="pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full blur-3xl"
         style={{
           background:
-            tone === "naira"
+            tone === "accent"
               ? "rgba(16,185,129,0.16)"
-              : "rgba(167,139,250,0.16)"
+              : "rgba(21,128,61,0.16)"
         }}
       />
       <div className="relative flex items-center justify-between mb-3">
         <span
           className={
-            "inline-flex h-8 w-8 items-center justify-center rounded-lg hairline " +
-            (tone === "naira"
-              ? "bg-emerald-500/15 text-emerald-300"
-              : "bg-violet-500/15 text-violet-300")
+            "inline-flex h-8 w-8 items-center justify-center rounded-2xl hairline " +
+            (tone === "accent"
+              ? "bg-brand-500/15 text-brand-300"
+              : "bg-brand-500/15 text-brand-300")
           }
         >
           {icon}
         </span>
       </div>
       <div className="relative">
-        <div className="text-[10px] uppercase tracking-wider text-mist-500">
+        <div className="text-xs uppercase tracking-wider text-mist-500">
           {label}
         </div>
-        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums animate-count-up">
+        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums ">
           {value}
         </div>
-        <div className="mt-0.5 text-[11px] text-mist-400">{hint}</div>
+        <div className="mt-0.5 text-xs text-mist-400">{hint}</div>
       </div>
     </div>
   );
@@ -441,14 +439,14 @@ function KpiPill({
   highlight?: boolean;
 }) {
   return (
-    <div className="rounded-lg bg-mist-50/[0.04] hairline px-3 py-2 text-center">
-      <div className="text-[10px] uppercase tracking-wider text-mist-500">
+    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-center">
+      <div className="text-xs uppercase tracking-wider text-mist-500">
         {label}
       </div>
       <div
         className={
           "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-emerald-300" : "text-mist-50")
+          (highlight ? "text-brand-300" : "text-mist-50")
         }
       >
         {value}

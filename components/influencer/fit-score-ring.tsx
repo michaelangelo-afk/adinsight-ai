@@ -24,22 +24,22 @@ function fitTone(score: number): {
 } {
   if (score >= 80) {
     return {
-      stroke: "#10B981", // naira-500 — strong emerald, premium-positive
+      stroke: "#22C55E", // brand-500 — strong emerald, premium-positive
       glow: "rgba(16,185,129,0.45)",
       label: "Top fit"
     };
   }
   if (score >= 65) {
     return {
-      stroke: "#34D399", // naira-400 — warm emerald
+      stroke: "#4ADE80", // brand-400 — warm emerald
       glow: "rgba(52,211,153,0.38)",
       label: "Strong fit"
     };
   }
   if (score >= 45) {
     return {
-      stroke: "#A78BFA", // violet-300 — neutral / "explore"
-      glow: "rgba(167,139,250,0.30)",
+      stroke: "#15803D", // brand-300 — neutral / "explore"
+      glow: "rgba(21,128,61,0.30)",
       label: "Decent fit"
     };
   }
@@ -66,7 +66,7 @@ export interface FitScoreRingProps {
 
 const SIZE_PRESETS = {
   sm: { px: 56, ring: 22, stroke: 4, font: "text-xs", scoreFont: "text-base" },
-  md: { px: 72, ring: 30, stroke: 5, font: "text-[11px]", scoreFont: "text-lg" },
+  md: { px: 72, ring: 30, stroke: 5, font: "text-xs", scoreFont: "text-lg" },
   lg: { px: 96, ring: 42, stroke: 6, font: "text-xs", scoreFont: "text-2xl" }
 };
 
@@ -125,7 +125,7 @@ export function FitScoreRing({
       {/* soft halo behind ring */}
       <span
         aria-hidden
-        className="absolute inset-0 rounded-full animate-halo-breathing"
+        className="absolute inset-0 rounded-full "
         style={{
           background: `radial-gradient(60% 60% at 50% 50%, ${tone.glow}, transparent 75%)`
         }}

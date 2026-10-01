@@ -1,5 +1,4 @@
 import { Plug, Sparkles, LineChart, Check } from "lucide-react";
-import { GradientBeam } from "@/components/motion/gradient-beam";
 
 const STEPS = [
   {
@@ -31,15 +30,14 @@ const STEPS = [
 export function Workflow() {
   return (
     <section id="workflow" className="relative py-24 md:py-32">
-      <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-glow-emerald blur-3xl opacity-50 dark:opacity-30 pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
           <span
             className="
               chip
-              bg-naira-600/15 border border-naira-600/30 text-naira-700
-              dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-300
+              bg-brand-600/15 border border-brand-600/30 text-brand-700
+              dark:bg-brand-500/15 dark:border-brand-500/30 dark:text-brand-300
             "
           >
             How it works
@@ -71,19 +69,19 @@ export function Workflow() {
                 key={s.title}
                 className="
                   group relative rounded-2xl p-7 transition-all duration-300 hover-lift
-                  bg-white border border-mist-200 shadow-card-flat
-                  hover:border-violet-700/40 hover:shadow-glow-forest
-                  dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark
-                  dark:hover:border-violet-700/40 dark:hover:shadow-glow-emerald-dark
+                  bg-white border border-mist-200 shadow-card
+                  hover:border-brand-700/40 hover:shadow-card
+                  dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
+                  dark:hover:border-brand-700/40 dark:hover:shadow-card
                 "
               >
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient shadow-glow-emerald transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:shadow-[0_0_30px_-4px_rgba(16,185,129,0.6)]">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient shadow-card transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:shadow-[0_0_30px_-4px_rgba(16,185,129,0.6)]">
                     <Icon size={20} className="text-white" strokeWidth={2.4} />
                   </div>
                   <span
                     className="
-                      text-[10px] font-semibold uppercase tracking-[0.18em]
+                      text-xs font-semibold uppercase tracking-[0.18em]
                       text-mist-500 dark:text-mist-400
                     "
                   >
@@ -111,15 +109,15 @@ export function Workflow() {
                     <li
                       key={b}
                       className="
-                        flex items-center gap-2.5 text-[13px]
+                        flex items-center gap-2.5 text-sm
                         text-mist-700 dark:text-mist-200
                       "
                     >
                       <span
                         className="
                           inline-flex h-4 w-4 items-center justify-center rounded-full
-                          bg-violet-700/15 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300
-                          dark:bg-emerald-500/20 dark:text-emerald-300
+                          bg-brand-700/15 text-brand-700 dark:bg-brand-400/15 dark:text-brand-300
+                          dark:bg-brand-500/20 dark:text-brand-300
                         "
                       >
                         <Check size={10} strokeWidth={3.5} />
@@ -130,14 +128,6 @@ export function Workflow() {
                 </ul>
                 {i < STEPS.length - 1 && (
                   <>
-                    <GradientBeam
-                      d="M 0 12 Q 28 -2, 56 12"
-                      width={56}
-                      height={24}
-                      duration={4.5}
-                      color="#10B981"
-                      className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 z-10"
-                    />
                     <svg
                       aria-hidden
                       className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 pointer-events-none"

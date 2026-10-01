@@ -150,9 +150,9 @@ export function MetricTooltip({
           tabIndex={0}
           className={cn(
             "ml-1.5 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full",
-            "text-mist-600 hover:text-violet-700",
-            "dark:text-mist-400 dark:hover:text-violet-300",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/60",
+            "text-mist-600 hover:text-brand-700",
+            "dark:text-mist-400 dark:hover:text-brand-300",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/60",
             "transition-colors duration-150 cursor-help"
           )}
         >
@@ -183,11 +183,11 @@ export function MetricTooltip({
               zIndex: 9999
             }}
             className={cn(
-              "px-3.5 py-3 rounded-xl",
-              "bg-white text-mist-700 border border-violet-300/60 shadow-2xl",
-              "dark:bg-ink-900/95 dark:text-mist-100 dark:border-violet-500/30",
+              "px-3.5 py-3 rounded-2xl",
+              "bg-white text-mist-700 border border-brand-300/60 shadow-2xl",
+              "dark:bg-ink-900/95 dark:text-mist-100 dark:border-brand-500/30",
               "text-xs leading-relaxed text-left",
-              "pointer-events-none animate-fade-up"
+              "pointer-events-none "
             )}
           >
             {content}

@@ -37,13 +37,13 @@ export function Nav() {
               key={l.href}
               href={l.href}
               className="
-                relative text-sm font-medium text-mist-600 hover:text-violet-700
-                dark:text-mist-200 dark:hover:text-violet-300
+                relative text-sm font-medium text-mist-600 hover:text-brand-700
+                dark:text-mist-200 dark:hover:text-brand-300
                 transition-colors duration-200
                 after:absolute after:left-0 after:right-0 after:-bottom-1
-                after:h-px after:origin-left after:scale-x-0 after:bg-violet-600
+                after:h-px after:origin-left after:scale-x-0 after:bg-brand-600
                 after:transition-transform after:duration-300 after:ease-out
-                hover:after:scale-x-100 dark:after:bg-violet-400
+                hover:after:scale-x-100 dark:after:bg-brand-400
               "
             >
               {l.label}
@@ -62,7 +62,7 @@ export function Nav() {
             href="/signup"
             variant="primary"
             size="sm"
-            className="shadow-glow-emerald"
+            className="shadow-card"
           >
             Start free
           </LinkButton>
@@ -72,9 +72,9 @@ export function Nav() {
           <ThemeToggle />
           <button
             className="
-              inline-flex h-11 w-11 items-center justify-center rounded-lg
-              bg-white border border-mist-300 hover:border-violet-400 hover:bg-violet-50
-              dark:bg-ink-900 dark:border-ink-700 dark:hover:border-violet-500/60 dark:hover:bg-ink-850
+              inline-flex h-11 w-11 items-center justify-center rounded-2xl
+              bg-white border border-mist-300 hover:border-brand-400 hover:bg-brand-50
+              dark:bg-ink-900 dark:border-ink-700 dark:hover:border-brand-500/60 dark:hover:bg-ink-850
               transition-all duration-200 tap-press touch-target
             "
             onClick={() => setOpen((s) => !s)}
@@ -101,8 +101,8 @@ export function Nav() {
                 href={l.href}
                 onClick={() => setOpen(false)}
                 className="
-                  text-sm text-mist-600 hover:text-violet-700
-                  dark:text-mist-200 dark:hover:text-violet-300
+                  text-sm text-mist-600 hover:text-brand-700
+                  dark:text-mist-200 dark:hover:text-brand-300
                   transition-colors
                 "
               >
@@ -126,7 +126,7 @@ export function Nav() {
                 href="/signup"
                 variant="primary"
                 size="sm"
-                className="flex-1 shadow-glow-emerald"
+                className="flex-1 shadow-card"
                 onClick={() => setOpen(false)}
               >
                 Start free

@@ -13,7 +13,7 @@
 //
 //   1. Definition    — plain English, 1 sentence.
 //   2. Formula       — exact calculation, monospace on a darker bar.
-//   3. What's good   — heuristic, italic + naira-green so it pops as
+//   3. What's good   — heuristic, italic + brand-green so it pops as
 //                      the "what should I actually do" guidance.
 //
 // Tip placement reminder: tooltips should answer "what is this
@@ -40,12 +40,12 @@ function TipBody({
 }) {
   return (
     <div className="space-y-2 block">
-      <div className="font-semibold text-violet-200 text-[13px]">{title}</div>
+      <div className="font-semibold text-brand-200 text-sm">{title}</div>
       <div className="text-mist-100">{definition}</div>
-      <div className="font-mono text-[11px] font-medium text-ink-900 bg-mist-100 border border-mist-200/60 px-2 py-1 rounded-md dark:text-mist-300 dark:bg-ink-950/70 dark:border-mist-50/[0.04]">
+      <div className="font-mono text-xs font-medium text-ink-900 bg-mist-100 border border-mist-200/60 px-2 py-1 rounded-2xl dark:text-mist-300 dark:bg-ink-950/70 dark:border-mist-50/[0.04]">
         {formula}
       </div>
-      <div className="text-[11px] text-naira-300 italic">{goodFor}</div>
+      <div className="text-xs text-brand-300 italic">{goodFor}</div>
     </div>
   );
 }

@@ -23,15 +23,15 @@ const IMPACT_TONE: Record<
   { ring: string; chip: string; glow: string; label: string }
 > = {
   high: {
-    ring: "from-emerald-500 to-emerald-300",
-    chip: "border-emerald-500/40 bg-emerald-500/15 text-emerald-200",
+    ring: "from-brand-500 to-brand-300",
+    chip: "border-brand-500/40 bg-brand-500/15 text-brand-200",
     glow: "rgba(16,185,129,0.40)",
     label: "High impact"
   },
   medium: {
-    ring: "from-violet-500 to-violet-300",
-    chip: "border-violet-500/40 bg-violet-500/15 text-violet-200",
-    glow: "rgba(167,139,250,0.35)",
+    ring: "from-brand-500 to-brand-300",
+    chip: "border-brand-500/40 bg-brand-500/15 text-brand-200",
+    glow: "rgba(21,128,61,0.35)",
     label: "Medium impact"
   },
   low: {
@@ -72,7 +72,7 @@ function StatusPill({ status }: { status: RecommendationStatus }) {
   return (
     <Badge tone={meta.tone}>
       {status === "pending" && (
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse-soft mr-1" />
+        <span className="h-1.5 w-1.5 rounded-full bg-amber-400  mr-1" />
       )}
       {status === "applied" && (
         <Check size={10} className="mr-1" aria-hidden />
@@ -113,7 +113,7 @@ export function RecommendationCard(props: RecommendationCardProps) {
     <Link
       href={href}
       aria-label={`View recommendation: ${recommendation.title}`}
-      className="group glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+      className="group glass-card rounded-2xl p-5 sm:p-6 hover-lift  relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
       style={{ animationDelay: `${delay}ms` }}
     >
       <span
@@ -131,15 +131,15 @@ export function RecommendationCard(props: RecommendationCardProps) {
         <div className="min-w-0 space-y-2.5">
           <div className="flex items-center gap-2 flex-wrap">
             <ImpactDot impact={recommendation.impact} />
-            <span className="text-[10px] uppercase tracking-wider text-mist-500">
+            <span className="text-xs uppercase tracking-wider text-mist-500">
               {tone.label}
             </span>
-            <span className="text-[10px] uppercase tracking-wider text-mist-600" aria-hidden>
+            <span className="text-xs uppercase tracking-wider text-mist-600" aria-hidden>
               ·
             </span>
             <StatusPill status={recommendation.status} />
             {campaignName && (
-              <span className="text-[10px] uppercase tracking-wider text-violet-300">
+              <span className="text-xs uppercase tracking-wider text-brand-300">
                 {campaignName}
               </span>
             )}
@@ -163,10 +163,10 @@ export function RecommendationCard(props: RecommendationCardProps) {
               <TrendingUp
                 size={11}
                 aria-hidden
-                className="text-emerald-300"
+                className="text-brand-300"
               />
               <span className="text-mist-400">Projected value:</span>
-              <span className="text-emerald-300 font-semibold tabular-nums">
+              <span className="text-brand-300 font-semibold tabular-nums">
                 {formatNaira(recommendation.estimatedSavings)}
               </span>
             </div>
@@ -182,7 +182,7 @@ export function RecommendationCard(props: RecommendationCardProps) {
           {isFeatured ? (
             <>
               <div className="hidden lg:block">
-                <div className="text-[10px] uppercase tracking-wider text-mist-500">
+                <div className="text-xs uppercase tracking-wider text-mist-500">
                   AI confidence
                 </div>
                 <div className="mt-1 flex items-center gap-2">
@@ -193,7 +193,7 @@ export function RecommendationCard(props: RecommendationCardProps) {
                   <span className="relative inline-block h-1.5 w-12 rounded-full bg-mist-50/[0.06] overflow-hidden">
                     <span
                       aria-hidden
-                      className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-300"
+                      className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-500 to-brand-300"
                       style={{
                         width:
                           recommendation.impact === "high"
@@ -208,7 +208,7 @@ export function RecommendationCard(props: RecommendationCardProps) {
               </div>
               <span
                 aria-hidden
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-mist-50/[0.04] hairline text-mist-300 transition-all duration-300 group-hover:text-violet-200 group-hover:bg-violet-500/15 group-hover:border-violet-500/40 group-hover:translate-x-0.5"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-mist-50/[0.04] hairline text-mist-300 transition-all duration-300 group-hover:text-brand-200 group-hover:bg-brand-500/15 group-hover:border-brand-500/40 group-hover:translate-x-0.5"
               >
                 <ArrowUpRight size={15} aria-hidden />
               </span>
@@ -216,17 +216,17 @@ export function RecommendationCard(props: RecommendationCardProps) {
           ) : (
             <>
               {recommendation.estimatedSavings ? (
-                <span className="text-[11px] uppercase tracking-wider text-emerald-300 font-semibold tabular-nums">
+                <span className="text-xs uppercase tracking-wider text-brand-300 font-semibold tabular-nums">
                   {formatNaira(recommendation.estimatedSavings)}
                 </span>
               ) : (
-                <span className="text-[11px] uppercase tracking-wider text-mist-500">
+                <span className="text-xs uppercase tracking-wider text-mist-500">
                   No savings estimate
                 </span>
               )}
               <span
                 aria-hidden
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-mist-50/[0.04] hairline text-mist-400 transition-all duration-300 group-hover:text-violet-200 group-hover:bg-violet-500/15 group-hover:border-violet-500/40 group-hover:translate-x-0.5"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-mist-50/[0.04] hairline text-mist-400 transition-all duration-300 group-hover:text-brand-200 group-hover:bg-brand-500/15 group-hover:border-brand-500/40 group-hover:translate-x-0.5"
               >
                 <ArrowUpRight size={12} aria-hidden />
               </span>
@@ -246,7 +246,7 @@ export function recommendationImpactTone(impact: ImpactLevel) {
 /** Convenience pill for empty/dismissed ai states. */
 export function PausedPill() {
   return (
-    <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-mist-500">
+    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-wider text-mist-500">
       <ZapOff size={10} aria-hidden />
       no impact
     </span>
@@ -257,9 +257,9 @@ export function PausedPill() {
 export function AiActivityPulse() {
   return (
     <span className="relative inline-flex" aria-label="AI engine live">
-      <span className="absolute inset-0 rounded-full animate-ping h-2 w-2 bg-emerald-400 opacity-50" />
-      <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
-      <Sparkles size={10} className="ml-1 text-emerald-300" aria-hidden />
+      <span className="absolute inset-0 rounded-full animate-ping h-2 w-2 bg-brand-400 opacity-50" />
+      <span className="relative h-2 w-2 rounded-full bg-brand-400" />
+      <Sparkles size={10} className="ml-1 text-brand-300" aria-hidden />
     </span>
   );
 }

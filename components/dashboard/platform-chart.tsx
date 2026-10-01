@@ -39,7 +39,7 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
   }));
 
   return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift ">
       <div className="mb-4">
         <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
           Platform mix
@@ -77,7 +77,7 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
               width={60}
             />
             <Tooltip
-              cursor={{ fill: "rgba(124,58,237,0.08)" }}
+              cursor={{ fill: "rgba(21,128,61,0.08)" }}
               contentStyle={{
                 background: "rgba(13,13,30,0.95)",
                 border: "1px solid rgba(255,255,255,0.06)",
@@ -157,8 +157,8 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
         })}
       </div>
 
-      <div className="mt-4 rounded-lg bg-violet-500/[0.06] border border-violet-500/20 p-3 text-xs text-ink-800 dark:text-mist-200">
-        <strong className="text-violet-700 dark:text-violet-300">
+      <div className="mt-4 rounded-2xl bg-brand-500/[0.06] border border-brand-500/20 p-3 text-xs text-ink-800 dark:text-mist-200">
+        <strong className="text-brand-700 dark:text-brand-300">
           <MetricTooltip
             content={BestCostPerConvTip}
             label="What best cost-per-conversion means"

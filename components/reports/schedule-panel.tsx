@@ -77,13 +77,13 @@ export function SchedulePanel() {
 
   return (
     <section
-      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up"
+      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift "
       style={{ animationDelay: "180ms" }}
       aria-label="Scheduled report cadence"
     >
       <header className="flex items-start justify-between mb-4 gap-3">
         <div>
-          <div className="text-xs uppercase tracking-wider text-violet-300 inline-flex items-center gap-1.5">
+          <div className="text-xs uppercase tracking-wider text-brand-300 inline-flex items-center gap-1.5">
             <Calendar size={11} aria-hidden />
             Scheduled
           </div>
@@ -114,9 +114,9 @@ export function SchedulePanel() {
             <li
               key={s.id}
               className={
-                "rounded-xl hairline p-3.5 flex items-center gap-3 transition-colors duration-300 " +
+                "rounded-2xl hairline p-3.5 flex items-center gap-3 transition-colors duration-300 " +
                 (on
-                  ? "bg-ink-900/40 border-violet-500/30"
+                  ? "bg-ink-900/40 border-brand-500/30"
                   : "bg-ink-900/40 opacity-70 hover:opacity-95")
               }
             >
@@ -128,7 +128,7 @@ export function SchedulePanel() {
                 className={
                   "inline-flex h-6 w-11 items-center rounded-full transition-colors tap-press touch-target shrink-0 " +
                   (on
-                    ? "bg-emerald-500/70 border border-emerald-400/80 justify-end px-1"
+                    ? "bg-brand-500/70 border border-brand-400/80 justify-end px-1"
                     : "bg-mist-50/10 border hairline justify-start px-1")
                 }
               >
@@ -142,10 +142,10 @@ export function SchedulePanel() {
                   <span className="text-sm font-semibold text-mist-50">
                     {CADENCE_LABEL[s.cadence]} report
                   </span>
-                  <Badge tone={s.format === "pdf" ? "violet" : s.format === "csv" ? "neutral" : "good"}>
+                  <Badge tone={s.format === "pdf" ? "brand" : s.format === "csv" ? "neutral" : "good"}>
                     {s.format.toUpperCase()}
                   </Badge>
-                  <span className="text-[10px] uppercase tracking-wider text-mist-500 inline-flex items-center gap-1">
+                  <span className="text-xs uppercase tracking-wider text-mist-500 inline-flex items-center gap-1">
                     <Clock size={9} aria-hidden />
                     Next run {nextRunLabel(s.nextRunAt)}
                   </span>
@@ -155,7 +155,7 @@ export function SchedulePanel() {
                   {s.recipients.map((r) => (
                     <span
                       key={r}
-                      className="text-[11px] text-mist-300 rounded-full hairline px-2 py-0.5"
+                      className="text-xs text-mist-300 rounded-full hairline px-2 py-0.5"
                     >
                       {r}
                     </span>
@@ -164,7 +164,7 @@ export function SchedulePanel() {
               </div>
               {on && (
                 <span
-                  className="text-[10px] uppercase tracking-wider text-emerald-300 inline-flex items-center gap-1"
+                  className="text-xs uppercase tracking-wider text-brand-300 inline-flex items-center gap-1"
                   aria-label="Schedule enabled"
                 >
                   <Check size={10} aria-hidden />

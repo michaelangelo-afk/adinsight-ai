@@ -1,8 +1,5 @@
 import { LinkButton } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
-import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
-import { ParticleField } from "@/components/motion/particle-field";
-import { MagneticCTA } from "@/components/motion/magnetic-cta";
 
 export function Cta() {
   return (
@@ -12,15 +9,15 @@ export function Cta() {
         bg-surface-50 dark:bg-ink-950
       "
     >
-      <AuroraOrbsBackground variant="dark" intensity={1.15} />
+      <div aria-hidden className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div
           className="
-            group relative overflow-hidden rounded-3xl border shadow-card-elevated
+            group relative overflow-hidden rounded-2xl border shadow-card
             bg-white border-mist-200
-            dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-elevated-dark
-            hover-lift hover:border-violet-400/60
+            dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
+            hover-lift hover:border-brand-400/60
           "
         >
           {/* Soft brand gradient overlay */}
@@ -38,8 +35,8 @@ export function Cta() {
               <span
                 className="
                   chip
-                  bg-violet-700/10 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/10
-                  dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
+                  bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
+                  dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
                 "
               >
                 <Sparkles />
@@ -66,17 +63,15 @@ export function Cta() {
                 across Meta, Google, and TikTok — from one dashboard.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <MagneticCTA>
-                  <LinkButton
-                    href="/dashboard"
-                    variant="primary"
-                    size="lg"
-                    className="touch-target group hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] transition-shadow duration-300"
-                  >
-                    Start free 14-day trial
-                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </LinkButton>
-                </MagneticCTA>
+                <LinkButton
+                  href="/dashboard"
+                  variant="primary"
+                  size="lg"
+                  className="touch-target group"
+                >
+                  Start free 14-day trial
+                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </LinkButton>
                 <LinkButton
                   href="#"
                   aria-label="Chat on WhatsApp (demo link — phone number configured post-launch)"
@@ -88,8 +83,8 @@ export function Cta() {
                   <span
                     aria-hidden="true"
                     className="
-                      text-[10px] font-semibold uppercase tracking-wider
-                      text-mist-600 border border-mist-300 rounded px-1.5 py-0.5
+                      text-xs font-semibold uppercase tracking-wider
+                      text-mist-600 border border-mist-300 rounded-2xl px-1.5 py-0.5
                       dark:text-mist-300 dark:border-mist-600
                     "
                   >
@@ -112,7 +107,7 @@ export function Cta() {
                     text-mist-500 dark:text-mist-400
                   "
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse-soft" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-500 " />
                   Nigeria-first support
                 </div>
                 <div className="mt-2 text-2xl font-bold text-mist-600 dark:text-mist-50">

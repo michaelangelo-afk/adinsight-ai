@@ -30,8 +30,8 @@ export default function DashboardError({
           <Logo showWordmark={false} />
         </div>
 
-        <div className="rounded-2xl glass-card p-8 shadow-card-elevated-dark">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/15 border border-rose-500/30 mb-4">
+        <div className="rounded-2xl glass-card p-8 shadow-card">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-500/15 border border-rose-500/30 mb-4">
             <AlertTriangle size={20} className="text-rose-400" />
           </div>
 
@@ -52,7 +52,7 @@ export default function DashboardError({
           <div className="mt-6 flex flex-wrap gap-2">
             <button
               onClick={reset}
-              className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald transition-all duration-200"
+              className="inline-flex items-center gap-2 rounded-2xl bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card transition-all duration-200"
             >
               <RefreshCw size={14} />
               Retry
@@ -61,7 +61,7 @@ export default function DashboardError({
               href="https://supabase.com/dashboard/project/dyfeolrotkjmeauiknbx"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-mist-50/[0.04] hairline px-4 py-2.5 text-sm font-medium text-mist-200 hover:bg-mist-50/[0.08] transition-colors"
+              className="inline-flex items-center gap-2 rounded-2xl bg-mist-50/[0.04] hairline px-4 py-2.5 text-sm font-medium text-mist-200 hover:bg-mist-50/[0.08] transition-colors"
             >
               Open Supabase dashboard
             </a>

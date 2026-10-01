@@ -1,5 +1,32 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * GrowthAds design system.
+ *
+ * Rebuilt 2026-10-01 after measuring the rendered CSS (see tools/audit_ui.mjs).
+ * The rules this file enforces, and why:
+ *
+ * 1. ONE green ramp, named `brand`, with EVERY step declared explicitly.
+ *    The previous config set `theme.extend.violet` = green, which MERGES with
+ *    Tailwind's default *purple* violet for any step it didn't declare.
+ *    Result: 39 usages rendered purple in a green product (violet-50/100/200)
+ *    and `naira-100/200` rendered nothing at all. Every step is now explicit,
+ *    so no default can bleed through.
+ *
+ * 2. `naira` is gone. It was a second green ramp (emerald) sitting alongside
+ *    a green ramp named `violet`. Sixteen tokens for one colour family.
+ *
+ * 3. ONE shadow token. There were eight, with inconsistent elevation.
+ *
+ * 4. ZERO custom keyframes. There were 24. Madgicx, the reference, has none —
+ *    its whole motion personality is `transition: 0.2s ease`, which now lives
+ *    as a single base rule in app/globals.css. Motion should be felt, not seen.
+ *
+ * What is deliberately NOT in this file:
+ *   - border radii are handled by migrating component classes to
+ *     `rounded-2xl` (16px) + `rounded-full`, so only two steps are used;
+ *   - type sizes are handled the same way, down to six steps.
+ */
 const config: Config = {
   darkMode: "class",
   content: [
@@ -10,6 +37,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        /**
+         * THE brand green. Every step declared — 50..950 — so nothing
+         * falls back to a Tailwind default. Forest → emerald.
+         */
+        brand: {
+          50: "#F0FDF4",
+          100: "#DCFCE7",
+          200: "#BBF7D0",
+          300: "#86EFAC",
+          400: "#4ADE80",
+          500: "#22C55E",
+          600: "#16A34A",
+          700: "#15803D",
+          800: "#166534",
+          900: "#14532D",
+          950: "#052E16"
+        },
+        /** Dark dashboard surfaces. */
         ink: {
           950: "#070710",
           900: "#0b0b18",
@@ -19,26 +64,7 @@ const config: Config = {
           600: "#272a4d",
           500: "#3a3d62"
         },
-        violet: {
-          950: "#052E16",
-          900: "#14532D",
-          800: "#166534",
-          700: "#15803D",
-          600: "#16A34A",
-          500: "#22C55E",
-          400: "#4ADE80",
-          300: "#86EFAC"
-        },
-        naira: {
-          950: "#022C22",
-          900: "#064E3B",
-          800: "#065F46",
-          700: "#047857",
-          600: "#059669",
-          500: "#10B981",
-          400: "#34D399",
-          300: "#6EE7B7"
-        },
+        /** Neutral text + borders (slate). */
         mist: {
           50: "#F8FAFC",
           100: "#F1F5F9",
@@ -48,6 +74,7 @@ const config: Config = {
           500: "#64748B",
           600: "#475569"
         },
+        /** Light page surfaces. */
         surface: {
           50: "#FFFFFF",
           100: "#FAFBF7",
@@ -62,175 +89,18 @@ const config: Config = {
       },
       backgroundImage: {
         "brand-gradient":
-          "linear-gradient(135deg, #15803D 0%, #16A34A 45%, #10B981 100%)",
+          "linear-gradient(135deg, #15803D 0%, #16A34A 45%, #22C55E 100%)",
         "brand-gradient-soft":
-          "linear-gradient(135deg, rgba(21, 128, 61, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%)",
-        "subtle-grid":
-          "linear-gradient(rgba(16, 185, 129, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.06) 1px, transparent 1px)",
-        "subtle-grid-dark":
-          "linear-gradient(rgba(16, 185, 129, 0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.10) 1px, transparent 1px)",
-        "mesh-gradient-light":
-          "radial-gradient(at 20% 20%, rgba(34, 197, 94, 0.30) 0px, transparent 50%), radial-gradient(at 80% 10%, rgba(22, 163, 74, 0.20) 0px, transparent 50%), radial-gradient(at 60% 90%, rgba(16, 185, 129, 0.18) 0px, transparent 50%)",
-        "mesh-gradient-dark":
-          "radial-gradient(at 20% 20%, rgba(34, 197, 94, 0.20) 0px, transparent 50%), radial-gradient(at 80% 10%, rgba(22, 163, 74, 0.14) 0px, transparent 50%), radial-gradient(at 60% 90%, rgba(16, 185, 129, 0.12) 0px, transparent 50%)",
-        "glow-emerald":
-          "radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.20), transparent 60%)",
-        "glow-forest":
-          "radial-gradient(circle at 50% 100%, rgba(21, 128, 61, 0.16), transparent 60%)"
+          "linear-gradient(135deg, rgba(21, 128, 61, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%)"
       },
+      /** One shadow. Elevation was previously eight competing tokens. */
       boxShadow: {
-        "glow-emerald": "0 0 60px -10px rgba(16, 185, 129, 0.45)",
-        "glow-emerald-dark":
-          "0 0 60px -10px rgba(16, 185, 129, 0.35), 0 0 0 1px rgba(34, 197, 94, 0.20) inset",
-        "glow-forest":
-          "0 12px 32px -8px rgba(21, 128, 61, 0.30), 0 1px 0 0 rgba(255,255,255,1) inset",
-        "card-elevated":
-          "0 1px 0 0 rgba(255,255,255,1) inset, 0 20px 60px -20px rgba(15, 23, 42, 0.10)",
-        "card-elevated-dark":
-          "0 1px 0 0 rgba(34, 197, 94, 0.06) inset, 0 20px 60px -20px rgba(0, 0, 0, 0.45)",
-        "card-flat":
-          "0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -2px rgba(15, 23, 42, 0.06)",
-        "card-flat-dark":
-          "0 1px 2px rgba(0, 0, 0, 0.45), 0 4px 12px -2px rgba(0, 0, 0, 0.55)"
-      },
-      keyframes: {
-        "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
-        },
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" }
-        },
-        "pulse-soft": {
-          "0%, 100%": { opacity: "0.6" },
-          "50%": { opacity: "1" }
-        },
-        sprout: {
-          "0%": { transform: "scale(0.94)", opacity: "0.6" },
-          "60%": { transform: "scale(1.04)", opacity: "1" },
-          "100%": { transform: "scale(1)", opacity: "1" }
-        },
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" }
-        },
-        "dash-flow": {
-          to: { strokeDashoffset: "-24" }
-        },
-        "aurora-border": {
-          "0%, 100%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" }
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px) rotate(0deg)" },
-          "50%": { transform: "translateY(-6px) rotate(-1deg)" }
-        },
-        "scale-pulse": {
-          "0%, 100%": { transform: "scale(1)" },
-          "50%": { transform: "scale(1.03)" }
-        },
-        "mesh-shift": {
-          "0%, 100%": { backgroundPosition: "20% 20%, 80% 10%, 60% 90%" },
-          "50%": { backgroundPosition: "60% 30%, 30% 60%, 80% 70%" }
-        },
-        "press-down": {
-          "0%": { transform: "scale(1)" },
-          "60%": { transform: "scale(0.96)" },
-          "100%": { transform: "scale(1)" }
-        },
-        "icon-bob": {
-          "0%, 100%": { transform: "translateY(0) rotate(0)" },
-          "50%": { transform: "translateY(-1px) rotate(-2deg)" }
-        },
-        "icon-spin-hover": {
-          "0%": { transform: "rotate(0) scale(1)" },
-          "100%": { transform: "rotate(8deg) scale(1.08)" }
-        },
-        "ring-pulse": {
-          "0%, 100%": {
-            boxShadow:
-              "0 0 0 0 rgba(16, 185, 129, 0.45), 0 0 0 0 rgba(22, 163, 74, 0.0)"
-          },
-          "50%": {
-            boxShadow:
-              "0 0 0 6px rgba(16, 185, 129, 0.0), 0 0 0 12px rgba(22, 163, 74, 0.12)"
-          }
-        },
-        "draw-line": {
-          "0%": { strokeDashoffset: "120" },
-          "100%": { strokeDashoffset: "0" }
-        },
-        "count-up": {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
-        },
-        "slide-in-right": {
-          "0%": { opacity: "0", transform: "translateX(-12px)" },
-          "100%": { opacity: "1", transform: "translateX(0)" }
-        },
-        "bg-shimmer-fade": {
-          "0%, 100%": { opacity: "0" },
-          "50%": { opacity: "1" }
-        },
-        "aurora-drift": {
-          "0%, 100%": { transform: "translate3d(0,0,0) scale(1)" },
-          "33%": { transform: "translate3d(4%, -3%, 0) scale(1.08)" },
-          "66%": { transform: "translate3d(-3%, 4%, 0) scale(0.95)" }
-        },
-        "halo-breathing": {
-          "0%, 100%": {
-            boxShadow:
-              "0 0 0 0 rgba(16, 185, 129, 0.0), 0 0 24px -2px rgba(16, 185, 129, 0.35)"
-          },
-          "50%": {
-            boxShadow:
-              "0 0 0 6px rgba(16, 185, 129, 0.10), 0 0 38px -2px rgba(16, 185, 129, 0.55)"
-          }
-        },
-        "shimmer-stripes": {
-          "0%": { backgroundPosition: "120% 0" },
-          "100%": { backgroundPosition: "-120% 0" }
-        },
-        "wiggle-3d": {
-          "0%, 100%": { transform: "translate3d(0,0,0) rotate(-1.5deg)" },
-          "50%": { transform: "translate3d(0,-2px,0) rotate(1.5deg)" }
-        },
-        "logo-leaf-grow": {
-          "0%": { transform: "translate(0px, 0px) scale(1)" },
-          "50%": { transform: "translate(0px, -3px) scale(1.08)" },
-          "100%": { transform: "translate(0px, 0px) scale(1)" }
-        }
-      },
-      animation: {
-        "fade-up": "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
-        shimmer: "shimmer 3.5s linear infinite",
-        "pulse-soft": "pulse-soft 2.4s ease-in-out infinite",
-        sprout: "sprout 1.6s ease-out both",
-        marquee: "marquee 35s linear infinite",
-        "dash-flow": "dash-flow 1.2s linear infinite",
-        "aurora-border": "aurora-border 6s ease infinite",
-        float: "float 6s ease-in-out infinite",
-        "scale-pulse": "scale-pulse 3s ease-in-out infinite",
-        "mesh-shift": "mesh-shift 18s ease-in-out infinite",
-        "press-down": "press-down 240ms cubic-bezier(0.22, 1, 0.36, 1)",
-        "icon-bob": "icon-bob 2.8s ease-in-out infinite",
-        "ring-pulse": "ring-pulse 2.4s ease-in-out infinite",
-        "draw-line": "draw-line 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards",
-        "count-up": "count-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both",
-        "slide-in-right":
-          "slide-in-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) both",
-        "bg-shimmer-fade": "bg-shimmer-fade 1.6s ease-in-out infinite",
-        "aurora-drift-a": "aurora-drift 22s ease-in-out infinite",
-        "aurora-drift-b": "aurora-drift 28s ease-in-out infinite reverse",
-        "aurora-drift-c": "aurora-drift 34s ease-in-out infinite",
-        "halo-breathing": "halo-breathing 3.4s ease-in-out infinite",
-        "shimmer-stripes": "shimmer-stripes 2.8s linear infinite",
-        "wiggle-3d": "wiggle-3d 3.6s ease-in-out infinite",
-        "logo-leaf-grow": "logo-leaf-grow 4.4s ease-in-out infinite"
+        card: "0 1px 2px rgba(15, 23, 42, 0.05), 0 12px 32px -12px rgba(15, 23, 42, 0.12)"
       }
+      // NOTE: no `keyframes` and no `animation`. Deliberate — see header.
     }
   },
   plugins: []
 };
+
 export default config;

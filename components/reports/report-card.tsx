@@ -58,7 +58,7 @@ export function ReportCard(props: ReportCardProps) {
     <Link
       href={href}
       aria-label={`Open report ${report.title}`}
-      className="group glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+      className="group glass-card rounded-2xl p-5 sm:p-6 hover-lift  relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
       style={{ animationDelay: `${delay}ms` }}
     >
       <span
@@ -85,20 +85,20 @@ export function ReportCard(props: ReportCardProps) {
             (isHero ? "h-28 w-20 lg:w-24" : "h-12 w-10")
           }
         >
-          <span className="absolute inset-0 rounded-lg bg-emerald-500/[0.10] hairline -rotate-[6deg]" />
-          <span className="absolute inset-0 rounded-lg bg-violet-500/[0.12] hairline -rotate-[3deg]" />
-          <span className="absolute inset-0 rounded-lg bg-mist-50/[0.04] hairline flex items-center justify-center">
+          <span className="absolute inset-0 rounded-2xl bg-brand-500/[0.10] hairline -rotate-[6deg]" />
+          <span className="absolute inset-0 rounded-2xl bg-brand-500/[0.12] hairline -rotate-[3deg]" />
+          <span className="absolute inset-0 rounded-2xl bg-mist-50/[0.04] hairline flex items-center justify-center">
             <FileText
               size={isHero ? 22 : 14}
               aria-hidden
-              className="text-mist-300 group-hover:text-emerald-300 transition-colors duration-300"
+              className="text-mist-300 group-hover:text-brand-300 transition-colors duration-300"
             />
           </span>
         </div>
 
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <Badge tone="violet">
+            <Badge tone="brand">
               <Calendar size={10} aria-hidden className="mr-1" />
               {dateRangeLabel(report)}
             </Badge>
@@ -137,7 +137,7 @@ export function ReportCard(props: ReportCardProps) {
               // Demo: no real PDF.
               alert(`Download queued for ${report.title} (demo)`);
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-emerald-500/40 hover:text-emerald-200 tap-press touch-target"
+            className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-brand-500/40 hover:text-brand-200 tap-press touch-target"
           >
             <Download size={12} aria-hidden />
             {isHero ? "Download PDF" : "PDF"}
@@ -150,10 +150,10 @@ export function ReportCard(props: ReportCardProps) {
               alert(`Email queued for ${report.title} (demo)`);
             }}
             className={
-              "inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold tap-press touch-target " +
+              "inline-flex items-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-semibold tap-press touch-target " +
               (isHero
-                ? "bg-violet-600 hover:bg-violet-500 text-white shadow-glow-emerald"
-                : "bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-violet-500/40 hover:text-violet-200")
+                ? "bg-brand-600 hover:bg-brand-500 text-white shadow-card"
+                : "bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-brand-500/40 hover:text-brand-200")
             }
           >
             <Send size={12} aria-hidden />
@@ -162,7 +162,7 @@ export function ReportCard(props: ReportCardProps) {
           {isHero && (
             <span
               aria-hidden
-              className="inline-flex h-9 w-9 self-center justify-center self-stretch rounded-full bg-mist-50/[0.04] hairline text-mist-300 transition-all duration-300 group-hover:text-violet-200 group-hover:bg-violet-500/15 group-hover:border-violet-500/40 group-hover:translate-x-0.5"
+              className="inline-flex h-9 w-9 self-center justify-center self-stretch rounded-full bg-mist-50/[0.04] hairline text-mist-300 transition-all duration-300 group-hover:text-brand-200 group-hover:bg-brand-500/15 group-hover:border-brand-500/40 group-hover:translate-x-0.5"
             >
               <ChevronRight size={14} className="m-auto" aria-hidden />
             </span>

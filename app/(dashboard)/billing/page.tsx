@@ -16,7 +16,6 @@ import {
   CreditCard
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
 import { TextureGrain } from "@/components/motion/texture-grain";
 
 import { Topbar } from "@/components/dashboard/topbar";
@@ -68,7 +67,6 @@ export default async function BillingPage() {
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <AuroraOrbsBackground variant="dark" />
         <TextureGrain />
       </div>
 
@@ -77,7 +75,7 @@ export default async function BillingPage() {
       <main className="flex-1 p-6 md:p-8 space-y-6">
         {/* Hero */}
         <section
-          className="relative rounded-3xl overflow-hidden hairline bg-gradient-to-br from-violet-500/15 via-ink-950/60 to-emerald-500/15 p-6 sm:p-8 animate-fade-up"
+          className="relative rounded-2xl overflow-hidden hairline bg-gradient-to-br from-brand-500/15 via-ink-950/60 to-brand-500/15 p-6 sm:p-8 "
           aria-label="Billing hero"
         >
           <div
@@ -86,7 +84,7 @@ export default async function BillingPage() {
           />
           <div className="relative grid lg:grid-cols-[1.5fr,1fr] gap-6 items-center">
             <div>
-              <Badge tone="good" className="!text-[10px]">
+              <Badge tone="good" className="!text-xs">
                 <Wallet size={11} aria-hidden className="mr-1" />
                 Phase 5 · Billing center
               </Badge>
@@ -96,7 +94,7 @@ export default async function BillingPage() {
               </h1>
               <p className="mt-3 text-sm sm:text-base text-mist-200 max-w-xl leading-relaxed">
                 <strong className="text-mist-50">Lagos Bites</strong> is on
-                the <em className="not-italic text-emerald-300">Pro</em>{" "}
+                the <em className="not-italic text-brand-300">Pro</em>{" "}
                 plan — ₦{currentPlan.priceMonthly.toLocaleString()}/mo with{" "}
                 <strong className="text-mist-50">
                   ₦{stats.savedYtd.toLocaleString()}
@@ -104,7 +102,7 @@ export default async function BillingPage() {
                 saved through applied recommendations this year.
               </p>
 
-              <div className="mt-5 grid grid-cols-3 gap-2 max-w-md text-[11px] text-mist-400">
+              <div className="mt-5 grid grid-cols-3 gap-2 max-w-md text-xs text-mist-400">
                 <KpiPill
                   label="Next bill"
                   value={`${stats.daysUntilRenewal}d`}
@@ -122,18 +120,18 @@ export default async function BillingPage() {
             </div>
 
             <div className="hidden lg:flex justify-end items-center">
-              <div className="relative h-44 w-44 rounded-full bg-emerald-500/[0.06] hairline flex items-center justify-center">
+              <div className="relative h-44 w-44 rounded-full bg-brand-500/[0.06] hairline flex items-center justify-center">
                 <span
                   aria-hidden
-                  className="absolute inset-2 rounded-full bg-emerald-500/[0.10] animate-halo-breathing"
+                  className="absolute inset-2 rounded-full bg-brand-500/[0.10] "
                 />
                 <CreditCard
                   size={64}
-                  className="text-emerald-300 relative"
+                  className="text-brand-300 relative"
                   aria-hidden
                 />
                 <span
-                  className="absolute -top-2 right-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[10px] uppercase tracking-wider text-emerald-200"
+                  className="absolute -top-2 right-2 inline-flex items-center gap-1 rounded-full bg-brand-500/15 border border-brand-500/30 px-2 py-0.5 text-xs uppercase tracking-wider text-brand-200"
                 >
                   <Sparkles size={10} aria-hidden />
                   Pro
@@ -153,28 +151,28 @@ export default async function BillingPage() {
             value={`${stats.daysUntilRenewal}d`}
             icon={<TrendingUp size={14} aria-hidden />}
             hint={`₦${currentPlan.priceMonthly.toLocaleString()} Pro · ${currentPlan.id === "pro" ? "renews" : "downgrade protection"}`}
-            tone="naira"
+            tone="accent"
           />
           <KpiTile
             label="Active seats"
             value={String(currentPlan.limits.seatsIncluded)}
             icon={<Sparkles size={14} aria-hidden />}
             hint="Including you + 4 collaborators"
-            tone="violet"
+            tone="brand"
           />
           <KpiTile
             label="YTD savings"
             value={`₦${(stats.savedYtd / 1000).toFixed(0)}k`}
             icon={<Wallet size={14} aria-hidden />}
             hint="From applied AI recommendations"
-            tone="naira"
+            tone="accent"
           />
           <KpiTile
             label="Payment method"
             value="Visa · 4271"
             icon={<CreditCard size={14} aria-hidden />}
             hint="Auto-renews on next cycle"
-            tone="violet"
+            tone="brand"
           />
         </section>
 
@@ -232,10 +230,10 @@ export default async function BillingPage() {
         {/* Invoices */}
         <InvoicesList invoices={invoices} />
 
-        <footer className="text-[11px] text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-lg hairline px-4 py-3">
+        <footer className="text-xs text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-2xl hairline px-4 py-3">
           <span>
             Payments secured by{" "}
-            <code className="text-[10px] bg-mist-50/[0.05] rounded px-1.5 py-0.5">
+            <code className="text-xs bg-mist-50/[0.05] rounded-2xl px-1.5 py-0.5">
               Paystack
             </code>
             . Receipts auto-emailed within 60s.
@@ -260,40 +258,40 @@ function KpiTile({
   value: string;
   icon: React.ReactNode;
   hint: string;
-  tone: "violet" | "naira";
+  tone: "brand" | "accent";
 }) {
   return (
-    <div className="glass-card rounded-2xl p-5 hover-lift animate-fade-up relative overflow-hidden">
+    <div className="glass-card rounded-2xl p-5 hover-lift  relative overflow-hidden">
       <span
         aria-hidden
         className="pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full blur-3xl"
         style={{
           background:
-            tone === "naira"
+            tone === "accent"
               ? "rgba(16,185,129,0.16)"
-              : "rgba(167,139,250,0.16)"
+              : "rgba(21,128,61,0.16)"
         }}
       />
       <div className="relative flex items-center justify-between mb-3">
         <span
           className={
-            "inline-flex h-8 w-8 items-center justify-center rounded-lg hairline " +
-            (tone === "naira"
-              ? "bg-emerald-500/15 text-emerald-300"
-              : "bg-violet-500/15 text-violet-300")
+            "inline-flex h-8 w-8 items-center justify-center rounded-2xl hairline " +
+            (tone === "accent"
+              ? "bg-brand-500/15 text-brand-300"
+              : "bg-brand-500/15 text-brand-300")
           }
         >
           {icon}
         </span>
       </div>
       <div className="relative">
-        <div className="text-[10px] uppercase tracking-wider text-mist-500">
+        <div className="text-xs uppercase tracking-wider text-mist-500">
           {label}
         </div>
-        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums animate-count-up">
+        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums ">
           {value}
         </div>
-        <div className="mt-0.5 text-[11px] text-mist-400">{hint}</div>
+        <div className="mt-0.5 text-xs text-mist-400">{hint}</div>
       </div>
     </div>
   );
@@ -309,14 +307,14 @@ function KpiPill({
   highlight?: boolean;
 }) {
   return (
-    <div className="rounded-lg bg-mist-50/[0.04] hairline px-3 py-2 text-center">
-      <div className="text-[10px] uppercase tracking-wider text-mist-500">
+    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-center">
+      <div className="text-xs uppercase tracking-wider text-mist-500">
         {label}
       </div>
       <div
         className={
           "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-emerald-300" : "text-mist-50")
+          (highlight ? "text-brand-300" : "text-mist-50")
         }
       >
         {value}

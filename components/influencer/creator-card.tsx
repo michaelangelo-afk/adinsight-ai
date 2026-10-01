@@ -27,10 +27,10 @@ import type { FitBreakdown } from "@/lib/influencer/types";
 
 interface ErSparkProps {
   series: number[];
-  tone?: "violet" | "naira";
+  tone?: "brand" | "accent";
 }
 
-function MiniErSpark({ series, tone = "violet" }: ErSparkProps) {
+function MiniErSpark({ series, tone = "brand" }: ErSparkProps) {
   const w = 100;
   const h = 28;
   const max = Math.max(...series);
@@ -43,7 +43,7 @@ function MiniErSpark({ series, tone = "violet" }: ErSparkProps) {
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(" ");
-  const stroke = tone === "naira" ? "#10B981" : "#A78BFA";
+  const stroke = tone === "accent" ? "#22C55E" : "#15803D";
   return (
     <svg
       viewBox={`0 0 ${w} ${h}`}
@@ -120,7 +120,7 @@ function CreatorAvatar({
     size === "lg"
       ? "h-14 w-14 text-base"
       : size === "sm"
-      ? "h-9 w-9 text-[11px]"
+      ? "h-9 w-9 text-xs"
       : "h-11 w-11 text-xs";
 
   return (
@@ -135,7 +135,7 @@ function CreatorAvatar({
         <span
           aria-label="Verified creator"
           title="Verified creator"
-          className="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-ink-950"
+          className="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-500 ring-2 ring-ink-950"
         >
           <BadgeCheck
             size={12}
@@ -159,8 +159,8 @@ function StatPill({
   // on hardcoded mist-* text — illegible on light surfaces and the
   // hairline border would visually stack with adjacent badges).
   return (
-    <span className="inline-flex items-baseline gap-1.5 rounded-md bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 px-2.5 py-1 text-[11px] text-slate-700 dark:text-mist-300">
-      <span className="text-slate-500 dark:text-mist-400 uppercase tracking-wider text-[9px]">
+    <span className="inline-flex items-baseline gap-1.5 rounded-2xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 px-2.5 py-1 text-xs text-slate-700 dark:text-mist-300">
+      <span className="text-slate-500 dark:text-mist-400 uppercase tracking-wider text-xs">
         {label}
       </span>
       <span className="text-slate-900 dark:text-mist-50 font-semibold tabular-nums">{value}</span>
@@ -178,7 +178,7 @@ export function CreatorCard(props: CreatorCardProps) {
       href={href}
       aria-label={`View ${creator.fullName} (${creator.handle}) — fit score ${fit.overall} out of 100`}
       className={
-        "group glass-card dark:shadow-card-elevated-dark shadow-card-elevated rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-ink-950"
+        "group glass-card dark:shadow-card shadow-card rounded-2xl p-5 sm:p-6 hover-lift  relative overflow-hidden tap-press block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-ink-950"
       }
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -211,10 +211,10 @@ export function CreatorCard(props: CreatorCardProps) {
                 {creator.fullName}
               </h3>
             </div>
-            <div className="mt-0.5 text-[12px] text-slate-500 dark:text-mist-400 truncate">
+            <div className="mt-0.5 text-xs text-slate-500 dark:text-mist-400 truncate">
               {creator.handle}
             </div>
-            <div className="mt-1 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-mist-500">
+            <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500 dark:text-mist-500">
               <MapPin size={10} aria-hidden />
               <span>{creator.city}</span>
               <span className="text-slate-400 dark:text-mist-600">·</span>
@@ -237,18 +237,18 @@ export function CreatorCard(props: CreatorCardProps) {
           {isFeatured ? (
             <>
               <p className="text-sm text-slate-700 dark:text-mist-200 leading-relaxed">
-                <span className="text-emerald-700 dark:text-emerald-300 font-medium">
+                <span className="text-brand-700 dark:text-brand-300 font-medium">
                   Why this fits:
                 </span>{" "}
                 {props.whyFit ?? <WhyFitLine fit={fit} />}
               </p>
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-mist-500 mb-1">
+                <div className="text-xs uppercase tracking-wider text-slate-500 dark:text-mist-500 mb-1">
                   12-month engagement
                 </div>
                 <MiniErSpark
                   series={creator.historicalEr.series}
-                  tone="naira"
+                  tone="accent"
                 />
               </div>
             </>
@@ -279,7 +279,7 @@ export function CreatorCard(props: CreatorCardProps) {
           />
           <span
             aria-hidden
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-slate-500 dark:text-mist-300 transition-all duration-300 group-hover:text-violet-700 group-hover:bg-violet-100 group-hover:border-violet-300 dark:group-hover:text-violet-200 dark:group-hover:bg-violet-500/15 dark:group-hover:border-violet-500/40 group-hover:translate-x-0.5 shadow-sm"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-slate-500 dark:text-mist-300 transition-all duration-300 group-hover:text-brand-700 group-hover:bg-brand-100 group-hover:border-brand-300 dark:group-hover:text-brand-200 dark:group-hover:bg-brand-500/15 dark:group-hover:border-brand-500/40 group-hover:translate-x-0.5 shadow-card"
           >
             <ArrowUpRight size={14} />
           </span>

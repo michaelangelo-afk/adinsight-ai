@@ -81,7 +81,7 @@ export function MetaLogo({
             )}
           </linearGradient>
         </defs>
-        {/* Infinity-style "M" — two rounded humps joined at a clean
+        {/* Infinity-style "M" — two rounded-2xl humps joined at a clean
             central taper. Hand-tuned cubic curves to evoke Meta's
             published mark proportions without reproducing the
             proprietary SVG path data verbatim. */}
@@ -94,7 +94,7 @@ export function MetaLogo({
         <span
           className={cn(
             "font-semibold tracking-tight leading-none",
-            size === "xs" ? "text-[11px]" : size === "sm" ? "text-[12px]" : "text-[14px]",
+            size === "xs" ? "text-xs" : size === "sm" ? "text-xs" : "text-sm",
             tone === "brand" && "text-[#0866FF] dark:text-[#1877F2]",
             tone === "mono" && "text-white",
             tone === "invert" && "text-ink-950"

@@ -9,10 +9,10 @@ export function Card({
   variant?: "elevated" | "glow" | "subtle";
 }) {
   const variants = {
-    elevated: "glass-card shadow-card-elevated hover-lift",
+    elevated: "glass-card shadow-card hover-lift",
     glow:
-      "glass-card shadow-glow-violet border-violet-500/20 hover-lift",
-    subtle: "rounded-xl bg-ink-850/60 hairline transition-colors duration-300"
+      "glass-card shadow-card border-brand-500/20 hover-lift",
+    subtle: "rounded-2xl bg-ink-850/60 hairline transition-colors duration-300"
   };
   return (
     <div

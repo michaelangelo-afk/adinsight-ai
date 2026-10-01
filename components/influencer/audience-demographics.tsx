@@ -22,7 +22,7 @@ export function AudienceDemographicsChart({
     >
       {/* Age bands */}
       <div>
-        <h4 className="text-[11px] uppercase tracking-wider text-mist-500 mb-2">
+        <h4 className="text-xs uppercase tracking-wider text-mist-500 mb-2">
           Age
         </h4>
         <div className="space-y-1.5">
@@ -39,7 +39,7 @@ export function AudienceDemographicsChart({
 
       {/* Gender */}
       <div>
-        <h4 className="text-[11px] uppercase tracking-wider text-mist-500 mb-2">
+        <h4 className="text-xs uppercase tracking-wider text-mist-500 mb-2">
           Gender
         </h4>
         <div className="grid grid-cols-3 gap-2">
@@ -52,13 +52,13 @@ export function AudienceDemographicsChart({
           ).map(([k, label]) => (
             <div
               key={k}
-              className="rounded-lg bg-mist-50/[0.04] hairline p-2.5 text-center"
+              className="rounded-2xl bg-mist-50/[0.04] hairline p-2.5 text-center"
             >
               <div className="text-base font-semibold text-mist-50 tabular-nums">
                 {Math.round(audience.gender[k] * 100)}
                 <span className="text-mist-400 text-xs">%</span>
               </div>
-              <div className="text-[10px] uppercase tracking-wider text-mist-500 mt-0.5">
+              <div className="text-xs uppercase tracking-wider text-mist-500 mt-0.5">
                 {label}
               </div>
             </div>
@@ -68,7 +68,7 @@ export function AudienceDemographicsChart({
 
       {/* Top cities */}
       <div>
-        <h4 className="text-[11px] uppercase tracking-wider text-mist-500 mb-2">
+        <h4 className="text-xs uppercase tracking-wider text-mist-500 mb-2">
           Top cities
         </h4>
         <div className="space-y-1.5">
@@ -92,7 +92,7 @@ function Bar({
 }) {
   return (
     <div>
-      <div className="flex items-baseline justify-between text-[11px] text-mist-200 mb-0.5">
+      <div className="flex items-baseline justify-between text-xs text-mist-200 mb-0.5">
         <span>{label}</span>
         <span className="tabular-nums text-mist-100 font-semibold">
           {Math.round(share * 100)}%
@@ -105,8 +105,8 @@ function Bar({
           style={{
             width: `${share * 100}%`,
             background: accent
-              ? `linear-gradient(90deg, #15803D, #34D399)`
-              : `linear-gradient(90deg, #A78BFA, #C4B5FD)`
+              ? `linear-gradient(90deg, #15803D, #4ADE80)`
+              : `linear-gradient(90deg, #15803D, #86EFAC)`
           }}
         />
       </div>

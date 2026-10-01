@@ -74,7 +74,7 @@ export function OnboardingForm() {
   };
 
   return (
-    <div className="rounded-2xl glass-card p-8 shadow-card-elevated dark:shadow-card-elevated-dark">
+    <div className="rounded-2xl glass-card p-8 shadow-card dark:shadow-card">
       {/* Progress indicator */}
       <div className="flex items-center justify-center gap-2 mb-8">
         {([1, 2, 3] as Step[]).map((s) => (
@@ -83,9 +83,9 @@ export function OnboardingForm() {
               className={cn(
                 "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-colors",
                 s === step
-                  ? "bg-violet-700 text-white"
+                  ? "bg-brand-700 text-white"
                   : s < step
-                  ? "bg-violet-700/30 text-violet-300"
+                  ? "bg-brand-700/30 text-brand-300"
                   : "bg-mist-50/[0.04] hairline text-mist-400"
               )}
             >
@@ -95,7 +95,7 @@ export function OnboardingForm() {
               <div
                 className={cn(
                   "h-px w-8",
-                  s < step ? "bg-violet-700/50" : "bg-mist-50/[0.08]"
+                  s < step ? "bg-brand-700/50" : "bg-mist-50/[0.08]"
                 )}
               />
             )}
@@ -115,7 +115,7 @@ export function OnboardingForm() {
       </p>
 
       {error && (
-        <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 mb-4">
+        <div className="rounded-2xl bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 mb-4">
           {error}
         </div>
       )}
@@ -138,7 +138,7 @@ export function OnboardingForm() {
                 onChange={(e) => setBusinessName(e.target.value)}
                 required
                 placeholder="Lagos Bites"
-                className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+                className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export function OnboardingForm() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+234 803 555 0123"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 px-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 px-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
             />
           </div>
         </div>
@@ -167,10 +167,10 @@ export function OnboardingForm() {
               type="button"
               onClick={() => setMonthlyBudget(opt.value)}
               className={cn(
-                "rounded-xl border p-4 text-center transition-all",
+                "rounded-2xl border p-4 text-center transition-all",
                 monthlyBudget === opt.value
-                  ? "border-violet-700/60 bg-violet-700/10 text-violet-700 dark:border-violet-500/60 dark:bg-violet-500/15 dark:text-violet-200 shadow-glow-emerald"
-                  : "border-mist-200 bg-white hover:border-violet-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-violet-700/40"
+                  ? "border-brand-700/60 bg-brand-700/10 text-brand-700 dark:border-brand-500/60 dark:bg-brand-500/15 dark:text-brand-200 shadow-card"
+                  : "border-mist-200 bg-white hover:border-brand-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-brand-700/40"
               )}
             >
               <Wallet
@@ -178,7 +178,7 @@ export function OnboardingForm() {
                 className={cn(
                   "mx-auto mb-2",
                   monthlyBudget === opt.value
-                    ? "text-violet-700 dark:text-violet-300"
+                    ? "text-brand-700 dark:text-brand-300"
                     : "text-mist-400"
                 )}
               />
@@ -186,7 +186,7 @@ export function OnboardingForm() {
                 className={cn(
                   "text-sm font-semibold",
                   monthlyBudget === opt.value
-                    ? "text-violet-700 dark:text-violet-200"
+                    ? "text-brand-700 dark:text-brand-200"
                     : "text-mist-600 dark:text-mist-200"
                 )}
               >
@@ -206,10 +206,10 @@ export function OnboardingForm() {
               type="button"
               onClick={() => setObjective(obj.value)}
               className={cn(
-                "w-full rounded-xl border p-4 text-left flex items-start gap-3 transition-all",
+                "w-full rounded-2xl border p-4 text-left flex items-start gap-3 transition-all",
                 objective === obj.value
-                  ? "border-violet-700/60 bg-violet-700/10 dark:border-violet-500/60 dark:bg-violet-500/15 shadow-glow-emerald"
-                  : "border-mist-200 bg-white hover:border-violet-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-violet-700/40"
+                  ? "border-brand-700/60 bg-brand-700/10 dark:border-brand-500/60 dark:bg-brand-500/15 shadow-card"
+                  : "border-mist-200 bg-white hover:border-brand-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-brand-700/40"
               )}
             >
               <Target
@@ -217,7 +217,7 @@ export function OnboardingForm() {
                 className={cn(
                   "mt-0.5 shrink-0",
                   objective === obj.value
-                    ? "text-violet-700 dark:text-violet-300"
+                    ? "text-brand-700 dark:text-brand-300"
                     : "text-mist-400"
                 )}
               />
@@ -226,7 +226,7 @@ export function OnboardingForm() {
                   className={cn(
                     "text-sm font-semibold",
                     objective === obj.value
-                      ? "text-violet-700 dark:text-violet-200"
+                      ? "text-brand-700 dark:text-brand-200"
                       : "text-mist-600 dark:text-mist-200"
                   )}
                 >
@@ -237,7 +237,7 @@ export function OnboardingForm() {
                 </div>
               </div>
               {objective === obj.value && (
-                <Check size={16} className="ml-auto mt-0.5 text-violet-700 dark:text-violet-300" />
+                <Check size={16} className="ml-auto mt-0.5 text-brand-700 dark:text-brand-300" />
               )}
             </button>
           ))}
@@ -250,7 +250,7 @@ export function OnboardingForm() {
           <button
             type="button"
             onClick={() => setStep((s) => (s - 1) as Step)}
-            className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-mist-600 hover:bg-mist-100 dark:text-mist-200 dark:hover:bg-ink-850 transition-colors"
+            className="inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-mist-600 hover:bg-mist-100 dark:text-mist-200 dark:hover:bg-ink-850 transition-colors"
           >
             <ArrowLeft size={16} />
             Back
@@ -264,7 +264,7 @@ export function OnboardingForm() {
             type="button"
             onClick={() => setStep((s) => (s + 1) as Step)}
             disabled={step === 1 && !businessName.trim()}
-            className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="inline-flex items-center gap-2 rounded-2xl bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             Continue
             <ArrowRight size={16} />
@@ -274,7 +274,7 @@ export function OnboardingForm() {
             type="button"
             onClick={handleSubmit}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="inline-flex items-center gap-2 rounded-2xl bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {loading ? "Setting up…" : "Go to dashboard"}
             <ArrowRight size={16} />

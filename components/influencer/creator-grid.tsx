@@ -28,10 +28,10 @@ export function CreatorGrid({
   if (items.length === 0) {
     return (
       <div
-        className="glass-card rounded-2xl p-12 text-center animate-fade-up"
+        className="glass-card rounded-2xl p-12 text-center "
         role="status"
       >
-        <div className="mx-auto h-12 w-12 rounded-full bg-violet-500/15 flex items-center justify-center text-violet-300 mb-4">
+        <div className="mx-auto h-12 w-12 rounded-full bg-brand-500/15 flex items-center justify-center text-brand-300 mb-4">
           <Sparkles size={20} aria-hidden />
         </div>
         <h3 className="text-lg font-semibold text-mist-50">

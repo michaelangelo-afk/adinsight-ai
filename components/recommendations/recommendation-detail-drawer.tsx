@@ -66,7 +66,7 @@ function StatusAffordances({
           flashDemo("Marked done");
         }}
         disabled={!isPending}
-        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-emerald-500/40 hover:text-emerald-200 tap-press touch-target disabled:opacity-40 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-100 hover:border-brand-500/40 hover:text-brand-200 tap-press touch-target disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <ArrowRight size={12} aria-hidden />
         Mark done
@@ -78,7 +78,7 @@ function StatusAffordances({
           flashDemo("Dismissed");
         }}
         disabled={!isPending}
-        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-300 hover:text-rose-300 hover:border-rose-500/40 tap-press touch-target disabled:opacity-40 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-semibold bg-mist-50/[0.04] border border-mist-50/10 text-mist-300 hover:text-rose-300 hover:border-rose-500/40 tap-press touch-target disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <XCircle size={12} aria-hidden />
         Dismiss
@@ -168,7 +168,7 @@ export function RecommendationDetailDrawer({
           >
             <header className="sticky top-0 z-10 bg-ink-950/85 backdrop-blur-xl border-b border-mist-50/[0.06] px-5 sm:px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs text-mist-400">
-                <Sparkles size={11} aria-hidden className="text-violet-300" />
+                <Sparkles size={11} aria-hidden className="text-brand-300" />
                 AI Recommendation · {recommendation.impact} impact
               </div>
               <button
@@ -176,7 +176,7 @@ export function RecommendationDetailDrawer({
                 type="button"
                 onClick={close}
                 aria-label="Close recommendation details"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-rose-500/40 hover:bg-rose-500/10 tap-press touch-target"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-rose-500/40 hover:bg-rose-500/10 tap-press touch-target"
               >
                 <X size={14} aria-hidden />
               </button>
@@ -198,7 +198,7 @@ export function RecommendationDetailDrawer({
                     Impact {recommendation.impact}
                   </Badge>
                   {recommendation.campaignId && (
-                    <Badge tone="violet">
+                    <Badge tone="brand">
                       {recommendation.campaignId.replace("c_", "")}
                     </Badge>
                   )}
@@ -215,10 +215,10 @@ export function RecommendationDetailDrawer({
               </section>
 
               {/* Confidence + savings */}
-              <section className="rounded-xl bg-ink-900/40 hairline p-4">
+              <section className="rounded-2xl bg-ink-900/40 hairline p-4">
                 <div className="grid grid-cols-2 gap-4 items-center">
                   <div className="text-center">
-                    <div className="text-[10px] uppercase tracking-wider text-mist-500 mb-1.5">
+                    <div className="text-xs uppercase tracking-wider text-mist-500 mb-1.5">
                       AI confidence
                     </div>
                     <FitScoreRing
@@ -227,7 +227,7 @@ export function RecommendationDetailDrawer({
                     />
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-wider text-mist-500">
+                    <div className="text-xs uppercase tracking-wider text-mist-500">
                       Projected value
                     </div>
                     {recommendation.estimatedSavings ? (
@@ -235,9 +235,9 @@ export function RecommendationDetailDrawer({
                         <TrendingUp
                           size={14}
                           aria-hidden
-                          className="text-emerald-300"
+                          className="text-brand-300"
                         />
-                        <span className="text-2xl font-semibold text-emerald-300 tabular-nums animate-count-up">
+                        <span className="text-2xl font-semibold text-brand-300 tabular-nums ">
                           {formatNaira(recommendation.estimatedSavings)}
                         </span>
                       </div>
@@ -246,7 +246,7 @@ export function RecommendationDetailDrawer({
                         No savings estimate
                       </div>
                     )}
-                    <div className="mt-2 text-[11px] text-mist-400">
+                    <div className="mt-2 text-xs text-mist-400">
                       Generated{" "}
                       <time dateTime={recommendation.createdAt}>
                         {new Date(recommendation.createdAt).toLocaleDateString(
@@ -261,7 +261,7 @@ export function RecommendationDetailDrawer({
 
               {/* Action row */}
               <div className="sticky bottom-0 -mx-5 sm:-mx-6 px-5 sm:px-6 py-4 bg-ink-950/85 backdrop-blur-xl border-t border-mist-50/[0.06] flex items-center justify-between gap-3">
-                <span className="text-[11px] text-mist-400">
+                <span className="text-xs text-mist-400">
                   {recommendation.status === "pending"
                     ? "Awaiting your action"
                     : `Final state: ${recommendation.status}`}

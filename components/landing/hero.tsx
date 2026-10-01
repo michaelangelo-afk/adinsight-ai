@@ -14,11 +14,7 @@ import {
   Zap,
   CircleDot
 } from "lucide-react";
-import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
-import { ParticleField } from "@/components/motion/particle-field";
-import { AnimatedIcon3D } from "@/components/motion/animated-icon-3d";
-import { MagneticCTA } from "@/components/motion/magnetic-cta";
-import { motion } from "framer-motion";
+
 
 const PLATFORMS = [
   { name: "Meta", short: "M", tone: "#1877F2", lightText: false },
@@ -43,13 +39,13 @@ function MiniMetric({
   return (
     <div
       className="
-        rounded-xl bg-white border border-mist-200 shadow-card-flat p-4
-        dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark
+        rounded-2xl bg-white border border-mist-200 shadow-card p-4
+        dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
       "
     >
       <div
         className="
-          text-[11px] uppercase tracking-wider font-semibold
+          text-xs uppercase tracking-wider font-semibold
           text-mist-500 dark:text-mist-400
         "
       >
@@ -62,8 +58,8 @@ function MiniMetric({
         {delta && (
           <span
             className={
-              "text-[11px] font-semibold flex items-center gap-1 " +
-              (positive ? "text-violet-700 dark:text-violet-400" : "text-rose-500 dark:text-rose-400")
+              "text-xs font-semibold flex items-center gap-1 " +
+              (positive ? "text-brand-700 dark:text-brand-400" : "text-rose-500 dark:text-rose-400")
             }
           >
             {positive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
@@ -80,7 +76,7 @@ function PlatformsStrip() {
     <div className="flex items-center gap-2 flex-wrap">
       <span
         className="
-          text-[11px] uppercase tracking-wider font-semibold mr-1
+          text-xs uppercase tracking-wider font-semibold mr-1
           text-mist-500 dark:text-mist-400
         "
       >
@@ -90,7 +86,7 @@ function PlatformsStrip() {
         <div
           key={p.name}
           className="
-            inline-flex items-center gap-1.5 rounded-md px-2 py-1
+            inline-flex items-center gap-1.5 rounded-2xl px-2 py-1
             bg-mist-100 border border-mist-200
             dark:bg-ink-850 dark:border-ink-700
           "
@@ -98,7 +94,7 @@ function PlatformsStrip() {
         >
           <span
             className={
-              "inline-flex items-center justify-center h-4 w-4 rounded text-[9px] font-bold " +
+              "inline-flex items-center justify-center h-4 w-4 rounded-2xl text-xs font-bold " +
               (p.lightText ? "text-black" : "text-white")
             }
             style={{ background: p.tone }}
@@ -106,10 +102,10 @@ function PlatformsStrip() {
           >
             {p.short}
           </span>
-          <span className="text-[11px] font-semibold text-mist-600 dark:text-mist-200">
+          <span className="text-xs font-semibold text-mist-600 dark:text-mist-200">
             {p.name}
           </span>
-          <CircleDot size={10} className="text-violet-600 dark:text-violet-400" />
+          <CircleDot size={10} className="text-brand-600 dark:text-brand-400" />
         </div>
       ))}
     </div>
@@ -120,18 +116,18 @@ function AutomationTile() {
   return (
     <div
       className="
-        mt-4 rounded-xl p-4 flex items-start gap-3
-        bg-violet-700/[0.04] border border-violet-700/20
-        dark:bg-violet-700/[0.08] dark:border-violet-700/30
+        mt-4 rounded-2xl p-4 flex items-start gap-3
+        bg-brand-700/[0.04] border border-brand-700/20
+        dark:bg-brand-700/[0.08] dark:border-brand-700/30
       "
     >
       <div
         className="
-          mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg
-          bg-violet-700/15 dark:bg-violet-700/20
+          mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-2xl
+          bg-brand-700/15 dark:bg-brand-700/20
         "
       >
-        <Zap size={14} className="text-violet-700 dark:text-violet-400" />
+        <Zap size={14} className="text-brand-700 dark:text-brand-400" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
@@ -140,12 +136,12 @@ function AutomationTile() {
           </span>
           <span
             className="
-              chip bg-violet-700/10 border border-violet-700/30 text-violet-700
-              dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
-              text-[10px]
+              chip bg-brand-700/10 border border-brand-700/30 text-brand-700
+              dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+              text-xs
             "
           >
-            <CircleDot size={8} className="text-violet-600 dark:text-violet-400" />
+            <CircleDot size={8} className="text-brand-600 dark:text-brand-400" />
             Active · triggered 3× this week
           </span>
         </div>
@@ -161,11 +157,10 @@ function AutomationTile() {
 function HeroPreview() {
   return (
     <div className="relative group">
-      <div className="absolute -inset-8 -z-10 bg-glow-emerald blur-3xl opacity-80 dark:opacity-60 animate-pulse-soft" />
       <div
         className="
-          rounded-3xl bg-white border border-mist-200 shadow-card-elevated p-5 md:p-6
-          dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-elevated-dark
+          rounded-2xl bg-white border border-mist-200 shadow-card p-5 md:p-6
+          dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
           hover-lift
         "
       >
@@ -184,14 +179,14 @@ function HeroPreview() {
                 dark:bg-ink-850 dark:border-ink-700 dark:text-mist-200
               "
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-[pulse-soft_1.2s_ease-in-out_infinite]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
               Live · last 30 days
             </span>
             <span
               className="
-                chip bg-violet-700/10 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/10
-                dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
-                text-[11px]
+                chip bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
+                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+                text-xs
               "
             >
               + 1 rule running
@@ -202,7 +197,7 @@ function HeroPreview() {
         {/* Connected platforms strip */}
         <div
           className="
-            rounded-xl bg-surface-100 border border-mist-200 p-3 mb-4
+            rounded-2xl bg-surface-100 border border-mist-200 p-3 mb-4
             dark:bg-ink-850 dark:border-ink-700
           "
         >
@@ -240,7 +235,7 @@ function HeroPreview() {
         {/* Trend chart preview */}
         <div
           className="
-            mt-5 rounded-xl bg-surface-100 border border-mist-200 p-5
+            mt-5 rounded-2xl bg-surface-100 border border-mist-200 p-5
             dark:bg-ink-850 dark:border-ink-700
           "
         >
@@ -255,8 +250,8 @@ function HeroPreview() {
             </div>
             <span
               className="
-                chip bg-violet-700/10 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/10
-                dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
+                chip bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
+                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
               "
             >
               {formatPercent(0.184, 1)} MoM uplift
@@ -296,8 +291,8 @@ function PreviewSpark() {
     >
       <defs>
         <linearGradient id="spark" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#10B981" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+          <stop offset="0%" stopColor="#22C55E" stopOpacity="0.45" />
+          <stop offset="100%" stopColor="#22C55E" stopOpacity="0" />
         </linearGradient>
       </defs>
       <polyline
@@ -324,41 +319,41 @@ function LiveActivityToast() {
       aria-hidden
       className="
         hidden lg:flex absolute -left-6 top-12 z-20 max-w-[260px]
-        animate-fade-up
+        
       "
       style={{
         animationDelay: "600ms",
         animationFillMode: "both"
       }}
     >
-      <div className="animate-float" style={{ animationDelay: "600ms" }}>
+      <div className="" style={{ animationDelay: "600ms" }}>
         <div
           className="
-            rounded-xl backdrop-blur-md p-3 flex items-start gap-3
-            bg-white/95 border border-mist-200 shadow-card-elevated
-            dark:bg-ink-900/95 dark:border-ink-700 dark:shadow-card-elevated-dark
+            rounded-2xl backdrop-blur-md p-3 flex items-start gap-3
+            bg-white/95 border border-mist-200 shadow-card
+            dark:bg-ink-900/95 dark:border-ink-700 dark:shadow-card
           "
         >
           <span
             className="
-              relative inline-flex h-8 w-8 items-center justify-center rounded-lg
-              bg-violet-700/15 dark:bg-violet-700/20
+              relative inline-flex h-8 w-8 items-center justify-center rounded-2xl
+              bg-brand-700/15 dark:bg-brand-700/20
             "
           >
-            <Zap size={14} className="text-violet-700 dark:text-violet-300" />
-            <span className="absolute inset-0 rounded-lg bg-violet-700/15 animate-ping" />
+            <Zap size={14} className="text-brand-700 dark:text-brand-300" />
+            <span className="absolute inset-0 rounded-2xl bg-brand-700/15 animate-ping" />
           </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-500 dark:text-mist-400">
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-mist-500 dark:text-mist-400">
                 Auto-rule fired
               </span>
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-[pulse-soft_1.2s_ease-in-out_infinite]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
             </div>
-            <div className="mt-0.5 text-[13px] font-semibold text-mist-600 dark:text-mist-100 leading-snug">
+            <div className="mt-0.5 text-sm font-semibold text-mist-600 dark:text-mist-100 leading-snug">
               Paused 2 ads · saved ₦24,800
             </div>
-            <div className="text-[11px] font-medium text-mist-500 dark:text-mist-400 mt-0.5">
+            <div className="text-xs font-medium text-mist-500 dark:text-mist-400 mt-0.5">
               2 min ago · Lagos campaign
             </div>
           </div>
@@ -378,7 +373,7 @@ function LiveActivityToast() {
             stroke="rgb(21 128 61 / 0.4)"
             strokeWidth="1"
             strokeDasharray="3 3"
-            className="animate-dash-flow"
+            className=""
             strokeLinecap="round"
           />
         </svg>
@@ -387,23 +382,17 @@ function LiveActivityToast() {
   );
 }
 
-/** Premium hero background — four drifting emerald orbs + grain. */
-function MeshBackground() {
-  return <AuroraOrbsBackground variant="light" />;
-}
-
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <MeshBackground />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60" />
 
       {/* Decorative scattered leaves backdrop */}
       <svg
         aria-hidden
         className="
           absolute top-32 right-[8%] w-16 h-16 -z-10 hidden md:block
-          text-violet-700/[0.07] dark:text-violet-400/[0.06]
-          animate-[float_8s_ease-in-out_infinite]
+          text-brand-700/[0.07] dark:text-brand-400/[0.06]
         "
         viewBox="0 0 64 64"
         fill="currentColor"
@@ -415,8 +404,7 @@ export function Hero() {
         aria-hidden
         className="
           absolute bottom-24 left-[5%] w-10 h-10 -z-10 hidden md:block
-          text-violet-700/[0.05] dark:text-violet-400/[0.04]
-          animate-[float_10s_ease-in-out_infinite_0.5s]
+          text-brand-700/[0.05] dark:text-brand-400/[0.04]
         "
         viewBox="0 0 64 64"
         fill="currentColor"
@@ -426,12 +414,12 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="animate-fade-up">
+          <div className="">
             <span
               className="
                 chip
-                bg-violet-700/10 border border-violet-700/30 text-violet-700
-                dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
+                bg-brand-700/10 border border-brand-700/30 text-brand-700
+                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
                 mb-6
               "
             >
@@ -447,19 +435,19 @@ export function Hero() {
               "
             >
               <span
-                className="block animate-fade-up"
+                className="block "
                 style={{ animationDelay: "0ms", animationFillMode: "both" }}
               >
                 Plant money on ads
               </span>
               <span
-                className="block animate-fade-up"
+                className="block "
                 style={{ animationDelay: "120ms", animationFillMode: "both" }}
               >
                 that <span className="gradient-text">grow.</span>
               </span>
               <span
-                className="block animate-fade-up"
+                className="block "
                 style={{ animationDelay: "240ms", animationFillMode: "both" }}
               >
                 Automate the rest.
@@ -468,7 +456,7 @@ export function Hero() {
 
             <p
               className="
-                mt-6 text-base md:text-lg leading-relaxed max-w-xl animate-fade-up
+                mt-6 text-base md:text-lg leading-relaxed max-w-xl 
                 text-mist-600 dark:text-mist-300
               "
               style={{ animationDelay: "360ms", animationFillMode: "both" }}
@@ -480,20 +468,18 @@ export function Hero() {
             </p>
 
       <div
-        className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 animate-fade-up w-full sm:w-auto"
+        className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3  w-full sm:w-auto"
         style={{ animationDelay: "480ms", animationFillMode: "both" }}
       >
-              <MagneticCTA>
-                <LinkButton
-                  href="/dashboard"
-                  variant="primary"
-                  size="lg"
-                  className="shadow-glow-emerald shadow-[0_0_50px_-5px_rgba(16,185,129,0.55)] hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.8)] touch-target group"
-                >
-                  Start free 14-day trial
-                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </LinkButton>
-              </MagneticCTA>
+              <LinkButton
+                href="/dashboard"
+                variant="primary"
+                size="lg"
+                className="shadow-card touch-target group"
+              >
+                Start free 14-day trial
+                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </LinkButton>
               <LinkButton href="#workflow" variant="secondary" size="lg">
                 See how it works
               </LinkButton>
@@ -501,48 +487,41 @@ export function Hero() {
 
             <div
               className="
-                mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm animate-fade-up
+                mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm 
                 text-mist-600 dark:text-mist-300
               "
               style={{ animationDelay: "600ms", animationFillMode: "both" }}
             >
               <div className="flex items-center gap-2">
-                <BadgeCheck size={16} className="text-violet-600 dark:text-violet-400" />
+                <BadgeCheck size={16} className="text-brand-600 dark:text-brand-400" />
                 No credit card needed
               </div>
               <div className="flex items-center gap-2">
-                <BadgeCheck size={16} className="text-violet-600 dark:text-violet-400" />
+                <BadgeCheck size={16} className="text-brand-600 dark:text-brand-400" />
                 Live in under 10 minutes
               </div>
               <div className="flex items-center gap-2">
-                <BadgeCheck size={16} className="text-violet-600 dark:text-violet-400" />
+                <BadgeCheck size={16} className="text-brand-600 dark:text-brand-400" />
                 Paystack-billed in Naira
               </div>
             </div>
           </div>
 
           <div
-            className="relative animate-fade-up"
+            className="relative "
             style={{ animationDelay: "120ms", animationFillMode: "both" }}
           >
             <LiveActivityToast />
             {/* Orbiting badge floating above the dashboard preview — adds a
                 motion-path anchor above the HeroPreview. */}
-            <motion.div
-              className="absolute -top-6 -right-6 z-20 hidden lg:block"
-              animate={{
-                y: [0, -6, 0],
-                rotate: [-3, 3, -3]
-              }}
-              transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="rounded-full bg-violet-700/15 border border-violet-700/30 px-3 py-1.5 shadow-[0_0_20px_-2px_rgba(16,185,129,0.55)] backdrop-blur-md dark:bg-violet-700/20 dark:border-violet-700/30">
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-violet-700 dark:text-violet-300">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse-soft" />
+            <div className="absolute -top-6 -right-6 z-20 hidden lg:block">
+              <div className="rounded-full bg-brand-700/15 border border-brand-700/30 px-3 py-1.5 shadow-[0_0_20px_-2px_rgba(16,185,129,0.55)] backdrop-blur-md dark:bg-brand-700/20 dark:border-brand-700/30">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 dark:text-brand-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-500 " />
                   LIVE
                 </span>
               </div>
-            </motion.div>
+            </div>
             <HeroPreview />
           </div>
         </div>

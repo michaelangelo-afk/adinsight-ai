@@ -1,7 +1,7 @@
 // components/influencer/marketplace-kpis.tsx
 //
 // Phase 4 — 4 hero KPIs for the Influencer Sector. Mirrors the
-// Phase 3 MetricsGrid pattern: glass-card, hover-lift, animate-fade-up
+// Phase 3 MetricsGrid pattern: glass-card, hover-lift, 
 // stagger, sparkline, color-coded delta. Server Component (no hooks).
 
 import type { LucideIcon } from "lucide-react";
@@ -21,7 +21,7 @@ function MiniSpark({
   tone
 }: {
   data: number[];
-  tone: "violet" | "naira";
+  tone: "brand" | "accent";
 }) {
   const w = 100;
   const h = 24;
@@ -35,8 +35,8 @@ function MiniSpark({
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(" ");
-  const stroke = tone === "naira" ? "#10B981" : "#A78BFA";
-  const fill = tone === "naira" ? "#10B981" : "#A78BFA";
+  const stroke = tone === "accent" ? "#22C55E" : "#15803D";
+  const fill = tone === "accent" ? "#22C55E" : "#15803D";
   return (
     <svg
       viewBox={`0 0 ${w} ${h}`}
@@ -72,9 +72,9 @@ interface CardSpec {
   value: string;
   hint: string;
   icon: LucideIcon;
-  tone: "violet" | "naira";
+  tone: "brand" | "accent";
   spark: number[];
-  badgeTone?: "good" | "neutral" | "violet";
+  badgeTone?: "good" | "neutral" | "brand";
   badgeText?: string;
 }
 
@@ -85,9 +85,9 @@ function buildCards(s: MarketplaceStats): CardSpec[] {
       value: String(s.totalCreators),
       hint: "across 4 cities · 10 niches",
       icon: Users,
-      tone: "violet",
+      tone: "brand",
       spark: sparkFromAggregate(s.totalCreators * 1.2),
-      badgeTone: "violet",
+      badgeTone: "brand",
       badgeText: `${s.highFitCount} high-fit`
     },
     {
@@ -95,7 +95,7 @@ function buildCards(s: MarketplaceStats): CardSpec[] {
       value: `${s.averageFit}`,
       hint: "out of 100 — weighted overlap",
       icon: Sparkles,
-      tone: "naira",
+      tone: "accent",
       spark: sparkFromAggregate(s.averageFit * 1.1),
       badgeTone: s.averageFit >= 60 ? "good" : "neutral",
       badgeText: s.averageFit >= 60 ? "healthy" : "working"
@@ -105,9 +105,9 @@ function buildCards(s: MarketplaceStats): CardSpec[] {
       value: `${formatCompactNumber(s.totalReach)}`,
       hint: "aggregated follower count",
       icon: Radio,
-      tone: "violet",
+      tone: "brand",
       spark: sparkFromAggregate(s.totalReach / 1000),
-      badgeTone: "violet",
+      badgeTone: "brand",
       badgeText: "all channels"
     },
     {
@@ -115,7 +115,7 @@ function buildCards(s: MarketplaceStats): CardSpec[] {
       value: formatNaira(s.averageCpmBy1000Followers),
       hint: "vs ₦167/1k reach on Meta Retargeting",
       icon: Wallet,
-      tone: "naira",
+      tone: "accent",
       spark: sparkFromAggregate(s.averageCpmBy1000Followers / 80),
       badgeTone: "good",
       badgeText: "vs ads —40%"
@@ -132,14 +132,14 @@ export function MarketplaceKpis({ stats }: { stats: MarketplaceStats }) {
         return (
           <div
             key={c.label}
-            className="glass-card rounded-2xl p-5 sm:p-6 group hover-lift animate-fade-up"
+            className="glass-card rounded-2xl p-5 sm:p-6 group hover-lift "
             style={{ animationDelay: `${i * 60}ms` }}
           >
             <div className="flex items-center justify-between">
-              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-100 group-hover:border-violet-300 dark:group-hover:bg-violet-500/15 dark:group-hover:border-violet-500/40">
+              <div className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-100 group-hover:border-brand-300 dark:group-hover:bg-brand-500/15 dark:group-hover:border-brand-500/40">
                 <Icon
                   size={16}
-                  className="text-violet-700 dark:text-violet-300 transition-transform duration-300 group-hover:rotate-[8deg]"
+                  className="text-brand-700 dark:text-brand-300 transition-transform duration-300 group-hover:rotate-[8deg]"
                 />
               </div>
               {c.badgeTone && c.badgeText && (
@@ -150,10 +150,10 @@ export function MarketplaceKpis({ stats }: { stats: MarketplaceStats }) {
               <div className="text-xs text-slate-600 dark:text-mist-400">
                 {c.label}
               </div>
-              <div className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-mist-50 tabular-nums animate-count-up">
+              <div className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-mist-50 tabular-nums ">
                 {c.value}
               </div>
-              <div className="mt-0.5 text-[11px] text-slate-500 dark:text-mist-500">
+              <div className="mt-0.5 text-xs text-slate-500 dark:text-mist-500">
                 {c.hint}
               </div>
             </div>

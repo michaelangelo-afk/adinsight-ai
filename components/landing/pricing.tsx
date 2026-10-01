@@ -1,7 +1,6 @@
 import { LinkButton } from "@/components/ui/button";
 import { Check, Sparkles, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ParticleField } from "@/components/motion/particle-field";
 
 type Tier = {
   name: string;
@@ -65,15 +64,13 @@ export function Pricing() {
         bg-surface-100 dark:bg-ink-900
       "
     >
-      <div className="absolute inset-0 bg-glow-forest blur-3xl opacity-60 dark:opacity-30 pointer-events-none" />
-
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="text-center max-w-2xl mx-auto">
           <span
             className="
               chip
-              bg-violet-700/10 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/10
-              dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
+              bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
+              dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
             "
           >
             Pricing
@@ -104,16 +101,16 @@ export function Pricing() {
               className={cn(
                 "relative rounded-2xl overflow-hidden p-7 transition-all duration-300 hover-lift group",
                 t.highlight
-                  ? "bg-white border-2 border-violet-700/60 shadow-glow-forest dark:border-violet-500/60 dark:shadow-glow-emerald-dark dark:bg-ink-900"
-                  : "bg-white border border-mist-200 shadow-card-flat dark:bg-ink-900 dark:border-ink-700 dark:shadow-card-flat-dark hover:border-violet-300/60"
+                  ? "bg-white border-2 border-brand-700/60 shadow-card dark:border-brand-500/60 dark:shadow-card dark:bg-ink-900"
+                  : "bg-white border border-mist-200 shadow-card dark:bg-ink-900 dark:border-ink-700 dark:shadow-card hover:border-brand-300/60"
               )}
             >
               {t.highlight && (
                 <div
-                  className="absolute inset-x-0 -top-px h-[3px] rounded-t-2xl animate-aurora-border"
+                  className="absolute inset-x-0 -top-px h-[3px] rounded-t-2xl-2xl "
                   style={{
                     backgroundImage:
-                      "linear-gradient(90deg, #14532D 0%, #15803D 20%, #16A34A 40%, #10B981 60%, #16A34A 80%, #15803D 100%)",
+                      "linear-gradient(90deg, #14532D 0%, #15803D 20%, #16A34A 40%, #22C55E 60%, #16A34A 80%, #15803D 100%)",
                     backgroundSize: "200% 100%"
                   }}
                 />
@@ -121,19 +118,11 @@ export function Pricing() {
               {t.highlight && (
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -inset-px rounded-2xl opacity-60 dark:opacity-70 animate-pulse-soft"
+                  className="pointer-events-none absolute -inset-px rounded-2xl opacity-60 dark:opacity-70 "
                   style={{
                     background:
                       "radial-gradient(80% 60% at 50% 0%, rgba(16,185,129,0.18), transparent 70%)"
                   }}
-                />
-              )}
-              {t.highlight && (
-                <ParticleField
-                  count={28}
-                  seed={t.name.length * 7 + 7}
-                  variant="light"
-                  className="[&>span]:opacity-40"
                 />
               )}
               {t.highlight && (
@@ -144,7 +133,7 @@ export function Pricing() {
                   <Crown
                     size={20}
                     strokeWidth={2.2}
-                    className="text-emerald-500 animate-wiggle-3d"
+                    className="text-brand-500 "
                   />
                 </div>
               )}
@@ -160,8 +149,8 @@ export function Pricing() {
                 {t.highlight && (
                   <span
                     className="
-                      chip bg-violet-700/15 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/15
-                      dark:bg-violet-700/20 dark:border-violet-700/40 dark:text-violet-300
+                      chip bg-brand-700/15 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/15
+                      dark:bg-brand-700/20 dark:border-brand-700/40 dark:text-brand-300
                       font-semibold
                     "
                   >
@@ -196,8 +185,8 @@ export function Pricing() {
                     <span
                       className="
                         mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full
-                        bg-violet-700/15 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300
-                        dark:bg-emerald-500/20 dark:text-emerald-300
+                        bg-brand-700/15 text-brand-700 dark:bg-brand-400/15 dark:text-brand-300
+                        dark:bg-brand-500/20 dark:text-brand-300
                       "
                     >
                       <Check size={10} strokeWidth={3.5} />
@@ -211,7 +200,7 @@ export function Pricing() {
                   href="/dashboard"
                   variant={t.highlight ? "primary" : "secondary"}
                   size="md"
-                  className={cn("w-full touch-target group/cta", t.highlight && "shadow-glow-emerald hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.7)]")}
+                  className={cn("w-full touch-target group/cta", t.highlight && "shadow-card hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.7)]")}
                 >
                   {t.cta}
                 </LinkButton>

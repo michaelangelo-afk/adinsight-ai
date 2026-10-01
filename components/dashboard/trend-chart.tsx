@@ -26,7 +26,7 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
   }));
 
   return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift ">
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
@@ -40,8 +40,8 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="chip bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-500/30">
-            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+          <span className="chip bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-500/30">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
             <MetricTooltip
               content={SpendLegendTip}
               label="What the daily spend line means"
@@ -50,8 +50,8 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
               <span>Spend</span>
             </MetricTooltip>
           </span>
-          <span className="chip bg-naira-500/10 text-naira-700 dark:text-naira-300 border border-naira-500/30">
-            <span className="h-1.5 w-1.5 rounded-full bg-naira-400" />
+          <span className="chip bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-500/30">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
             <MetricTooltip
               content={ConversionsLegendTip}
               label="What the daily conversions line means"

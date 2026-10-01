@@ -33,9 +33,9 @@ import type { CampaignSummary } from "@/lib/types";
 import { Sparkles, ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 const QUADRANT_COLOR: Record<string, string> = {
-  "sweet-spot": "#10B981", // emerald-500
-  "premium-overperform": "#A78BFA", // violet-400
-  "budget-gem": "#34D399", // emerald-400
+  "sweet-spot": "#22C55E", // brand-500
+  "premium-overperform": "#15803D", // brand-400
+  "budget-gem": "#4ADE80", // brand-400
   "premium-underperform": "#F59E0B", // amber-500
   "low-priority": "#64748B" // slate-500
 };
@@ -56,7 +56,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
   return (
     <div
       role="tooltip"
-      className="rounded-xl p-3 text-xs shadow-lg"
+      className="rounded-2xl p-3 text-xs shadow-card"
       style={{
         background: "rgba(13,13,30,0.96)",
         border: "1px solid rgba(255,255,255,0.06)"
@@ -68,7 +68,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
         ₦{Math.round(d.x)}/1k followers · {formatPercent(d.creator.engagementRate, 2)} ER
       </div>
       <div className="text-mist-400 mt-1">Fit {d.fit.overall}/100</div>
-      <div className="mt-1.5 text-[10px] uppercase tracking-wider" style={{ color: QUADRANT_COLOR[d.quadrant] }}>
+      <div className="mt-1.5 text-xs uppercase tracking-wider" style={{ color: QUADRANT_COLOR[d.quadrant] }}>
         {d.quadrant.replace("-", " ")}
       </div>
     </div>
@@ -102,13 +102,13 @@ export function BubbleCompareChart({
 
   return (
     <div
-      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up"
+      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift "
       style={{ animationDelay: "120ms" }}
     >
       <div className="flex items-start justify-between mb-4 gap-4">
         <div>
           <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400 inline-flex items-center gap-1.5">
-            <Sparkles size={11} aria-hidden className="text-violet-300" />
+            <Sparkles size={11} aria-hidden className="text-brand-300" />
             Compare to your ads
           </div>
           <h3 className="mt-1 text-lg font-semibold text-mist-50">
@@ -120,23 +120,23 @@ export function BubbleCompareChart({
             cost per 1,000 followers. <strong className="text-mist-50">Size</strong>:
             projected reach.{" "}
             <strong className="text-mist-50">Dashed line</strong>:{" "}
-            <span className="text-emerald-300 tabular-nums">
+            <span className="text-brand-300 tabular-nums">
               {formatNaira(baselineCpm)}
             </span>
             /1k reach on your existing Meta campaign.
           </p>
         </div>
-        <div className="hidden md:flex flex-col items-end gap-1.5 text-[11px] text-mist-500">
+        <div className="hidden md:flex flex-col items-end gap-1.5 text-xs text-mist-500">
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="h-2 w-2 rounded-full bg-brand-500" />
             Sweet spot
           </div>
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-violet-400" />
+            <span className="h-2 w-2 rounded-full bg-brand-400" />
             Premium overperform
           </div>
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="h-2 w-2 rounded-full bg-brand-400" />
             Budget gem
           </div>
           <div className="flex items-center gap-2">
@@ -210,11 +210,11 @@ export function BubbleCompareChart({
             />
             <ReferenceLine
               x={baselineCpm}
-              stroke="#10B981"
+              stroke="#22C55E"
               strokeDasharray="4 4"
               label={{
                 value: `Meta baseline ₦${Math.round(baselineCpm)}/1k reach`,
-                fill: "#10B981",
+                fill: "#22C55E",
                 fontSize: 10,
                 position: "top"
               }}
@@ -235,9 +235,9 @@ export function BubbleCompareChart({
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
+      <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
         <Insight
-          tone="naira"
+          tone="accent"
           icon={<ArrowDownRight size={11} aria-hidden />}
           text={
             <>
@@ -245,13 +245,13 @@ export function BubbleCompareChart({
                 {data.filter((d) => d.x < baselineCpm * 0.6).length}
               </strong>{" "}
               creators cost{" "}
-              <span className="text-emerald-300 font-medium">less</span> per
+              <span className="text-brand-300 font-medium">less</span> per
               reach than Meta — shortlist first.
             </>
           }
         />
         <Insight
-          tone="violet"
+          tone="brand"
           icon={<ArrowUpRight size={11} aria-hidden />}
           text={
             <>
@@ -287,24 +287,24 @@ function Insight({
   icon,
   text
 }: {
-  tone: "violet" | "naira" | "amber";
+  tone: "brand" | "accent" | "amber";
   icon: React.ReactNode;
   text: React.ReactNode;
 }) {
   const cls =
-    tone === "naira"
-      ? "border-emerald-500/30 bg-emerald-500/[0.06]"
-      : tone === "violet"
-      ? "border-violet-500/30 bg-violet-500/[0.06]"
+    tone === "accent"
+      ? "border-brand-500/30 bg-brand-500/[0.06]"
+      : tone === "brand"
+      ? "border-brand-500/30 bg-brand-500/[0.06]"
       : "border-amber-500/30 bg-amber-500/[0.08]";
   return (
-    <div className={`rounded-lg border ${cls} px-3 py-2 flex items-start gap-2 text-mist-200`}>
+    <div className={`rounded-2xl border ${cls} px-3 py-2 flex items-start gap-2 text-mist-200`}>
       <span
         className={
-          tone === "naira"
-            ? "text-emerald-300 mt-0.5"
-            : tone === "violet"
-            ? "text-violet-300 mt-0.5"
+          tone === "accent"
+            ? "text-brand-300 mt-0.5"
+            : tone === "brand"
+            ? "text-brand-300 mt-0.5"
             : "text-amber-300 mt-0.5"
         }
       >

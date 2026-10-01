@@ -77,7 +77,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
   const sorted = [...campaigns].sort((a, b) => b[sortKey] - a[sortKey]);
 
   return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up">
+    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift ">
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
@@ -90,7 +90,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
             Sort by spend, conversions or CPC. Click a campaign for drill-down.
           </p>
         </div>
-        <button className="hidden md:inline-flex items-center gap-2 rounded-lg bg-mist-50/[0.04] hairline px-3 py-1.5 text-xs text-mist-200 hover:bg-mist-50/[0.08]">
+        <button className="hidden md:inline-flex items-center gap-2 rounded-2xl bg-mist-50/[0.04] hairline px-3 py-1.5 text-xs text-mist-200 hover:bg-mist-50/[0.08]">
           <ArrowUpDown size={12} />
           Sort:{" "}
           <span className="text-mist-50 font-medium capitalize">
@@ -108,7 +108,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
             className={
               "rounded-full px-3 py-1 text-xs font-medium transition-colors " +
               (sortKey === k
-                ? "bg-violet-500/20 border border-violet-500/40 text-violet-200"
+                ? "bg-brand-500/20 border border-brand-500/40 text-brand-200"
                 : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50")
             }
           >
@@ -196,7 +196,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         {c.name}
                       </span>
                     </div>
-                    <div className="text-[11px] text-mist-600 dark:text-mist-500 ml-4.5 mt-0.5 capitalize">
+                    <div className="text-xs text-mist-600 dark:text-mist-500 ml-4.5 mt-0.5 capitalize">
                       {c.platform} · {formatPercent(c.ctr, 2)} CTR
                     </div>
                   </td>
@@ -227,7 +227,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                           type="submit"
                           aria-label={c.status === "active" ? `Pause ${c.name}` : `Resume ${c.name}`}
                           title={c.status === "active" ? `Pause ${c.name} on Meta` : `Resume ${c.name} on Meta`}
-                          className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-600 dark:text-mist-500 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                          className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-2xl text-mist-600 dark:text-mist-500 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
                         >
                           {c.status === "active" ? (
                             <Pause size={13} />
@@ -242,7 +242,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                         aria-label="More actions"
                         title={`Phase 3 wiring pending — open details for ${c.name}`}
                         onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-md text-mist-600 dark:text-mist-500 hover:text-violet-700 dark:hover:text-violet-300 hover:bg-violet-500/10 cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-2xl text-mist-600 dark:text-mist-500 hover:text-brand-700 dark:hover:text-brand-300 hover:bg-brand-500/10 cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
                       >
                         <MoreHorizontal size={13} />
                       </button>

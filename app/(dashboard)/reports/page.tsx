@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
 import { TextureGrain } from "@/components/motion/texture-grain";
 
 import { Topbar } from "@/components/dashboard/topbar";
@@ -68,7 +67,6 @@ export default async function ReportsPage() {
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <AuroraOrbsBackground variant="dark" />
         <TextureGrain />
       </div>
 
@@ -77,7 +75,7 @@ export default async function ReportsPage() {
       <main className="flex-1 p-6 md:p-8 space-y-6">
         {/* Hero */}
         <section
-          className="relative rounded-3xl overflow-hidden hairline bg-gradient-to-br from-emerald-500/15 via-ink-950/60 to-violet-500/10 p-6 sm:p-8 animate-fade-up"
+          className="relative rounded-2xl overflow-hidden hairline bg-gradient-to-br from-brand-500/15 via-ink-950/60 to-brand-500/10 p-6 sm:p-8 "
           aria-label="Reports hero"
         >
           <div
@@ -86,7 +84,7 @@ export default async function ReportsPage() {
           />
           <div className="relative grid lg:grid-cols-[1.5fr,1fr] gap-6 items-center">
             <div>
-              <Badge tone="good" className="!text-[10px]">
+              <Badge tone="good" className="!text-xs">
                 <FileText size={10} aria-hidden className="mr-1" />
                 Phase 5 · Reports center
               </Badge>
@@ -115,7 +113,7 @@ export default async function ReportsPage() {
                 </Button>
               </div>
 
-              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-[11px] text-mist-400">
+              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-xs text-mist-400">
                 <KpiPill
                   label="Avg weekly spend"
                   value={formatNaira(avgWeeklySpend)}
@@ -137,24 +135,24 @@ export default async function ReportsPage() {
                 {/* Decorative stack of report pages for hero right */}
                 <span
                   aria-hidden
-                  className="absolute inset-0 rotate-[-8deg] rounded-xl bg-emerald-500/[0.12] hairline"
+                  className="absolute inset-0 rotate-[-8deg] rounded-2xl bg-brand-500/[0.12] hairline"
                 />
                 <span
                   aria-hidden
-                  className="absolute inset-0 rotate-[-3deg] rounded-xl bg-violet-500/[0.10] hairline"
+                  className="absolute inset-0 rotate-[-3deg] rounded-2xl bg-brand-500/[0.10] hairline"
                 />
-                <div className="relative rounded-xl bg-mist-50/[0.04] hairline p-4">
-                  <Badge tone="good" className="!text-[10px]">
+                <div className="relative rounded-2xl bg-mist-50/[0.04] hairline p-4">
+                  <Badge tone="good" className="!text-xs">
                     <Calendar size={10} aria-hidden className="mr-1" />
                     This week
                   </Badge>
                   <div className="mt-3 text-2xl font-semibold text-mist-50 tabular-nums">
                     {formatCompactNumber(dashboardSummary.totalConversions)}
                   </div>
-                  <div className="text-[11px] uppercase tracking-wider text-mist-500">
+                  <div className="text-xs uppercase tracking-wider text-mist-500">
                     Conversions
                   </div>
-                  <div className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-emerald-300 font-semibold">
+                  <div className="mt-3 inline-flex items-center gap-1.5 text-xs text-brand-300 font-semibold">
                     <TrendingUp size={11} aria-hidden />
                     +{Math.abs(dashboardSummary.conversionsDelta).toFixed(1)}% vs last week
                   </div>
@@ -173,19 +171,19 @@ export default async function ReportsPage() {
             label="Latest report"
             value={featured.title}
             hint={formatNaira(dashboardSummary.totalSpend) + " tracked"}
-            tone="naira"
+            tone="accent"
           />
           <KpiTile
             label="Total reports (90d)"
             value={String(sortedReports.length * 12)}
             hint="Across all cadences"
-            tone="violet"
+            tone="brand"
           />
           <KpiTile
             label="Open rate"
             value="73%"
             hint="Across last 30 days"
-            tone="violet"
+            tone="brand"
           />
         </section>
 
@@ -230,7 +228,7 @@ export default async function ReportsPage() {
         {/* Schedule */}
         <SchedulePanel />
 
-        <footer className="text-[11px] text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-lg hairline px-4 py-3">
+        <footer className="text-xs text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-2xl hairline px-4 py-3">
           <span>
             Reports generated by the same engine that powers the
             dashboard — {campaigns.length} campaigns, 90-day trend, 1 cohort.
@@ -255,28 +253,28 @@ function KpiTile({
   label: string;
   value: string;
   hint: string;
-  tone: "violet" | "naira";
+  tone: "brand" | "accent";
 }) {
   return (
-    <div className="glass-card rounded-2xl p-5 hover-lift animate-fade-up relative overflow-hidden">
+    <div className="glass-card rounded-2xl p-5 hover-lift  relative overflow-hidden">
       <span
         aria-hidden
         className="pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full blur-3xl"
         style={{
           background:
-            tone === "naira"
+            tone === "accent"
               ? "rgba(16,185,129,0.16)"
-              : "rgba(167,139,250,0.16)"
+              : "rgba(21,128,61,0.16)"
         }}
       />
       <div className="relative">
-        <div className="text-[10px] uppercase tracking-wider text-mist-500">
+        <div className="text-xs uppercase tracking-wider text-mist-500">
           {label}
         </div>
-        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums animate-count-up truncate">
+        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums  truncate">
           {value}
         </div>
-        <div className="mt-0.5 text-[11px] text-mist-400">{hint}</div>
+        <div className="mt-0.5 text-xs text-mist-400">{hint}</div>
       </div>
     </div>
   );
@@ -292,14 +290,14 @@ function KpiPill({
   highlight?: boolean;
 }) {
   return (
-    <div className="rounded-lg bg-mist-50/[0.04] hairline px-3 py-2 text-center">
-      <div className="text-[10px] uppercase tracking-wider text-mist-500">
+    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-center">
+      <div className="text-xs uppercase tracking-wider text-mist-500">
         {label}
       </div>
       <div
         className={
           "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-emerald-300" : "text-mist-50")
+          (highlight ? "text-brand-300" : "text-mist-50")
         }
       >
         {value}

@@ -138,7 +138,7 @@ export function FilterBar({ totalCount }: { totalCount: number }) {
 
   return (
     <div
-      className="glass-card rounded-2xl p-4 sm:p-5 hover-lift animate-fade-up"
+      className="glass-card rounded-2xl p-4 sm:p-5 hover-lift "
       style={{ animationDelay: "100ms" }}
     >
       <div className="flex flex-wrap items-center gap-3">
@@ -160,12 +160,12 @@ export function FilterBar({ totalCount }: { totalCount: number }) {
             }}
             placeholder="Search creators, niches…"
             aria-label="Search creators"
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-mist-50/[0.04] hairline text-sm text-mist-100 placeholder:text-mist-500 focus-glow"
+            className="w-full pl-9 pr-3 py-2 rounded-2xl bg-mist-50/[0.04] hairline text-sm text-mist-100 placeholder:text-mist-500 focus-glow"
           />
         </div>
 
         {/* Sort dropdown */}
-        <label className="inline-flex items-center gap-2 rounded-lg bg-mist-50/[0.04] hairline px-3 py-2 text-sm text-mist-200">
+        <label className="inline-flex items-center gap-2 rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-sm text-mist-200">
           <ArrowDownUp size={14} aria-hidden className="text-mist-400" />
           <span className="sr-only">Sort</span>
           <select
@@ -186,7 +186,7 @@ export function FilterBar({ totalCount }: { totalCount: number }) {
           <button
             type="button"
             onClick={clearAll}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 px-3 py-2 text-xs font-medium text-rose-300 hover:bg-rose-500/20 tap-press touch-target"
+            className="inline-flex items-center gap-1.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 px-3 py-2 text-xs font-medium text-rose-300 hover:bg-rose-500/20 tap-press touch-target"
           >
             <X size={12} aria-hidden />
             Clear
@@ -194,7 +194,7 @@ export function FilterBar({ totalCount }: { totalCount: number }) {
         )}
 
         {/* Result count */}
-        <span className="ml-auto text-[11px] uppercase tracking-wider text-mist-500">
+        <span className="ml-auto text-xs uppercase tracking-wider text-mist-500">
           <span className="text-mist-50 font-semibold tabular-nums">
             {totalCount}
           </span>{" "}
@@ -227,7 +227,7 @@ export function FilterBar({ totalCount }: { totalCount: number }) {
 
       {/* Price slider */}
       <div className="mt-4 px-1">
-        <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-mist-500">
+        <div className="flex items-center justify-between text-xs uppercase tracking-wider text-mist-500">
           <span>Price range</span>
           <span className="tabular-nums text-mist-200">
             {fmtPriceK(localPriceLo)} – {fmtPriceK(localPriceHi)}
@@ -241,7 +241,7 @@ export function FilterBar({ totalCount }: { totalCount: number }) {
           />
           <span
             aria-hidden
-            className="absolute top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-emerald-500/55"
+            className="absolute top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-brand-500/55"
             style={{
               left: `${(localPriceLo / 500_000) * 100}%`,
               right: `${100 - (localPriceHi / 500_000) * 100}%`
@@ -327,7 +327,7 @@ function ChipRow({
   return (
     <div className="flex items-center gap-2 flex-wrap">
       {icon}
-      <span className="text-[11px] uppercase tracking-wider text-mist-500 w-16 shrink-0">
+      <span className="text-xs uppercase tracking-wider text-mist-500 w-16 shrink-0">
         {label}
       </span>
       {options.map((opt) => {
@@ -341,8 +341,8 @@ function ChipRow({
             className={
               "rounded-full px-3 py-1 text-xs font-medium transition-colors tap-press touch-target " +
               (active
-                ? "bg-violet-500/20 border border-violet-500/40 text-violet-200"
-                : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-violet-500/30")
+                ? "bg-brand-500/20 border border-brand-500/40 text-brand-200"
+                : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50 hover:border-brand-500/30")
             }
           >
             {opt.label}

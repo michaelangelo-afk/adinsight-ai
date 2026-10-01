@@ -63,11 +63,11 @@ export function Footer() {
                       href="#"
                       className="
                         relative inline-block text-sm transition-colors duration-200
-                        text-mist-600 hover:text-violet-700 dark:text-mist-300 dark:hover:text-violet-300
-                        dark:text-mist-300 dark:hover:text-violet-300
+                        text-mist-600 hover:text-brand-700 dark:text-mist-300 dark:hover:text-brand-300
+                        dark:text-mist-300 dark:hover:text-brand-300
                         after:absolute after:left-0 after:right-0 after:-bottom-0.5
                         after:h-px after:origin-left after:scale-x-0
-                        after:bg-gradient-to-r after:from-violet-600 after:to-naira-500
+                        after:bg-gradient-to-r after:from-brand-600 after:to-brand-500
                         after:transition-transform after:duration-300 after:ease-out
                         hover:after:scale-x-100
                       "
@@ -93,8 +93,8 @@ export function Footer() {
             <span
               className="
                 chip font-medium
-                bg-violet-700/10 border border-violet-700/30 text-violet-700 dark:text-violet-300 dark:border-violet-400/30 dark:bg-violet-400/10
-                dark:bg-violet-700/15 dark:border-violet-700/30 dark:text-violet-300
+                bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
+                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
               "
             >
               Paystack-secured
@@ -102,8 +102,8 @@ export function Footer() {
             <span
               className="
                 chip font-medium
-                bg-naira-600/15 border border-naira-600/30 text-naira-700
-                dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-300
+                bg-brand-600/15 border border-brand-600/30 text-brand-700
+                dark:bg-brand-500/15 dark:border-brand-500/30 dark:text-brand-300
               "
             >
               Meta Business Partner

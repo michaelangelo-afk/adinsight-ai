@@ -16,10 +16,10 @@ import type { ContentMixEntry, ContentKind } from "@/lib/influencer/types";
 import { CONTENT_KIND_LABEL } from "@/lib/influencer/types";
 
 const KIND_COLOR: Record<ContentKind, string> = {
-  reel: "#10B981", // emerald-500
-  carousel: "#34D399", // emerald-400
-  story: "#A78BFA", // violet-400
-  long: "#059669", // emerald-600
+  reel: "#22C55E", // brand-500
+  carousel: "#4ADE80", // brand-400
+  story: "#15803D", // brand-400
+  long: "#16A34A", // brand-600
   static: "#64748B" // slate-500
 };
 
@@ -85,7 +85,7 @@ export function ContentMixDonut({
         </ResponsiveContainer>
       </div>
 
-      <ul className="grid grid-cols-2 gap-y-1.5 gap-x-2 text-[11px]">
+      <ul className="grid grid-cols-2 gap-y-1.5 gap-x-2 text-xs">
         {data.map((d, i) => (
           <li
             key={`${d.kind}-${i}`}

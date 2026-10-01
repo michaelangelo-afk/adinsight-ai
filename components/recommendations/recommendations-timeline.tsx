@@ -43,7 +43,7 @@ function CustomTooltip({
   return (
     <div
       role="tooltip"
-      className="rounded-xl p-3 text-xs shadow-lg"
+      className="rounded-2xl p-3 text-xs shadow-card"
       style={{
         background: "rgba(13,13,30,0.96)",
         border: "1px solid rgba(255,255,255,0.06)"
@@ -51,20 +51,20 @@ function CustomTooltip({
     >
       <div className="text-mist-50 font-semibold mb-1.5">{d.week}</div>
       <div className="flex items-center gap-2 mb-0.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
         <span className="text-mist-300">Realized</span>
         <span className="text-mist-50 font-semibold tabular-nums ml-auto">
           {formatNaira(d.realized)}
         </span>
       </div>
       <div className="flex items-center gap-2 mb-0.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+        <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
         <span className="text-mist-300">Opportunity</span>
         <span className="text-mist-50 font-semibold tabular-nums ml-auto">
           {formatNaira(d.opportunity)}
         </span>
       </div>
-      <div className="text-[10px] text-mist-500 mt-1.5">
+      <div className="text-xs text-mist-500 mt-1.5">
         {d.applied} recommendation{d.applied === 1 ? "" : "s"} applied
       </div>
     </div>
@@ -77,12 +77,12 @@ export function RecommendationsTimeline() {
 
   return (
     <div
-      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift animate-fade-up"
+      className="glass-card rounded-2xl p-5 sm:p-6 hover-lift "
       style={{ animationDelay: "120ms" }}
     >
       <div className="flex items-start justify-between mb-4 gap-4 flex-wrap">
         <div>
-          <div className="text-xs uppercase tracking-wider text-violet-300 inline-flex items-center gap-1.5">
+          <div className="text-xs uppercase tracking-wider text-brand-300 inline-flex items-center gap-1.5">
             Savings timeline · 6 weeks
           </div>
           <h3 className="mt-1 text-lg font-semibold text-mist-50">
@@ -94,19 +94,19 @@ export function RecommendationsTimeline() {
               ₦{formatCompactNumber(totalRealized)}
             </strong>{" "}
             captured this cycle —{" "}
-            <strong className="text-emerald-300">
+            <strong className="text-brand-300">
               ₦{formatCompactNumber(totalOpportunity)}
             </strong>{" "}
             still on the table.
           </p>
         </div>
-        <div className="flex items-center gap-3 text-[11px]">
+        <div className="flex items-center gap-3 text-xs">
           <span className="inline-flex items-center gap-1.5 text-mist-300">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="h-2 w-2 rounded-full bg-brand-400" />
             Realized
           </span>
           <span className="inline-flex items-center gap-1.5 text-mist-300">
-            <span className="h-2 w-2 rounded-full bg-violet-400" />
+            <span className="h-2 w-2 rounded-full bg-brand-400" />
             Opportunity
           </span>
         </div>
@@ -117,12 +117,12 @@ export function RecommendationsTimeline() {
           <BarChart data={WEEKS} margin={{ top: 8, right: 12, left: 4, bottom: 8 }}>
             <defs>
               <linearGradient id="realized-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10B981" stopOpacity={0.95} />
-                <stop offset="100%" stopColor="#10B981" stopOpacity={0.55} />
+                <stop offset="0%" stopColor="#22C55E" stopOpacity={0.95} />
+                <stop offset="100%" stopColor="#22C55E" stopOpacity={0.55} />
               </linearGradient>
               <linearGradient id="opportunity-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#A78BFA" stopOpacity={0.85} />
-                <stop offset="100%" stopColor="#A78BFA" stopOpacity={0.45} />
+                <stop offset="0%" stopColor="#15803D" stopOpacity={0.85} />
+                <stop offset="100%" stopColor="#15803D" stopOpacity={0.45} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -141,7 +141,7 @@ export function RecommendationsTimeline() {
               tickFormatter={(v) => `₦${Math.round(v / 1000)}k`}
             />
             <Tooltip
-              cursor={{ fill: "rgba(124,58,237,0.08)" }}
+              cursor={{ fill: "rgba(21,128,61,0.08)" }}
               content={<CustomTooltip />}
             />
             <Bar
@@ -171,9 +171,9 @@ export function RecommendationsTimeline() {
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
+      <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
         <Insight
-          tone="naira"
+          tone="accent"
           text={
             <>
               Up <strong className="text-mist-50">3.4×</strong>{" "}
@@ -183,7 +183,7 @@ export function RecommendationsTimeline() {
           }
         />
         <Insight
-          tone="violet"
+          tone="brand"
           text={
             <>
               <strong className="text-mist-50">₦{formatCompactNumber(totalOpportunity)}</strong>{" "}
@@ -210,17 +210,17 @@ function Insight({
   tone,
   text
 }: {
-  tone: "violet" | "naira" | "amber";
+  tone: "brand" | "accent" | "amber";
   text: React.ReactNode;
 }) {
   const cls =
-    tone === "naira"
-      ? "border-emerald-500/30 bg-emerald-500/[0.06]"
-      : tone === "violet"
-      ? "border-violet-500/30 bg-violet-500/[0.06]"
+    tone === "accent"
+      ? "border-brand-500/30 bg-brand-500/[0.06]"
+      : tone === "brand"
+      ? "border-brand-500/30 bg-brand-500/[0.06]"
       : "border-amber-500/30 bg-amber-500/[0.08]";
   return (
-    <div className={`rounded-lg border ${cls} px-3 py-2 text-mist-200`}>
+    <div className={`rounded-2xl border ${cls} px-3 py-2 text-mist-200`}>
       {text}
     </div>
   );

@@ -71,7 +71,7 @@ export function AccountsStrip({
       {hasDemo && (
         <div
           data-demo-pill="1"
-          className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-violet-500/15 hairline text-xs"
+          className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-brand-500/15 hairline text-xs"
         >
           <MetaLogo size="xs" />
           <span className="text-ink-900 dark:text-mist-100">
@@ -85,7 +85,7 @@ export function AccountsStrip({
           </span>
           <span
             title="Demo mode — no real Meta OAuth. Connect Meta Ads to swap to live data."
-            className="chip px-2 py-0 text-[9px] uppercase tracking-wider bg-violet-500/30 text-violet-100 border border-violet-500/40"
+            className="chip px-2 py-0 text-xs uppercase tracking-wider bg-brand-500/30 text-brand-100 border border-brand-500/40"
           >
             demo
           </span>
@@ -99,14 +99,14 @@ export function AccountsStrip({
         return (
           <div
             key={a.id}
-            className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs"
+            className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs"
           >
             <PlatformMark platform={a.platform} />
             <span className="text-mist-100">{meta.name}</span>
             <span
-              className={`chip px-2 py-0 text-[9px] uppercase tracking-wider ${
+              className={`chip px-2 py-0 text-xs uppercase tracking-wider ${
                 a.isActive
-                  ? "bg-naira-500/15 text-naira-300 border border-naira-500/30"
+                  ? "bg-brand-500/15 text-brand-300 border border-brand-500/30"
                   : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
               }`}
             >
@@ -117,7 +117,7 @@ export function AccountsStrip({
       })}
 
       {accounts.length === 0 && (
-        <div className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-600 dark:text-mist-400">
+        <div className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-600 dark:text-mist-400">
           <Link2 size={12} />
           No accounts connected yet
         </div>
@@ -137,7 +137,7 @@ export function AccountsStrip({
               type="submit"
               title="We'll redirect you to Meta so you can approve the app to read your ad accounts."
               aria-label="Connect your Meta Ads account (opens Meta's permission screen)"
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-700 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-violet-200"
+              className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-brand-500/15 border border-brand-500/30 text-xs text-brand-700 hover:bg-brand-500/25 hover:border-brand-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-brand-200"
             >
               <Plus
                 size={12}
@@ -158,11 +158,11 @@ export function AccountsStrip({
               type="submit"
               aria-label="Connect a demo Meta ad account (no real OAuth)"
               title="Demo mode — populates the connected-state UI without real Meta OAuth. Connect Meta Ads later to swap to live insights."
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
+              className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
             >
               <Sparkles
                 size={12}
-                className="transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-700 dark:group-hover:text-violet-200"
+                className="transition-transform duration-300 group-hover:scale-110 group-hover:text-brand-700 dark:group-hover:text-brand-200"
               />
               Try demo
             </button>
@@ -175,7 +175,7 @@ export function AccountsStrip({
             <form action={syncInsights} className="contents">
               <button
                 type="submit"
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-violet-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
+                className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
               >
                 <RefreshCw
                   size={12}
@@ -197,7 +197,7 @@ export function AccountsStrip({
           rel="noopener noreferrer"
           aria-label="Set up a Meta developer app (opens in new tab)"
           title="Open the Meta developer portal to create the App ID + Secret — opens in a new tab so you keep your dashboard state."
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-violet-500/15 border border-violet-500/30 text-xs text-violet-700 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-violet-200"
+          className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-brand-500/15 border border-brand-500/30 text-xs text-brand-700 hover:bg-brand-500/25 hover:border-brand-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-brand-200"
         >
           <ExternalLink
             size={12}

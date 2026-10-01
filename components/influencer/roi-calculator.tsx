@@ -33,18 +33,18 @@ export function RoiCalculator({
 
   return (
     <section
-      className="rounded-xl bg-ink-950/40 hairline p-4 space-y-4"
+      className="rounded-2xl bg-ink-950/40 hairline p-4 space-y-4"
       aria-label="Projected ROI calculator"
     >
       <header className="flex items-center justify-between">
         <div>
-          <div className="text-[11px] uppercase tracking-wider text-violet-200 inline-flex items-center gap-1.5">
+          <div className="text-xs uppercase tracking-wider text-brand-200 inline-flex items-center gap-1.5">
             <Sparkles size={11} aria-hidden />
             Projected ROI
           </div>
           <h4 className="mt-0.5 text-sm font-semibold text-mist-50">
             What would you get for{" "}
-            <span className="text-emerald-300 tabular-nums">
+            <span className="text-brand-300 tabular-nums">
               {formatNaira(budget)}
             </span>
             ?
@@ -71,9 +71,9 @@ export function RoiCalculator({
             onClick={() => setBudget(t)}
             aria-pressed={budget === t}
             className={
-              "rounded-full px-2.5 py-1 text-[11px] font-medium tap-press touch-target " +
+              "rounded-full px-2.5 py-1 text-xs font-medium tap-press touch-target " +
               (budget === t
-                ? "bg-emerald-500/15 border border-emerald-500/40 text-emerald-200"
+                ? "bg-brand-500/15 border border-brand-500/40 text-brand-200"
                 : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50")
             }
           >
@@ -103,8 +103,8 @@ export function RoiCalculator({
         />
       </dl>
 
-      <div className="rounded-lg p-3 text-[11px] bg-emerald-500/[0.06] border border-emerald-500/20 text-mist-200 flex items-start gap-2">
-        <TrendingUp size={12} aria-hidden className="text-emerald-300 mt-0.5" />
+      <div className="rounded-2xl p-3 text-xs bg-brand-500/[0.06] border border-brand-500/20 text-mist-200 flex items-start gap-2">
+        <TrendingUp size={12} aria-hidden className="text-brand-300 mt-0.5" />
         <p>
           At this budget,{" "}
           <strong className="text-mist-50">
@@ -173,17 +173,17 @@ function Metric({
   return (
     <div
       className={
-        "rounded-lg p-2.5 hairline " +
-        (highlight ? "bg-emerald-500/[0.10] border-emerald-500/30" : "bg-mist-50/[0.04]")
+        "rounded-2xl p-2.5 hairline " +
+        (highlight ? "bg-brand-500/[0.10] border-brand-500/30" : "bg-mist-50/[0.04]")
       }
     >
-      <dt className="text-[10px] uppercase tracking-wider text-mist-500 mb-0.5">
+      <dt className="text-xs uppercase tracking-wider text-mist-500 mb-0.5">
         {label}
       </dt>
       <dd
         className={
           "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-emerald-300" : "text-mist-50")
+          (highlight ? "text-brand-300" : "text-mist-50")
         }
       >
         <motion.span
@@ -196,7 +196,7 @@ function Metric({
           {value}
         </motion.span>
         {typeof delta === "number" && label === "Projected reach" && (
-          <span className="text-[10px] text-mist-400 ml-1">
+          <span className="text-xs text-mist-400 ml-1">
             ≈
           </span>
         )}

@@ -13,15 +13,15 @@ const sizes: Record<Size, string> = {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-violet-700 text-white hover:bg-violet-600 shadow-glow-emerald hover:shadow-[0_0_40px_-5px_rgba(34,197,94,0.55)] hover:-translate-y-0.5 active:translate-y-0 tap-press tap-ripple",
+    "bg-brand-700 text-white hover:bg-brand-600 shadow-card hover:shadow-[0_0_40px_-5px_rgba(34,197,94,0.55)] hover:-translate-y-0.5 active:translate-y-0 tap-press tap-ripple",
   secondary:
     "bg-white text-mist-600 border border-mist-300 hover:bg-mist-50 hover:border-mist-400 tap-press " +
-    "dark:bg-ink-900 dark:text-mist-100 dark:border-ink-700 dark:hover:bg-ink-850 dark:hover:border-violet-700/40",
+    "dark:bg-ink-900 dark:text-mist-100 dark:border-ink-700 dark:hover:bg-ink-850 dark:hover:border-brand-700/40",
   outline:
-    "bg-white text-violet-700 border border-violet-300 hover:border-violet-600 hover:bg-violet-50/50 tap-press " +
-    "dark:bg-ink-900 dark:text-violet-300 dark:border-violet-700/40 dark:hover:border-violet-500 dark:hover:text-violet-200",
+    "bg-white text-brand-700 border border-brand-300 hover:border-brand-600 hover:bg-brand-50/50 tap-press " +
+    "dark:bg-ink-900 dark:text-brand-300 dark:border-brand-700/40 dark:hover:border-brand-500 dark:hover:text-brand-200",
   ghost:
-    "bg-transparent text-mist-600 hover:bg-mist-100 hover:text-violet-700 tap-press " +
+    "bg-transparent text-mist-600 hover:bg-mist-100 hover:text-brand-700 tap-press " +
     "dark:text-mist-200 dark:hover:bg-ink-850 dark:hover:text-mist-50"
 };
 
@@ -44,7 +44,7 @@ export function LinkButton({
     href: string;
   }) {
   const cls = cn(
-    "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-surface-50 dark:focus-visible:ring-offset-ink-950",
+    "inline-flex items-center justify-center gap-2 rounded-2xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-surface-50 dark:focus-visible:ring-offset-ink-950",
     sizes[size],
     variants[variant],
     className
@@ -87,7 +87,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-surface-50 dark:focus-visible:ring-offset-ink-950",
+          "inline-flex items-center justify-center gap-2 rounded-2xl font-semibold transition-all duration-200 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-surface-50 dark:focus-visible:ring-offset-ink-950",
           sizes[size],
           variants[variant],
           className

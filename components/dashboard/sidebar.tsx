@@ -43,12 +43,12 @@ export function Sidebar({ orgName }: SidebarProps) {
       </div>
 
       <div className="px-3">
-        <button className="w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 bg-violet-500/15 border border-violet-500/30 text-violet-200 hover:bg-violet-500/25 hover:border-violet-400/50 transition-all duration-200 tap-press touch-target group">
+        <button className="w-full flex items-center justify-between gap-2 rounded-2xl px-3 py-2.5 bg-brand-500/15 border border-brand-500/30 text-brand-200 hover:bg-brand-500/25 hover:border-brand-400/50 transition-all duration-200 tap-press touch-target group">
           <span className="flex items-center gap-2 text-sm font-medium">
             <Plus size={16} className="transition-transform duration-300 group-hover:rotate-90" />
             <span className="truncate max-w-[10rem]">{orgName}</span>
           </span>
-          <span className="text-[10px] uppercase tracking-wider text-violet-300/70 shrink-0 transition-colors group-hover:text-violet-200">
+          <span className="text-xs uppercase tracking-wider text-brand-300/70 shrink-0 transition-colors group-hover:text-brand-200">
             switch
           </span>
         </button>
@@ -67,9 +67,9 @@ export function Sidebar({ orgName }: SidebarProps) {
               href={n.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "nav-indicator group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200 hover:translate-x-0.5",
+                "nav-indicator group flex items-center gap-3 rounded-2xl px-3 py-2 text-sm transition-all duration-200 hover:translate-x-0.5",
                 active
-                  ? "bg-violet-100 text-violet-900 is-active dark:bg-violet-500/10 dark:text-mist-50"
+                  ? "bg-brand-100 text-brand-900 is-active dark:bg-brand-500/10 dark:text-mist-50"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-mist-300 dark:hover:bg-mist-50/[0.04] dark:hover:text-mist-50",
                 n.stub && "opacity-70 cursor-not-allowed"
               )}
@@ -82,13 +82,13 @@ export function Sidebar({ orgName }: SidebarProps) {
                 className={cn(
                   "transition-transform duration-300",
                   active
-                    ? "text-violet-700 dark:text-violet-300"
-                    : "group-hover:scale-110 group-hover:text-violet-700 dark:group-hover:text-violet-300"
+                    ? "text-brand-700 dark:text-brand-300"
+                    : "group-hover:scale-110 group-hover:text-brand-700 dark:group-hover:text-brand-300"
                 )}
               />
               {n.stub && (
                 <span
-                  className="text-[9px] uppercase tracking-wider text-slate-400 ml-auto dark:text-mist-600"
+                  className="text-xs uppercase tracking-wider text-slate-400 ml-auto dark:text-mist-600"
                   title="Coming soon"
                 >
                   soon
@@ -98,7 +98,7 @@ export function Sidebar({ orgName }: SidebarProps) {
                 {n.label}
               </span>
               {n.badge !== undefined && (
-                <span className="inline-flex items-center justify-center rounded-md bg-violet-500 px-1.5 h-5 text-[10px] font-semibold text-white animate-pulse-soft">
+                <span className="inline-flex items-center justify-center rounded-2xl bg-brand-500 px-1.5 h-5 text-xs font-semibold text-white ">
                   {n.badge}
                 </span>
               )}
@@ -108,15 +108,15 @@ export function Sidebar({ orgName }: SidebarProps) {
       </nav>
 
       <div className="px-4 pb-5">
-        <div className="rounded-xl p-4 bg-gradient-to-br from-violet-100 to-emerald-100 border border-violet-200 dark:from-violet-500/15 dark:to-naira-500/15 dark:border-violet-500/30 hover-lift hover:border-violet-400/50 relative overflow-hidden">
-          <div aria-hidden className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-violet-500/15 blur-2xl" />
-          <div className="text-[11px] uppercase tracking-wider text-violet-700 dark:text-violet-200">
+        <div className="rounded-2xl p-4 bg-gradient-to-br from-brand-100 to-brand-100 border border-brand-200 dark:from-brand-500/15 dark:to-brand-500/15 dark:border-brand-500/30 hover-lift hover:border-brand-400/50 relative overflow-hidden">
+          <div aria-hidden className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-brand-500/15 blur-2xl" />
+          <div className="text-xs uppercase tracking-wider text-brand-700 dark:text-brand-200">
             Pro plan
           </div>
           <p className="mt-1 text-xs text-slate-600 dark:text-mist-200 leading-relaxed">
             Priority AI insights unlock in <strong className="text-slate-900 dark:text-mist-50">2 days</strong>.
           </p>
-          <button className="mt-3 w-full rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold py-2 tap-press touch-target hover:shadow-[0_0_24px_-4px_rgba(167,139,250,0.7)] transition-shadow duration-300">
+          <button className="mt-3 w-full rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2 tap-press touch-target hover:shadow-[0_0_24px_-4px_rgba(21,128,61,0.7)] transition-shadow duration-300">
             Upgrade
           </button>
         </div>

@@ -23,9 +23,7 @@ import {
   ArrowDownRight
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AnimatedLogo } from "@/components/motion/animated-logo";
-import { MagneticCTA } from "@/components/motion/magnetic-cta";
-import { AuroraOrbsBackground } from "@/components/motion/aurora-orbs-background";
+import { Logo } from "@/components/brand/logo";
 import { TextureGrain } from "@/components/motion/texture-grain";
 
 import { Topbar } from "@/components/dashboard/topbar";
@@ -221,13 +219,12 @@ export default async function InfluencersPage({
     <div className="relative flex-1 min-w-0 flex flex-col">
       {/* Subtle alive background — orbs + grain — clipped to this page
           (NOT the whole dashboard shell, so one page being "alive" doesn't
-          bleed into `/dashboard`). bg-emerald-600/15 wash tinting
+          bleed into `/dashboard`). bg-brand-600/15 wash tinting
           distinguishes the sector visually too. */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <AuroraOrbsBackground variant="dark" />
         <TextureGrain />
       </div>
 
@@ -236,7 +233,7 @@ export default async function InfluencersPage({
       <main className="flex-1 p-6 md:p-8 space-y-6">
         {/* Z1: Hero */}
         <section
-          className="relative rounded-3xl overflow-hidden hairline bg-gradient-to-br from-violet-700/15 via-ink-950/60 to-emerald-500/10 p-6 sm:p-8 animate-fade-up"
+          className="relative rounded-2xl overflow-hidden hairline bg-gradient-to-br from-brand-700/15 via-ink-950/60 to-brand-500/10 p-6 sm:p-8 "
           aria-label="Influencer sector hero"
         >
           <div
@@ -245,7 +242,7 @@ export default async function InfluencersPage({
           />
           <div className="relative grid lg:grid-cols-[1.5fr,1fr] gap-6 items-center">
             <div>
-              <Badge tone="violet" className="!text-[10px]">
+              <Badge tone="brand" className="!text-xs">
                 <Sparkles size={11} aria-hidden />
                 Phase 4 · Influencer sector
               </Badge>
@@ -263,26 +260,24 @@ export default async function InfluencersPage({
               </p>
 
               <div className="mt-5 flex flex-wrap items-center gap-3">
-                <MagneticCTA>
                   <a
                     href="#marketplace-kpis"
-                    className="inline-flex items-center gap-2 rounded-lg bg-violet-700 hover:bg-violet-600 text-white px-5 py-2.5 text-sm font-semibold shadow-glow-emerald hover:shadow-[0_0_40px_-5px_rgba(34,197,94,0.55)] tap-press touch-target"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-brand-700 hover:bg-brand-600 text-white px-5 py-2.5 text-sm font-semibold shadow-card tap-press touch-target"
                     aria-label="Jump to discovery KPIs"
                   >
                     <ArrowDownRight size={14} aria-hidden />
                     Explore the marketplace
                   </a>
-                </MagneticCTA>
                 <a
                   href="/influencers?c=inf_01"
-                  className="inline-flex items-center gap-2 rounded-lg px-3.5 py-2.5 text-sm font-semibold tap-press bg-white/5 text-mist-200 border border-mist-50/10 hover:text-mist-50 hover:border-emerald-500/40 touch-target"
+                  className="inline-flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-sm font-semibold tap-press bg-white/5 text-mist-200 border border-mist-50/10 hover:text-mist-50 hover:border-brand-500/40 touch-target"
                 >
                   <Plus size={14} aria-hidden />
                   See the top match
                 </a>
               </div>
 
-              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-[11px] text-mist-400">
+              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-xs text-mist-400">
                 <MiniStat label="Avg fit" value={`${stats.averageFit}/100`} />
                 <MiniStat
                   label="Total reach"
@@ -297,13 +292,13 @@ export default async function InfluencersPage({
             </div>
 
             <div className="hidden lg:flex justify-center items-center">
-              <div className="relative h-48 w-48">
-                <AnimatedLogo aria-hidden />
+              <div className="relative h-48 w-48 text-brand-100">
+                <Logo showWordmark={false} className="h-48 w-48 [&>span]:h-full [&>span]:w-full [&>svg]:h-32 [&>svg]:w-32" />
                 <span
                   aria-hidden
-                  className="absolute -bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 text-[10px] uppercase tracking-wider text-emerald-200"
+                  className="absolute -bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-brand-500/15 border border-brand-500/30 px-3 py-1 text-xs uppercase tracking-wider text-brand-200"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-400 " />
                   Live · 12 vetted creators
                 </span>
               </div>
@@ -350,7 +345,7 @@ export default async function InfluencersPage({
       </Suspense>
 
       {/* Brand weights summary footer */}
-      <footer className="px-6 md:px-8 pb-6 text-[11px] text-mist-500">
+      <footer className="px-6 md:px-8 pb-6 text-xs text-mist-500">
         Fit is computed against your brand weights
         (Food {Math.round((BRAND_NICHE_WEIGHTS.Food ?? 0) * 100)}%,
         Lifestyle {Math.round((BRAND_NICHE_WEIGHTS.Lifestyle ?? 0) * 100)}%,
@@ -372,14 +367,14 @@ function MiniStat({
   highlight?: boolean;
 }) {
   return (
-    <div className="rounded-lg bg-mist-50/[0.04] hairline px-3 py-2 text-center">
-      <div className="text-[10px] uppercase tracking-wider text-mist-500">
+    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-center">
+      <div className="text-xs uppercase tracking-wider text-mist-500">
         {label}
       </div>
       <div
         className={
           "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-emerald-300" : "text-mist-50")
+          (highlight ? "text-brand-300" : "text-mist-50")
         }
       >
         {value}

@@ -54,7 +54,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="rounded-2xl glass-card shadow-card-elevated dark:shadow-card-elevated-dark p-6 sm:p-8 animate-fade-up hover-lift">
+    <div className="rounded-2xl glass-card shadow-card dark:shadow-card p-6 sm:p-8  hover-lift">
       <div className="text-center mb-7 sm:mb-8">
         <h1 className="text-2xl sm:text-[1.7rem] font-bold tracking-tight text-mist-600 dark:text-mist-50">
           Welcome back
@@ -66,7 +66,7 @@ export function LoginForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         {error && (
-          <div className="rounded-lg bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 animate-fade-up">
+          <div className="rounded-2xl bg-rose-500/10 border border-rose-500/30 p-3 text-sm text-rose-600 dark:text-rose-400 ">
             {error}
           </div>
         )}
@@ -78,7 +78,7 @@ export function LoginForm() {
           >
             Email
           </label>
-          <div className="relative focus-glow rounded-lg">
+          <div className="relative focus-glow rounded-2xl">
             <Mail
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
@@ -90,7 +90,7 @@ export function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="adaeze@lagosbites.com"
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
           </div>
         </div>
@@ -102,7 +102,7 @@ export function LoginForm() {
           >
             Password
           </label>
-          <div className="relative focus-glow rounded-lg">
+          <div className="relative focus-glow rounded-2xl">
             <Lock
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-400 pointer-events-none transition-colors"
@@ -113,13 +113,13 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full rounded-lg border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 touch-target"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-mist-400 hover:text-violet-600 dark:hover:text-violet-300 tap-press transition-colors duration-200"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-mist-400 hover:text-brand-600 dark:hover:text-brand-300 tap-press transition-colors duration-200"
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -129,7 +129,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-violet-700 py-2.5 text-sm font-semibold text-white hover:bg-violet-600 shadow-glow-emerald hover:shadow-[0_0_50px_-5px_rgba(16,185,129,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target relative overflow-hidden"
+          className="w-full rounded-2xl bg-brand-700 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card hover:shadow-[0_0_50px_-5px_rgba(16,185,129,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target relative overflow-hidden"
         >
           {loading ? (
             <span className="inline-flex items-center justify-center gap-2">
@@ -145,7 +145,7 @@ export function LoginForm() {
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"
-            className="font-medium text-violet-700 hover:text-violet-600 dark:text-violet-300 dark:hover:text-violet-200 transition-colors duration-200"
+            className="font-medium text-brand-700 hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200 transition-colors duration-200"
           >
             Create one
           </Link>
