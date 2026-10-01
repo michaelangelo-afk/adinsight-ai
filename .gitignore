@@ -45,3 +45,7 @@ next-env.d.ts
 # Operator secrets inventory (NEVER commit, even locally — contains credential metadata)
 docs/SECRETS.md
 **/SECRETS.md
+.env*
+mobile/android/
+mobile/ios/
+mobile/node_modules/

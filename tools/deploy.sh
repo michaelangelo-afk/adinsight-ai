@@ -58,4 +58,12 @@ ssh "$VPS" 'systemctl restart growthads && systemctl is-active growthads'
 echo "==> smoke test"
 sleep 3
 ssh "$VPS" 'curl -s -o /dev/null -w "landing http://127.0.0.1:3000 -> %{http_code}\n" http://127.0.0.1:3000/'
+
+# Production web URL: https://adinsight-ai-six.vercel.app (the GrowthAds
+# Capacitor APK loads this same bundle, so web + app update together).
+if [ "${SKIP_VERCEL:-0}" != "1" ]; then
+  echo "==> vercel deploy (prod)"
+  npx --yes vercel deploy --prod --yes --token "$(cat /root/.vercel-token)"
+fi
+
 echo "==> done"

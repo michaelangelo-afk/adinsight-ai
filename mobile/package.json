@@ -1,0 +1,19 @@
+{
+  "name": "growthads-mobile",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Capacitor native shell for GrowthAds (loads the live deployed web bundle).",
+  "scripts": {
+    "build:apk": "bash tools/build-apk.sh"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.2"
+  }
+}
