@@ -27,6 +27,11 @@ export type MetaEnvStatus =
       friendly: string;
       /** Always populated so the error can name the active redirect URI. */
       redirectUri: string;
+      /** Also always populated, for the same reason as redirectUri: the
+       *  effective API version must be visible even when the app id or
+       *  secret is missing, otherwise /api/health/meta has to guess and
+       *  reported a stale default (see the note in that route). */
+      apiVersion: string;
       /** Diagnostic booleans so the operator can tell which vars the
        *  Node.js runtime actually sees (without leaking the values). */
       appIdSet: boolean;
@@ -39,11 +44,24 @@ const VAR_NAMES: Record<"appId" | "appSecret" | "both", string> = {
   both: "META_APP_ID and META_APP_SECRET"
 };
 
-/** Default redirect URI for local development. */
-const DEFAULT_DEV_REDIRECT = "http://localhost:3000/api/auth/meta/callback";
+/** Default redirect URI for local development. Exported so callers that
+ *  need to report the effective config (e.g. /api/health/meta) never have
+ *  to re-declare the literal and drift from this file. */
+export const DEFAULT_DEV_REDIRECT =
+  "http://localhost:3000/api/auth/meta/callback";
 
-/** Default Meta Graph API version. */
-const DEFAULT_API_VERSION = "v18.0";
+/** Default Meta Graph API version. Exported for the same reason. */
+export const DEFAULT_API_VERSION = "v18.0";
+
+/** True when a URI can only ever be reached from the machine running the
+ *  dev server. Meta's servers POST back to the redirect URI, so a
+ *  localhost value in production is a guaranteed silent failure —
+ *  buildOAuthUrl() throws for it at connect time, and /api/health/meta
+ *  reports it as a warning so it is visible BEFORE a user clicks
+ *  Connect. */
+export function isLoopbackRedirect(uri: string): boolean {
+  return /localhost|127\.0\.0\.1|\[::1\]/i.test(uri);
+}
 
 export function readMetaEnv(): MetaEnvStatus {
   const appIdRaw = process.env.META_APP_ID;
@@ -60,6 +78,7 @@ export function readMetaEnv(): MetaEnvStatus {
       missing: "both",
       friendly: VAR_NAMES.both,
       redirectUri,
+      apiVersion,
       appIdSet,
       appSecretSet
     };
@@ -70,6 +89,7 @@ export function readMetaEnv(): MetaEnvStatus {
       missing: "appId",
       friendly: VAR_NAMES.appId,
       redirectUri,
+      apiVersion,
       appIdSet,
       appSecretSet
     };
@@ -80,6 +100,7 @@ export function readMetaEnv(): MetaEnvStatus {
       missing: "appSecret",
       friendly: VAR_NAMES.appSecret,
       redirectUri,
+      apiVersion,
       appIdSet,
       appSecretSet
     };

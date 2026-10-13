@@ -8,6 +8,12 @@
 
 # next.js
 /.next/
+
+# Build outputs produced by tools/deploy.sh (standalone server bundle +
+# static chunks). These are generated, large, and rsynced to the VPS —
+# they must never be committed.
+/.standalone/
+/.static/
 /out/
 
 # production

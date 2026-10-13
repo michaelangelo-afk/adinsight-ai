@@ -28,6 +28,26 @@ require real Meta credentials — they verify our wiring is sane.
       the toast reads: *"Meta OAuth isn't configured. Add META_APP_ID
       and META_APP_SECRET to .env.local…"*. If it does, the env
       validation is wired correctly.
+- [ ] **Production redirect URI is already wired (since 2026-10-13).**
+      `META_REDIRECT_URI` and `META_API_VERSION` are set on the Vercel
+      project **`adinsight-ai`** in the `production` target —
+      `https://adinsight-ai-six.vercel.app/api/auth/meta/callback`.
+      Confirm the deployed server agrees, from anywhere:
+
+      ```bash
+      curl -s https://adinsight-ai-six.vercel.app/api/health/meta | python3 -m json.tool
+      ```
+
+      Require **`warnings: []`** and
+      `META_REDIRECT_URI_reachable_by_meta: true` (with
+      `META_APP_ID_present: false` until the friend's app id/secret are
+      added — that part is expected). If `warnings` is NOT empty, the
+      deploy is misconfigured; fix that before involving your friend.
+      Note the old build reported `(default)
+      http://localhost:3000/...` whenever the app id/secret were missing,
+      which made a *correctly* configured production app look unconfigured
+      — that is fixed, and the field now reflects what the server really
+      has.
 - [ ] **OAuth URL builds correctly with placeholder values.** Open
       `lib/meta/env.ts` in your editor and temporarily paste your
       real `META_APP_ID` and `META_APP_SECRET`. Restart `npm run dev`.
@@ -61,11 +81,16 @@ Send her this message verbatim or copy-paste the relevant lines:
 >    grab the **App ID** and **App Secret**.
 > 2. Under your app's **Settings → Basic**, copy the **App ID** (a
 >    number) and the **App Secret** (Show → copy).
-> 3. Under **Facebook Login → Settings**, add this **exact** redirect
->    URI to the *Valid OAuth Redirect URIs* list:
->    `http://localhost:3000/api/auth/meta/callback`
->    (Production redirect URI is different — I'll set it on Vercel
->    later.)
+> 3. Under **Facebook Login → Settings**, add these **two** exact
+>    redirect URIs to the *Valid OAuth Redirect URIs* list — paste both,
+>    character for character (no trailing slash):
+>
+>    - `http://localhost:3000/api/auth/meta/callback` (for my local run)
+>    - `https://adinsight-ai-six.vercel.app/api/auth/meta/callback`
+>      (for the deployed app — already configured on my side)
+>
+>    Meta rejects a redirect URI that isn't on this list with an error
+>    that looks like a user denial, so both matter.
 > 4. Make sure you're **logged into facebook.com** as the user whose
 >    ad account you want to test with.
 > 5. **Add me as a Developer or Tester** on your app:
@@ -378,19 +403,44 @@ Same `.env.local` + Meta dashboard steps as ngrok. Cloudflare
 reserves the URL within a single session for free; pay for a named
 tunnel if you want URLs to stick.
 
-### Option C — Deploy to Vercel (production-shape, ~30 min)
+### Option C — Deploy to Vercel (production-shape) — **already done, 2026-10-13**
 
-Best when you also want the rest of the app on a real domain. Set
-the production `META_REDIRECT_URI` to your Vercel URL on the project's
-env-vars page (Dashboard → Project → Settings → Environment
-Variables). Same URL shape as ngrok but server-side — no tunnel
-needed, and you'll have a public base URL for the rest of the spec,
-docs, and demos.
+Best when you also want the rest of the app on a real domain, and for
+this project it is **already set up** — no tunnel needed:
+
+- `META_REDIRECT_URI=https://adinsight-ai-six.vercel.app/api/auth/meta/callback`
+  and `META_API_VERSION=v18.0` are set on Vercel project
+  **`adinsight-ai`**, `production` target.
+- All that is still missing for a production run is `META_APP_ID` and
+  `META_APP_SECRET` in the same target:
+  ```bash
+  printf '%s' '<app-id>' | npx vercel env add META_APP_ID production
+  printf '%s' '<app-secret>' | npx vercel env add META_APP_SECRET production
+  # then verify, because `vercel env add` via stdin can fail silently:
+  npx vercel env ls
+  curl -s https://adinsight-ai-six.vercel.app/api/health/meta | python3 -m json.tool
+  ```
+- Then **redeploy** so the new values are on the running deployment, and
+  re-run the health check until `ready: true`.
+
+Trade-off vs A/B: the OAuth roundtrip then happens against the live
+site, so it needs a **signed-in GrowthAds user on production** (the
+callback redirects anonymous visitors to `/login?next=/dashboard`). That
+is the one extra step a prod test buys you over a tunnel against local
+dev.
 
 ---
 
 **TL;DR:** the redirect URI must be reachable from `graph.facebook.com`.
-Pick whichever of A / B / C matches your setup, paste the public
-HTTPS URL into BOTH `.env.local.META_REDIRECT_URI` AND your Meta
-app's *Valid OAuth Redirect URIs*, restart `npm run dev`, retry
-Connect.
+The **production** URI
+(`https://adinsight-ai-six.vercel.app/api/auth/meta/callback`) is already
+set on Vercel, so Option C needs no tunnel work — just `META_APP_ID` +
+`META_APP_SECRET` in the `production` target and a redeploy. For a local
+run, paste the public HTTPS URL into BOTH `.env.local`'s
+`META_REDIRECT_URI` AND your Meta app's *Valid OAuth Redirect URIs*,
+restart `npm run dev`, retry Connect.
+
+**Always check the pre-flight before blaming Meta:**
+`curl -s <the-origin-you-are-testing>/api/health/meta` must show
+`warnings: []` and `META_REDIRECT_URI_reachable_by_meta: true`. `ready:
+false` alone is expected until the app id/secret exist.
