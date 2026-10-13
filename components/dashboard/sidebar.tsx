@@ -116,7 +116,7 @@ export function Sidebar({ orgName }: SidebarProps) {
           <p className="mt-1 text-xs text-slate-600 dark:text-mist-200 leading-relaxed">
             Priority AI insights unlock in <strong className="text-slate-900 dark:text-mist-50">2 days</strong>.
           </p>
-          <button className="mt-3 w-full rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2 tap-press touch-target hover:shadow-[0_0_24px_-4px_rgba(21,128,61,0.7)] transition-shadow duration-300">
+          <button className="mt-3 w-full rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2 tap-press touch-target hover:shadow-glow transition-shadow duration-300">
             Upgrade
           </button>
         </div>

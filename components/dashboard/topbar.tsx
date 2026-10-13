@@ -231,7 +231,7 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
 
         {/* Profile */}
         <button type="button" className="flex items-center gap-2 rounded-2xl pl-2 pr-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
-          <div className="h-7 w-7 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold text-white shadow-[0_0_12px_-2px_rgba(16,185,129,0.5)] group-hover:scale-110 transition-transform duration-300">
+          <div className="h-7 w-7 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold text-white shadow-glow group-hover:scale-110 transition-transform duration-300">
             {profile.avatar || "?"}
           </div>
           <div className="hidden md:flex flex-col leading-tight">

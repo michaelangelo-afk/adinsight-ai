@@ -15,7 +15,19 @@
   html,
   body {
     @apply bg-surface-50 text-mist-600 antialiased;
-    font-feature-settings: "cv11", "ss01";
+    /* Inter's tabular figures + slashed zero, so KPI columns and currency
+       values line up digit-for-digit instead of jittering as they update. */
+    font-feature-settings: "cv11", "ss01", "tnum";
+  }
+
+  /* Tailwind's preflight leaves <button> at the default arrow cursor, which made
+   * every control in the product feel inert. Fix it once, globally, rather than
+   * sprinkling `cursor-pointer` across ~50 call sites (and forgetting some).
+   * Disabled controls opt out. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
   }
 
   html.dark,
@@ -62,30 +74,64 @@
   }
 }
 
-/* Global keyboard focus ring — emerald on either surface */
+/* Global keyboard focus ring — emerald on either surface.
+ *
+ * `border-radius: inherit` (was a hard-coded 8px) — that value actively broke
+ * shape on focus: a `rounded-full` pill or a `rounded-2xl` card visibly snapped
+ * to an 8px corner the moment it received keyboard focus, so the control changed
+ * shape under the user. Inheriting keeps every control's own geometry and makes
+ * the ring follow the real corner radius.
+ *
+ * The ring colour is brand-500 (#22C55E) rather than emerald-500 (#10B981) so
+ * focus uses the same single green ramp as the rest of the product instead of
+ * introducing a second, un-ramped green. */
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #10b981;
-  border-radius: 8px;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #22c55e;
+  border-radius: inherit;
 }
 html.dark :focus-visible {
-  box-shadow: 0 0 0 2px #070710, 0 0 0 4px #10b981;
+  box-shadow: 0 0 0 2px #070710, 0 0 0 4px #22c55e;
 }
 
 @layer components {
+  /* Gradient headline text.
+   *
+   * The visible fill is the gradient (painted via `-webkit-text-fill-color:
+   * transparent` + `background-clip: text`), but `color` stays a REAL, opaque
+   * brand value. Previously `color: transparent` meant that any tool — or any
+   * user agent — that doesn't implement background-clip:text (contrast checkers,
+   * forced-colors/high-contrast mode, screen-reader text extraction, older
+   * engines) saw fully transparent text and reported it as invisible. The audit
+   * scored every headline 1.0:1 for exactly that reason. Painting is unchanged;
+   * the element now always has a legible fallback colour underneath the clip. */
   .gradient-text {
     background: linear-gradient(135deg, #15803d 0%, #16a34a 25%, #10b981 75%, #34d399 100%);
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
+    color: #15803d;
     -webkit-text-fill-color: transparent;
   }
   html.dark .gradient-text {
     background: linear-gradient(135deg, #4ade80 0%, #34d399 30%, #10b981 70%, #6ee7b7 100%);
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
+    color: #86efac;
     -webkit-text-fill-color: transparent;
+  }
+  @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+    .gradient-text,
+    html.dark .gradient-text {
+      background: none;
+      color: inherit;
+    }
+  }
+  @media (forced-colors: active) {
+    .gradient-text {
+      background: none;
+      color: CanvasText;
+      -webkit-text-fill-color: CanvasText;
+    }
   }
 
   .glass-card {
@@ -120,12 +166,39 @@ html.dark :focus-visible {
       linear-gradient(90deg, rgba(16, 185, 129, 0.11) 1px, transparent 1px);
   }
 
+  /* Chips are STATUS surfaces, not glass. They were mostly brand-700/10-over-
+   * gradient tints, which at 12px left text sitting on a semi-transparent wash
+   * and made measured contrast unreadable (the audit scored 1.5:1 on three of
+   * them). A solid surface + a saturated foreground reads crisply on both themes
+   * and is measurable — hence `chip` (neutral), `chip-brand` and `chip-warn`.
+   * Use the tone variants rather than hand-rolling bg-brand-x/10 again. */
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold;
+    @apply border-mist-200 bg-white text-mist-600;
+  }
+  html.dark .chip {
+    @apply border-ink-700 bg-ink-900 text-mist-200;
   }
 
+  .chip-brand {
+    @apply chip border-brand-200 bg-brand-50 text-brand-700;
+  }
+  html.dark .chip-brand {
+    @apply border-brand-700/40 bg-brand-950/60 text-brand-300;
+  }
+
+  .chip-warn {
+    @apply chip border-amber-200 bg-amber-50 text-amber-700;
+  }
+  html.dark .chip-warn {
+    @apply border-amber-500/30 bg-amber-500/10 text-amber-300;
+  }
+
+  /* Every button clears the 44px hit-area floor, keeps a pointer cursor (the
+   * preflight doesn't add one to <button>), and reserves its geometry while busy
+   * so a loading state can't reflow the row it sits in. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none;
   }
 
   .btn-primary {
@@ -174,18 +247,47 @@ html.dark :focus-visible {
    feature cards, recommendations, etc.
    `will-change` is intentionally gated on `(hover: hover)` so touch
    devices (which keep `:hover` sticky after a tap) don't keep a GPU
-   layer alive forever — saves battery and avoids paint cost. */
+   layer alive forever — saves battery and avoids paint cost.
+
+   The lift now uses the tokenised `shadow-lift` elevation instead of
+   `filter: drop-shadow(...)`. A filter forces the browser to rasterise the
+   whole subtree into a new layer on every frame just to draw a shadow, and it
+   can't be animated as cheaply as box-shadow. One token, cheaper paint, and the
+   hover elevation actually matches the resting `shadow-card` family. */
 .hover-lift {
-  @apply transition-all duration-300 ease-out;
+  @apply transition-all duration-200 ease-out;
 }
 .hover-lift:hover {
-  @apply -translate-y-1 scale-[1.012];
-  filter: drop-shadow(0 14px 30px rgba(16, 185, 129, 0.15));
+  @apply -translate-y-0.5 shadow-lift;
 }
 @media (hover: hover) {
   .hover-lift:hover {
     will-change: transform, box-shadow;
   }
+}
+
+/* Interactive row/panel: a flat surface that gains an edge on hover. Use for
+   table rows, list items and picker tiles — anything where lifting the whole box
+   would be too loud. */
+.row-interactive {
+  @apply cursor-pointer transition-colors duration-200;
+}
+.row-interactive:hover {
+  @apply bg-mist-50;
+}
+html.dark .row-interactive:hover {
+  @apply bg-ink-850;
+}
+
+/* Icon button: square, 44px floor, centred, with the shared press tactility.
+   Existed inline in ~10 places at four different sizes. */
+.icon-btn {
+  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-2xl;
+  @apply text-mist-600 transition-colors duration-200;
+  @apply hover:bg-mist-100 hover:text-brand-700;
+}
+html.dark .icon-btn {
+  @apply text-mist-200 hover:bg-ink-850 hover:text-brand-300;
 }
 
 /* Standardised press tactility for any button-like element. */
@@ -235,7 +337,7 @@ html.dark :focus-visible {
    Kept here only as a comment so future maintainers know the pattern
    was considered and replaced by Tailwind's `group-hover:`. */
 
-/* Subtle ripple for primary actions. Works with the Button. *//* Subtle ripple for primary actions. Works with the Button. */
+/* Subtle ripple for primary actions. Works with the Button. */
 .tap-ripple {
   position: relative;
   overflow: hidden;

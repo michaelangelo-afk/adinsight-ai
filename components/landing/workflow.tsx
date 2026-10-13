@@ -29,22 +29,22 @@ const STEPS = [
 
 export function Workflow() {
   return (
-    <section id="workflow" className="relative py-24 md:py-32">
+    <section id="workflow" className="relative py-section md:py-section-lg">
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
           <span
             className="
               chip
-              bg-brand-600/15 border border-brand-600/30 text-brand-700
-              dark:bg-brand-500/15 dark:border-brand-500/30 dark:text-brand-300
+              bg-brand-50 border border-brand-200 text-brand-700
+              dark:bg-brand-950/50 dark:border-brand-500/40 dark:text-brand-300
             "
           >
             How it works
           </span>
           <h2
             className="
-              mt-5 text-3xl md:text-4xl font-bold tracking-tight
+              mt-5 text-3xl font-bold tracking-tight
               text-mist-600 dark:text-mist-50
             "
           >
@@ -53,7 +53,7 @@ export function Workflow() {
           </h2>
           <p
             className="
-              mt-4 text-base md:text-lg leading-relaxed
+              mt-4 text-base md:text-xl leading-relaxed
               text-mist-600 dark:text-mist-300
             "
           >
@@ -61,14 +61,14 @@ export function Workflow() {
           </p>
         </div>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-5 relative">
+        <div className="mt-14 grid md:grid-cols-3 gap-6 relative">
           {STEPS.map((s, i) => {
             const Icon = s.icon;
             return (
               <div
                 key={s.title}
                 className="
-                  group relative rounded-2xl p-7 transition-all duration-300 hover-lift
+                  group relative rounded-2xl p-6 md:p-7 transition-all duration-300 hover-lift
                   bg-white border border-mist-200 shadow-card
                   hover:border-brand-700/40 hover:shadow-card
                   dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
@@ -76,7 +76,7 @@ export function Workflow() {
                 "
               >
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient shadow-card transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:shadow-[0_0_30px_-4px_rgba(16,185,129,0.6)]">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient shadow-card transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:shadow-glow">
                     <Icon size={20} className="text-white" strokeWidth={2.4} />
                   </div>
                   <span
@@ -116,7 +116,7 @@ export function Workflow() {
                       <span
                         className="
                           inline-flex h-4 w-4 items-center justify-center rounded-full
-                          bg-brand-700/15 text-brand-700 dark:bg-brand-400/15 dark:text-brand-300
+                          bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300
                           dark:bg-brand-500/20 dark:text-brand-300
                         "
                       >

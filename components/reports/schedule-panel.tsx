@@ -87,7 +87,7 @@ export function SchedulePanel() {
             <Calendar size={11} aria-hidden />
             Scheduled
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-mist-50">
             Cadence + recipients
           </h3>
           <p className="mt-1 text-sm text-mist-300">
@@ -134,7 +134,7 @@ export function SchedulePanel() {
               >
                 <span
                   aria-hidden
-                  className="h-4 w-4 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.35)]"
+                  className="h-4 w-4 rounded-full bg-white shadow-glow"
                 />
               </button>
               <div className="min-w-0 flex-1">

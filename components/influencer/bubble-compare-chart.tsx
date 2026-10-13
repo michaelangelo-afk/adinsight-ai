@@ -111,7 +111,7 @@ export function BubbleCompareChart({
             <Sparkles size={11} aria-hidden className="text-brand-300" />
             Compare to your ads
           </div>
-          <h3 className="mt-1 text-lg font-semibold text-mist-50">
+          <h3 className="mt-1 text-base font-semibold text-mist-50">
             Where creators win (and lose) vs your Meta Retargeting
           </h3>
           <p className="mt-1 text-sm text-mist-300">

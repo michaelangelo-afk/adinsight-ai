@@ -85,7 +85,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
             transition={{ duration: 0.2 }}
           />
           <motion.aside
-            className="ml-auto h-full w-full max-w-[720px] bg-ink-950 border-l border-mist-50/[0.06] shadow-2xl overflow-y-auto"
+            className="ml-auto h-full w-full max-w-[720px] bg-ink-950 border-l border-mist-50/[0.06] shadow-lift overflow-y-auto"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -129,7 +129,7 @@ export function ReportPreviewSheet({ reports }: { reports: Report[] }) {
                 </Badge>
                 <h2
                   id="rep-sheet-title"
-                  className="mt-3 text-2xl font-semibold text-mist-50 tracking-tight leading-tight"
+                  className="mt-3 text-3xl font-semibold text-mist-50 tracking-tight leading-tight"
                 >
                   {report.title}
                 </h2>

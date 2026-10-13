@@ -155,7 +155,7 @@ export function RecommendationDetailDrawer({
             transition={{ duration: 0.2 }}
           />
           <motion.aside
-            className="ml-auto h-full w-full max-w-[600px] bg-ink-950 border-l border-mist-50/[0.06] shadow-2xl overflow-y-auto"
+            className="ml-auto h-full w-full max-w-[600px] bg-ink-950 border-l border-mist-50/[0.06] shadow-lift overflow-y-auto"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -237,7 +237,7 @@ export function RecommendationDetailDrawer({
                           aria-hidden
                           className="text-brand-300"
                         />
-                        <span className="text-2xl font-semibold text-brand-300 tabular-nums ">
+                        <span className="text-3xl font-semibold text-brand-300 tabular-nums ">
                           {formatNaira(recommendation.estimatedSavings)}
                         </span>
                       </div>

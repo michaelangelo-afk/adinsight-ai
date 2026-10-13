@@ -33,7 +33,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-2 md:row-span-2",
     iconHalo:
-      "bg-brand-700/15 border-brand-700/30 dark:bg-brand-700/15 dark:border-brand-700/30",
+      "bg-brand-50 border-brand-200 dark:bg-brand-950/60 dark:border-brand-700/50",
     delay: 0
   },
   {
@@ -48,7 +48,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-2",
     iconHalo:
-      "bg-brand-600/15 border-brand-600/30 dark:bg-brand-500/15 dark:border-brand-500/30",
+      "bg-brand-50 border-brand-200 dark:bg-brand-950/50 dark:border-brand-500/40",
     delay: 80
   },
   {
@@ -62,7 +62,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-1",
     iconHalo:
-      "bg-brand-700/15 border-brand-700/30 dark:bg-brand-700/15 dark:border-brand-700/30",
+      "bg-brand-50 border-brand-200 dark:bg-brand-950/60 dark:border-brand-700/50",
     delay: 140
   },
   {
@@ -76,7 +76,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-1",
     iconHalo:
-      "bg-brand-600/15 border-brand-600/30 dark:bg-brand-500/15 dark:border-brand-500/30",
+      "bg-brand-50 border-brand-200 dark:bg-brand-950/50 dark:border-brand-500/40",
     delay: 200
   },
   {
@@ -90,7 +90,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-1",
     iconHalo:
-      "bg-brand-700/15 border-brand-700/30 dark:bg-brand-700/15 dark:border-brand-700/30",
+      "bg-brand-50 border-brand-200 dark:bg-brand-950/60 dark:border-brand-700/50",
     delay: 260
   },
   {
@@ -104,7 +104,7 @@ const FEATURES: Feature[] = [
     ],
     span: "md:col-span-2",
     iconHalo:
-      "bg-brand-600/15 border-brand-600/30 dark:bg-brand-500/15 dark:border-brand-500/30",
+      "bg-brand-50 border-brand-200 dark:bg-brand-950/50 dark:border-brand-500/40",
     delay: 320
   }
 ];
@@ -151,7 +151,7 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
       />
 
       <div
-        className={"relative z-10 " + (isHero ? "p-7 md:p-8" : "p-6")}
+        className={"relative z-10 " + (isHero ? "p-6 md:p-7 md:p-8" : "p-6")}
       >
         <span
           className={
@@ -169,7 +169,7 @@ function FeatureCard({ feature, size = "md" }: FeatureCardProps) {
         <h3
           className={
             "mt-5 font-bold tracking-tight text-mist-600 dark:text-mist-50 " +
-            (isHero ? "text-2xl" : "text-lg")
+            (isHero ? "text-3xl" : "text-base")
           }
         >
           {feature.title}
@@ -206,7 +206,7 @@ export function Features() {
     <section
       id="features"
       className="
-        relative py-24 md:py-32
+        relative py-section md:py-section-lg
         bg-surface-100 dark:bg-ink-900
       "
     >
@@ -215,15 +215,15 @@ export function Features() {
           <span
             className="
               chip
-              bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
-              dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+              bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+              dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
             "
           >
             The four pillars · now with automations
           </span>
           <h2
             className="
-              mt-5 text-3xl md:text-4xl font-bold tracking-tight
+              mt-5 text-3xl font-bold tracking-tight
               text-mist-600 dark:text-mist-50
             "
           >
@@ -232,7 +232,7 @@ export function Features() {
           </h2>
           <p
             className="
-              mt-4 text-base md:text-lg leading-relaxed
+              mt-4 text-base md:text-xl leading-relaxed
               text-mist-600 dark:text-mist-300
             "
           >
@@ -241,7 +241,7 @@ export function Features() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-fr">
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
           {FEATURES.map((f, i) => (
             <div
               key={f.title}

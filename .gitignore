@@ -55,3 +55,6 @@ docs/SECRETS.md
 mobile/android/
 mobile/ios/
 mobile/node_modules/
+
+# Python bytecode from the bundled .claude/ui-ux-pro-max toolkit scripts
+__pycache__/

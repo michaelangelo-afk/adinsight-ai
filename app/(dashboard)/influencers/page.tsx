@@ -246,7 +246,7 @@ export default async function InfluencersPage({
                 <Sparkles size={11} aria-hidden />
                 Phase 4 · Influencer sector
               </Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
+              <h1 className="mt-3 text-3xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
                 Find{" "}
                 <span className="gradient-text">
                   creators your audience already trusts.

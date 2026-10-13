@@ -88,7 +88,7 @@ export default async function ReportsPage() {
                 <FileText size={10} aria-hidden className="mr-1" />
                 Phase 5 · Reports center
               </Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
+              <h1 className="mt-3 text-3xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
                 Weekly briefs.
                 <br />
                 <span className="gradient-text">Always on time.</span>
@@ -146,7 +146,7 @@ export default async function ReportsPage() {
                     <Calendar size={10} aria-hidden className="mr-1" />
                     This week
                   </Badge>
-                  <div className="mt-3 text-2xl font-semibold text-mist-50 tabular-nums">
+                  <div className="mt-3 text-3xl font-semibold text-mist-50 tabular-nums">
                     {formatCompactNumber(dashboardSummary.totalConversions)}
                   </div>
                   <div className="text-xs uppercase tracking-wider text-mist-500">
@@ -191,7 +191,7 @@ export default async function ReportsPage() {
         <section className="space-y-5">
           <header className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-mist-50">
+              <h2 className="text-base font-semibold text-mist-50">
                 Recent reports
               </h2>
               <p className="text-sm text-mist-400">

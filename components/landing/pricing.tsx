@@ -60,7 +60,7 @@ export function Pricing() {
     <section
       id="pricing"
       className="
-        relative py-24 md:py-32
+        relative py-section md:py-section-lg
         bg-surface-100 dark:bg-ink-900
       "
     >
@@ -69,15 +69,15 @@ export function Pricing() {
           <span
             className="
               chip
-              bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
-              dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+              bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+              dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
             "
           >
             Pricing
           </span>
           <h2
             className="
-              mt-5 text-3xl md:text-4xl font-bold tracking-tight
+              mt-5 text-3xl font-bold tracking-tight
               text-mist-600 dark:text-mist-50
             "
           >
@@ -94,12 +94,12 @@ export function Pricing() {
           </p>
         </div>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-5">
+        <div className="mt-14 grid md:grid-cols-3 gap-6">
           {TIERS.map((t) => (
             <div
               key={t.name}
               className={cn(
-                "relative rounded-2xl overflow-hidden p-7 transition-all duration-300 hover-lift group",
+                "relative rounded-2xl overflow-hidden p-6 md:p-7 transition-all duration-300 hover-lift group",
                 t.highlight
                   ? "bg-white border-2 border-brand-700/60 shadow-card dark:border-brand-500/60 dark:shadow-card dark:bg-ink-900"
                   : "bg-white border border-mist-200 shadow-card dark:bg-ink-900 dark:border-ink-700 dark:shadow-card hover:border-brand-300/60"
@@ -140,7 +140,7 @@ export function Pricing() {
               <div className="flex items-center justify-between">
                 <h3
                   className="
-                    text-lg font-semibold tracking-tight
+                    text-base font-semibold tracking-tight
                     text-mist-600 dark:text-mist-50
                   "
                 >
@@ -149,8 +149,8 @@ export function Pricing() {
                 {t.highlight && (
                   <span
                     className="
-                      chip bg-brand-700/15 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/15
-                      dark:bg-brand-700/20 dark:border-brand-700/40 dark:text-brand-300
+                      chip bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+                      dark:bg-brand-950/60 dark:border-brand-700/40 dark:text-brand-300
                       font-semibold
                     "
                   >
@@ -162,7 +162,7 @@ export function Pricing() {
               <div className="mt-4">
                 <span
                   className="
-                    text-4xl font-bold tracking-tight
+                    text-3xl font-bold tracking-tight
                     text-mist-600 dark:text-mist-50
                   "
                 >
@@ -185,7 +185,7 @@ export function Pricing() {
                     <span
                       className="
                         mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full
-                        bg-brand-700/15 text-brand-700 dark:bg-brand-400/15 dark:text-brand-300
+                        bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300
                         dark:bg-brand-500/20 dark:text-brand-300
                       "
                     >
@@ -200,7 +200,7 @@ export function Pricing() {
                   href="/dashboard"
                   variant={t.highlight ? "primary" : "secondary"}
                   size="md"
-                  className={cn("w-full touch-target group/cta", t.highlight && "shadow-card hover:shadow-[0_0_60px_-5px_rgba(16,185,129,0.7)]")}
+                  className={cn("w-full touch-target group/cta", t.highlight && "shadow-card hover:shadow-glow")}
                 >
                   {t.cta}
                 </LinkButton>

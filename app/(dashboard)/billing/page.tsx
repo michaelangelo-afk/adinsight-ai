@@ -88,7 +88,7 @@ export default async function BillingPage() {
                 <Wallet size={11} aria-hidden className="mr-1" />
                 Phase 5 · Billing center
               </Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
+              <h1 className="mt-3 text-3xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
                 Pay for what{" "}
                 <span className="gradient-text">moves the needle.</span>
               </h1>
@@ -206,7 +206,7 @@ export default async function BillingPage() {
         >
           <header className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-mist-50">
+              <h2 className="text-base font-semibold text-mist-50">
                 Compare plans
               </h2>
               <p className="text-sm text-mist-400">

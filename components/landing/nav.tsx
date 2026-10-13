@@ -22,8 +22,8 @@ export function Nav() {
       <div
         className="
           absolute inset-0 -z-10 backdrop-blur-xl
-          bg-surface-50/80 border-b border-mist-200/70
-          dark:bg-ink-950/80 dark:border-ink-700/60
+          bg-surface-50/95 border-b border-mist-200/70
+          dark:bg-ink-950/90 dark:border-ink-700/60
         "
       />
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-6 py-4">

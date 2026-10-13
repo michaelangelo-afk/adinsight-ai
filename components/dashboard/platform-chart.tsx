@@ -44,7 +44,7 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
         <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
           Platform mix
         </div>
-        <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink-900 dark:text-mist-50">
+        <h3 className="mt-1 text-base font-semibold tracking-tight text-ink-900 dark:text-mist-50">
           Where every naira goes
         </h3>
         <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">

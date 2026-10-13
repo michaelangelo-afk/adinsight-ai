@@ -156,7 +156,7 @@ export function CreatorDetailDrawer({
 
           {/* Panel */}
           <motion.aside
-            className="ml-auto h-full w-full max-w-[640px] bg-ink-950 border-l border-mist-50/[0.06] shadow-2xl overflow-y-auto"
+            className="ml-auto h-full w-full max-w-[640px] bg-ink-950 border-l border-mist-50/[0.06] shadow-lift overflow-y-auto"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -189,7 +189,7 @@ export function CreatorDetailDrawer({
               <section className="flex items-start gap-4">
                 <div
                   aria-hidden
-                  className="relative h-16 w-16 rounded-full bg-brand-gradient flex items-center justify-center text-lg font-semibold text-white shadow-[0_0_18px_-2px_rgba(16,185,129,0.55)]"
+                  className="relative h-16 w-16 rounded-full bg-brand-gradient flex items-center justify-center text-base font-semibold text-white shadow-glow"
                 >
                   {creator.avatar}
                   {creator.isVerified && (

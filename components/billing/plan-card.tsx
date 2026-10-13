@@ -57,7 +57,7 @@ export function CurrentPlanCard({
           <Sparkles size={10} className="mr-1" aria-hidden />
           Current
         </Badge>
-        <h2 className="mt-3 text-2xl font-semibold text-mist-50 tracking-tight">
+        <h2 className="mt-3 text-xl font-semibold text-mist-50 tracking-tight">
           {plan.name}{" "}
           <span className="text-mist-400 text-base font-normal">plan</span>
         </h2>
@@ -166,7 +166,7 @@ export function PlanMatrixCard({
           )}
         </div>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-2xl font-semibold text-mist-50 tabular-nums">
+          <span className="text-3xl font-semibold text-mist-50 tabular-nums">
             {plan.priceMonthly === 0
               ? "Free"
               : `₦${(plan.priceMonthly / 1000).toFixed(0)}k`}

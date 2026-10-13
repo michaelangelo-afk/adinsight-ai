@@ -66,8 +66,8 @@ export interface FitScoreRingProps {
 
 const SIZE_PRESETS = {
   sm: { px: 56, ring: 22, stroke: 4, font: "text-xs", scoreFont: "text-base" },
-  md: { px: 72, ring: 30, stroke: 5, font: "text-xs", scoreFont: "text-lg" },
-  lg: { px: 96, ring: 42, stroke: 6, font: "text-xs", scoreFont: "text-2xl" }
+  md: { px: 72, ring: 30, stroke: 5, font: "text-xs", scoreFont: "text-base" },
+  lg: { px: 96, ring: 42, stroke: 6, font: "text-xs", scoreFont: "text-3xl" }
 };
 
 export function FitScoreRing({

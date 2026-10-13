@@ -126,7 +126,7 @@ function CreatorAvatar({
   return (
     <div className="relative inline-flex items-center justify-center">
       <div
-        className={`${dim} rounded-full bg-brand-gradient flex items-center justify-center font-semibold text-white shadow-[0_0_14px_-2px_rgba(16,185,129,0.55)]`}
+        className={`${dim} rounded-full bg-brand-gradient flex items-center justify-center font-semibold text-white shadow-glow`}
         aria-hidden
       >
         {avatar}
@@ -139,7 +139,7 @@ function CreatorAvatar({
         >
           <BadgeCheck
             size={12}
-            className="text-white drop-shadow-[0_0_4px_rgba(16,185,129,0.7)]"
+            className="text-white drop-shadow-glow"
           />
         </span>
       )}

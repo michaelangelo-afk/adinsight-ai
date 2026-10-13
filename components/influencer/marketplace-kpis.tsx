@@ -150,7 +150,7 @@ export function MarketplaceKpis({ stats }: { stats: MarketplaceStats }) {
               <div className="text-xs text-slate-600 dark:text-mist-400">
                 {c.label}
               </div>
-              <div className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-mist-50 tabular-nums ">
+              <div className="mt-1 text-3xl font-semibold tracking-tight text-slate-900 dark:text-mist-50 tabular-nums ">
                 {c.value}
               </div>
               <div className="mt-0.5 text-xs text-slate-500 dark:text-mist-500">

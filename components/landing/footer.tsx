@@ -93,8 +93,8 @@ export function Footer() {
             <span
               className="
                 chip font-medium
-                bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
-                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+                bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+                dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
               "
             >
               Paystack-secured
@@ -102,8 +102,8 @@ export function Footer() {
             <span
               className="
                 chip font-medium
-                bg-brand-600/15 border border-brand-600/30 text-brand-700
-                dark:bg-brand-500/15 dark:border-brand-500/30 dark:text-brand-300
+                bg-brand-50 border border-brand-200 text-brand-700
+                dark:bg-brand-950/50 dark:border-brand-500/40 dark:text-brand-300
               "
             >
               Meta Business Partner

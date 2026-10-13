@@ -108,7 +108,7 @@ export function ReportCard(props: ReportCardProps) {
           <h3
             className={
               "font-semibold text-mist-50 tracking-tight " +
-              (isHero ? "text-lg" : "text-sm")
+              (isHero ? "text-base" : "text-sm")
             }
           >
             {report.title}

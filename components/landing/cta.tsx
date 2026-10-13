@@ -35,8 +35,8 @@ export function Cta() {
               <span
                 className="
                   chip
-                  bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
-                  dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+                  bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+                  dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
                 "
               >
                 <Sparkles />
@@ -44,7 +44,7 @@ export function Cta() {
               </span>
               <h2
                 className="
-                  mt-4 text-3xl md:text-4xl font-bold tracking-tight leading-tight
+                  mt-4 text-3xl font-bold tracking-tight leading-tight
                   text-mist-600 dark:text-mist-50
                 "
               >
@@ -110,7 +110,7 @@ export function Cta() {
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-500 " />
                   Nigeria-first support
                 </div>
-                <div className="mt-2 text-2xl font-bold text-mist-600 dark:text-mist-50">
+                <div className="mt-2 text-3xl font-bold text-mist-600 dark:text-mist-50">
                   We&apos;re online.
                 </div>
                 <p className="mt-2 text-sm text-mist-600 dark:text-mist-300">

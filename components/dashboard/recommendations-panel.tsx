@@ -49,7 +49,7 @@ export function RecommendationsPanel({
             <Sparkles size={12} />
             AI Recommendations
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-mist-50">
             <MetricTooltip
               content={SavingsOnTableTip}
               label="What ₦ on the table means"

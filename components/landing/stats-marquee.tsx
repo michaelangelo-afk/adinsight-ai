@@ -66,7 +66,7 @@ export function StatsMarquee() {
               <span
                 className="
                   inline-flex h-5 w-5 items-center justify-center rounded-2xl
-                  bg-brand-700/10 dark:bg-brand-700/15
+                  bg-brand-50 dark:bg-brand-950/60
                 "
               >
                 <Icon

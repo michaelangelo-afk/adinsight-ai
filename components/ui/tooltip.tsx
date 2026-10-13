@@ -184,7 +184,7 @@ export function MetricTooltip({
             }}
             className={cn(
               "px-3.5 py-3 rounded-2xl",
-              "bg-white text-mist-700 border border-brand-300/60 shadow-2xl",
+              "bg-white text-mist-700 border border-brand-300/60 shadow-lift",
               "dark:bg-ink-900/95 dark:text-mist-100 dark:border-brand-500/30",
               "text-xs leading-relaxed text-left",
               "pointer-events-none "

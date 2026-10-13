@@ -85,7 +85,7 @@ export function RecommendationsTimeline() {
           <div className="text-xs uppercase tracking-wider text-brand-300 inline-flex items-center gap-1.5">
             Savings timeline · 6 weeks
           </div>
-          <h3 className="mt-1 text-lg font-semibold text-mist-50">
+          <h3 className="mt-1 text-base font-semibold text-mist-50">
             Where your AI insights have paid off
           </h3>
           <p className="mt-1 text-sm text-mist-300">

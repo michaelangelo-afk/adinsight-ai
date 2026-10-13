@@ -103,7 +103,7 @@ export default async function DashboardPage() {
               <div className="text-xs uppercase tracking-wider text-mist-400">
                 Performance overview
               </div>
-              <h1 className="mt-1 text-2xl md:text-3xl font-semibold text-mist-50 tracking-tight">
+              <h1 className="mt-1 text-xl md:text-3xl font-semibold text-mist-50 tracking-tight">
                 You&apos;re{" "}
                 <span className="gradient-text">
                   {summary.totalConversions > 0

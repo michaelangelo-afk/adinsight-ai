@@ -83,7 +83,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
           <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
             Campaigns
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink-900 dark:text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-ink-900 dark:text-mist-50">
             How every campaign is performing
           </h3>
           <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">

@@ -12,7 +12,7 @@ export default function NotFound() {
         <div className="text-[120px] md:text-[160px] leading-none font-bold gradient-text">
           404
         </div>
-        <h1 className="mt-4 text-2xl md:text-3xl font-semibold text-mist-50 tracking-tight">
+        <h1 className="mt-4 text-3xl font-semibold text-mist-50 tracking-tight">
           This page is off-grid.
         </h1>
         <p className="mt-3 text-mist-300 max-w-md mx-auto">

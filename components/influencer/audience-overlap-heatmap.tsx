@@ -76,7 +76,7 @@ export function AudienceOverlapHeatmap({
             <Info size={11} aria-hidden className="text-brand-300" />
             Audience overlap
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-mist-50">
             Where each creator's audience actually lives
           </h3>
           <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">

@@ -32,7 +32,7 @@ export function TrendChart({ data }: { data: DashboardSummary["trend"] }) {
           <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
             Spend vs. conversions · 30 days
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink-900 dark:text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-ink-900 dark:text-mist-50">
             You spent less and got more.
           </h3>
           <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">

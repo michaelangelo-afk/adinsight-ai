@@ -24,7 +24,7 @@ export default function LoginLayout({
 
         {/* Top: brand mark + sparkles chip */}
         <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 text-2xl font-bold tracking-tight">
+          <div className="flex items-center gap-2.5 text-xl font-bold tracking-tight">
             <span>Growth</span>
             <span className="text-brand-300">Ads</span>
           </div>
@@ -60,7 +60,10 @@ export default function LoginLayout({
             <ShieldCheck size={13} className="text-brand-400" />
             Paystack-secured
           </span>
-          <span className="text-brand-400/40">•</span>
+          {/* Decorative separator, but at /40 it was the weakest glyph on the
+              panel (~1.3:1). Raised to /70 so it reads on the dark scene at a
+              glance without competing with the functional text beside it. */}
+          <span className="text-brand-400/70">•</span>
           <span>Naira-billed, .ng-first</span>
         </div>
       </aside>

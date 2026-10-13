@@ -25,7 +25,7 @@ export function InvoicesList({ invoices }: { invoices: Invoice[] }) {
             <FileText size={11} aria-hidden />
             Invoices
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-mist-50">
             Recent invoices
           </h3>
           <p className="mt-1 text-sm text-mist-300">

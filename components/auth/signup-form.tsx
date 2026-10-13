@@ -112,7 +112,7 @@ export function SignupForm() {
   return (
     <div className="rounded-2xl glass-card shadow-card dark:shadow-card p-6 sm:p-8  hover-lift">
       <div className="text-center mb-7 sm:mb-8">
-        <h1 className="text-2xl sm:text-[1.7rem] font-bold tracking-tight text-mist-600 dark:text-mist-50">
+        <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-mist-600 dark:text-mist-50">
           Create your account
         </h1>
         <p className="mt-2 text-sm text-mist-600 dark:text-mist-300">
@@ -226,7 +226,7 @@ export function SignupForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-2xl bg-brand-700 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card hover:shadow-[0_0_50px_-5px_rgba(16,185,129,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target"
+          className="w-full rounded-2xl bg-brand-700 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 shadow-card hover:shadow-glow disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 tap-press touch-target"
         >
           {loading ? (
             <span className="inline-flex items-center justify-center gap-2">

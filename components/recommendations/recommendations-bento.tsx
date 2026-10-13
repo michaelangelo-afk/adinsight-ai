@@ -34,7 +34,7 @@ export function RecommendationsBento({
         <div className="mx-auto h-12 w-12 rounded-full bg-brand-500/15 flex items-center justify-center text-brand-300 mb-4">
           <Sparkles size={20} aria-hidden />
         </div>
-        <h3 className="text-lg font-semibold text-mist-50">
+        <h3 className="text-base font-semibold text-mist-50">
           No recommendations in this view.
         </h3>
         <p className="mt-2 text-sm text-mist-300 max-w-md mx-auto">

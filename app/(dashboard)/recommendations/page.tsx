@@ -157,7 +157,7 @@ export default async function RecommendationsPage({
                 <Brain size={11} aria-hidden />
                 Phase 5 · AI Recommendation engine
               </Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
+              <h1 className="mt-3 text-3xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
                 Insights that <br />
                 <span className="gradient-text">pay off this week.</span>
               </h1>

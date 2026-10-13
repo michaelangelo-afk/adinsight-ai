@@ -55,7 +55,7 @@ export function ShortlistPanel({
             <Heart size={11} aria-hidden />
             Creator shortlist
           </div>
-          <h3 className="mt-1 text-lg font-semibold tracking-tight text-mist-50">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-mist-50">
             {hydrated && saved.length > 0
               ? `${saved.length} creator${saved.length === 1 ? "" : "s"} ready to brief`
               : "Shortlist creators to brief"}

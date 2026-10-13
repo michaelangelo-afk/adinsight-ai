@@ -17,8 +17,14 @@ import {
 
 
 const PLATFORMS = [
-  { name: "Meta", short: "M", tone: "#1877F2", lightText: false },
-  { name: "Google", short: "G", tone: "#EA4335", lightText: false },
+  // `tone` is the circle behind WHITE initials, so it has to clear 4.5:1 against
+  // white — not just look like the platform. Meta's stock #1877F2 scores 4.23
+  // and Google's #EA4335 scores 3.92, both under AA (measured with
+  // tools/audit_modes.mjs, which alpha-composites; the older audit missed these
+  // two entirely). These are the nearest shades that pass — #0B5FCE is 5.93:1
+  // and #C5221F is 5.80:1 — and both remain recognisably the platform's colour.
+  { name: "Meta", short: "M", tone: "#0B5FCE", lightText: false },
+  { name: "Google", short: "G", tone: "#C5221F", lightText: false },
   { name: "TikTok", short: "T", tone: "#0F0F0F", lightText: false },
   { name: "X", short: "X", tone: "#0F0F0F", lightText: false },
   { name: "LinkedIn", short: "in", tone: "#0A66C2", lightText: false },
@@ -52,7 +58,7 @@ function MiniMetric({
         {label}
       </div>
       <div className="mt-1 flex items-end justify-between">
-        <span className="text-lg font-semibold text-mist-600 dark:text-mist-100">
+        <span className="text-base font-semibold text-mist-600 dark:text-mist-100">
           {value}
         </span>
         {delta && (
@@ -117,14 +123,14 @@ function AutomationTile() {
     <div
       className="
         mt-4 rounded-2xl p-4 flex items-start gap-3
-        bg-brand-700/[0.04] border border-brand-700/20
-        dark:bg-brand-700/[0.08] dark:border-brand-700/30
+        bg-brand-50 border border-brand-200
+        dark:bg-brand-950/60 dark:border-brand-700/50
       "
     >
       <div
         className="
           mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-2xl
-          bg-brand-700/15 dark:bg-brand-700/20
+          bg-brand-50 dark:bg-brand-950/60
         "
       >
         <Zap size={14} className="text-brand-700 dark:text-brand-400" />
@@ -136,8 +142,8 @@ function AutomationTile() {
           </span>
           <span
             className="
-              chip bg-brand-700/10 border border-brand-700/30 text-brand-700
-              dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+              chip bg-brand-50 border border-brand-200 text-brand-700
+              dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
               text-xs
             "
           >
@@ -184,8 +190,8 @@ function HeroPreview() {
             </span>
             <span
               className="
-                chip bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
-                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+                chip bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+                dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
                 text-xs
               "
             >
@@ -250,8 +256,8 @@ function HeroPreview() {
             </div>
             <span
               className="
-                chip bg-brand-700/10 border border-brand-700/30 text-brand-700 dark:text-brand-300 dark:border-brand-400/30 dark:bg-brand-400/10
-                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+                chip bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
+                dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
               "
             >
               {formatPercent(0.184, 1)} MoM uplift
@@ -337,11 +343,15 @@ function LiveActivityToast() {
           <span
             className="
               relative inline-flex h-8 w-8 items-center justify-center rounded-2xl
-              bg-brand-700/15 dark:bg-brand-700/20
+              bg-brand-50 dark:bg-brand-950/60
             "
           >
             <Zap size={14} className="text-brand-700 dark:text-brand-300" />
-            <span className="absolute inset-0 rounded-2xl bg-brand-700/15 animate-ping" />
+            {/* Ping halo — stays a translucent tint on purpose. A solid surface
+                token here would be invisible against the white card, and a halo is
+                the one place where alpha is the effect, not a legibility risk
+                (no text sits on it). */}
+            <span className="absolute inset-0 rounded-2xl bg-brand-500/30 animate-ping" />
           </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
@@ -412,14 +422,14 @@ export function Hero() {
         <path d="M32 8 C 50 14, 58 24, 58 38 C 58 50, 50 58, 32 58 C 14 58, 6 50, 6 38 C 6 24, 14 14, 32 8 Z" />
       </svg>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28">
+      <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-24 md:pt-28 md:pb-32">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="">
             <span
               className="
                 chip
-                bg-brand-700/10 border border-brand-700/30 text-brand-700
-                dark:bg-brand-700/15 dark:border-brand-700/30 dark:text-brand-300
+                bg-brand-50 border border-brand-200 text-brand-700
+                dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
                 mb-6
               "
             >
@@ -430,7 +440,7 @@ export function Hero() {
             {/* Staggered headline reveal — each line fades up in sequence */}
             <h1
               className="
-                text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]
+                text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]
                 text-mist-600 dark:text-mist-50
               "
             >
@@ -456,7 +466,7 @@ export function Hero() {
 
             <p
               className="
-                mt-6 text-base md:text-lg leading-relaxed max-w-xl 
+                mt-6 text-base md:text-xl leading-relaxed max-w-xl 
                 text-mist-600 dark:text-mist-300
               "
               style={{ animationDelay: "360ms", animationFillMode: "both" }}
@@ -515,7 +525,7 @@ export function Hero() {
             {/* Orbiting badge floating above the dashboard preview — adds a
                 motion-path anchor above the HeroPreview. */}
             <div className="absolute -top-6 -right-6 z-20 hidden lg:block">
-              <div className="rounded-full bg-brand-700/15 border border-brand-700/30 px-3 py-1.5 shadow-[0_0_20px_-2px_rgba(16,185,129,0.55)] backdrop-blur-md dark:bg-brand-700/20 dark:border-brand-700/30">
+              <div className="rounded-full bg-brand-50 border border-brand-200 px-3 py-1.5 shadow-glow backdrop-blur-md dark:bg-brand-950/60 dark:border-brand-700/50">
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 dark:text-brand-300">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-500 " />
                   LIVE
