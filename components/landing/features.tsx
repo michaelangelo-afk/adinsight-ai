@@ -1,15 +1,25 @@
-import { ArrowRight } from "lucide-react";
+import {
+  BarChart3,
+  Bot,
+  Check,
+  Mail,
+  Rocket,
+  Sparkles,
+  Users,
+  type LucideIcon
+} from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
 
 /**
- * Feature index.
+ * Features — six glass cards on the dark shell.
  *
- * Six instruments, set as a ruled index rather than a bento of cards: number,
- * name, what it does, and the three facts that matter. The list is the section —
- * no icon halos, no gradient washes, no hover lift.
+ * The section is the product's capability list, so the cards stay quiet:
+ * icon tile, name, one paragraph, three facts. Depth comes from a 1px white
+ * border and a top-light sheen, not from shadows or illustration.
  */
 
 type Feature = {
+  icon: LucideIcon;
   title: string;
   blurb: string;
   points: string[];
@@ -17,6 +27,7 @@ type Feature = {
 
 const FEATURES: Feature[] = [
   {
+    icon: Sparkles,
     title: "Smart automations",
     blurb:
       "Set the rules once. Pause bad ads, rotate creatives, and rebalance budget across platforms the moment conditions change.",
@@ -27,37 +38,35 @@ const FEATURES: Feature[] = [
     ]
   },
   {
+    icon: BarChart3,
     title: "Multi-platform analytics",
     blurb:
       "Every naira, click, and conversion from Meta, Google, and TikTok in one view — sliced by platform, campaign, or audience.",
-    points: [
-      "Live sync, no CSV imports",
-      "Cohort + funnel breakdowns",
-      "Export to PDF or CSV in two clicks"
-    ]
+    points: ["Live sync, no CSV imports", "Cohort + funnel breakdowns", "Export to PDF or CSV in two clicks"]
   },
   {
+    icon: Rocket,
     title: "One-click deployment",
     blurb:
       "Push campaigns live to Meta, Google, and TikTok from one editor — using each platform's own API, with budgets and creatives synced.",
     points: ["Native integrations, OAuth-secured", "Same campaign, every channel"]
   },
   {
+    icon: Bot,
     title: "AI recommendations",
     blurb:
-      "Yesterday’s spend, today’s three highest-ROI changes — straight to your inbox.",
-    points: [
-      "Specific reallocations, not vague tips",
-      "Links straight into Ads Manager"
-    ]
+      "Yesterday's spend, today's three highest-ROI changes — straight to your inbox, ranked by expected return.",
+    points: ["Specific reallocations, not vague tips", "Links straight into Ads Manager"]
   },
   {
+    icon: Mail,
     title: "Monday-ready reports",
     blurb:
-      "Branded PDF every Monday. Forward to investors and look like you’re on top of everything.",
+      "A branded PDF lands every Monday with the numbers, the wins, and your next three moves. Forward it and look on top of everything.",
     points: ["Top 3 actions auto-included", "Share via email or WhatsApp"]
   },
   {
+    icon: Users,
     title: "Influencer marketplace",
     blurb:
       "Find vetted micro-influencers, manage briefs, pay through Paystack escrow — all from one inbox.",
@@ -69,83 +78,57 @@ export function Features() {
   return (
     <section id="features" className="relative py-section md:py-section-lg">
       <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
-        {/* Section head — the same edition rail as the front page. */}
-        <div className="flex items-center gap-4">
-          <span className="kicker text-brand-700 dark:text-brand-300">
-            02 — What&apos;s inside
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="eyebrow">
+            <Sparkles size={12} className="text-brand-300" />
+            Everything in one place
           </span>
-          <span className="h-px flex-1 bg-ink-950/20 dark:bg-paper-100/20" />
-          <span className="kicker">Six instruments</span>
-        </div>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:gap-10">
-          <h2 className="display text-3xl sm:text-5xl lg:col-span-7">
-            One page that reads your whole campaign.
+          <h2 className="headline-fade mt-5 text-3xl font-medium sm:text-5xl">
+            One dashboard that reads your whole campaign.
           </h2>
-          <p className="text-base leading-relaxed text-mist-600 dark:text-mist-300 lg:col-span-5 lg:pt-2">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/55">
             Built for Nigerian SMEs spending ₦100k–₦500k a month across
-            platforms — tired of opening five tabs just to know what’s working.
+            platforms — tired of opening five tabs just to know what&apos;s working.
           </p>
         </div>
 
-        {/* The index itself. */}
-        <ol className="mt-12 border-b border-ink-950/15 dark:border-paper-100/15">
-          {FEATURES.map((f, i) => (
-            <li
-              key={f.title}
-              className="border-t border-ink-950/15 dark:border-paper-100/15"
-            >
-              <div className="grid grid-cols-1 gap-x-6 gap-y-3 py-6 md:grid-cols-12 md:items-start md:py-7">
-                <span className="num text-xs text-mist-500 dark:text-mist-400 md:col-span-1 md:pt-1">
-                  {String(i + 1).padStart(2, "0")}
+        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((f) => {
+            const Icon = f.icon;
+            return (
+              <article
+                key={f.title}
+                className="
+                  group rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent
+                  p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20
+                "
+              >
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 text-brand-300 ring-1 ring-inset ring-brand-300/20">
+                  <Icon size={18} strokeWidth={1.75} />
                 </span>
 
-                <div className="md:col-span-5">
-                  <h3 className="display text-xl md:text-3xl">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-mist-600 dark:text-mist-300">
-                    {f.blurb}
-                  </p>
-                </div>
+                <h3 className="mt-5 text-xl font-medium text-white">{f.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/55">{f.blurb}</p>
 
-                <ul className="space-y-1.5 md:col-span-5 md:pt-1">
+                <ul className="mt-4 space-y-2">
                   {f.points.map((p) => (
-                    <li
-                      key={p}
-                      className="flex gap-2 font-mono text-xs leading-relaxed text-mist-600 dark:text-mist-300"
-                    >
-                      <span aria-hidden className="text-brand-700 dark:text-brand-300">
-                        —
-                      </span>
+                    <li key={p} className="flex gap-2 text-sm leading-relaxed text-white/65">
+                      <Check size={14} className="mt-1 shrink-0 text-brand-300" strokeWidth={2.5} />
                       <span>{p}</span>
                     </li>
                   ))}
                 </ul>
+              </article>
+            );
+          })}
+        </div>
 
-                <div aria-hidden className="hidden md:col-span-1 md:flex md:justify-end md:pt-1">
-                  <ArrowRight
-                    aria-hidden
-                    size={16}
-                    strokeWidth={1.5}
-                    className="text-mist-400 dark:text-mist-500"
-                  />
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        {/* Closing rule of the section. */}
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-md font-mono text-xs uppercase tracking-[0.08em] text-mist-500">
-            Every action is logged. Every naira is attributable.
-          </p>
-          <LinkButton href="/signup" variant="secondary" size="md" className="group">
-            Open your first statement
-            <ArrowRight
-              size={14}
-              strokeWidth={1.75}
-              className="transition-transform duration-200 group-hover:translate-x-1"
-            />
+        <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <LinkButton href="/signup" variant="white" size="md">
+            Start free
+          </LinkButton>
+          <LinkButton href="#pricing" variant="glass" size="md">
+            See pricing
           </LinkButton>
         </div>
       </div>

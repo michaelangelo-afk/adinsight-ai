@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "ghost" | "outline";
+type Variant = "primary" | "secondary" | "ghost" | "outline" | "white" | "glass";
 type Size = "sm" | "md" | "lg";
 
 /**
@@ -25,23 +25,31 @@ const sizes: Record<Size, string> = {
  */
 const shared =
   "inline-flex cursor-pointer select-none items-center justify-center whitespace-nowrap " +
-  "rounded-xs border border-transparent font-mono text-xs font-medium uppercase tracking-[0.1em] " +
+  "rounded-full border border-transparent text-sm font-medium " +
   "transition-colors duration-200 tap-press " +
   "disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
+  /** App primary. */
   primary:
-    "bg-ink-950 text-paper-50 border-ink-950 hover:bg-brand-800 hover:border-brand-800 " +
-    "dark:bg-paper-50 dark:text-ink-950 dark:border-paper-50 dark:hover:bg-brand-200 dark:hover:border-brand-200",
+    "bg-brand-600 text-white hover:bg-brand-500 active:bg-brand-700 shadow-card",
+  /** App secondary (light surfaces in both themes). */
   secondary:
-    "bg-transparent text-ink-950 border-ink-950/35 hover:bg-paper-200 hover:border-brand-800 " +
-    "dark:text-paper-50 dark:border-paper-50/35 dark:hover:bg-ink-850 dark:hover:border-brand-300",
+    "bg-surface-50 text-mist-600 border-mist-300 hover:bg-mist-50 hover:border-mist-400 " +
+    "dark:bg-ink-900 dark:text-mist-100 dark:border-ink-700 dark:hover:bg-ink-850",
   outline:
-    "bg-transparent text-brand-700 border-brand-700 hover:bg-brand-50 " +
-    "dark:text-brand-200 dark:border-brand-300 dark:hover:bg-brand-950",
+    "bg-transparent text-brand-700 border-brand-300 hover:bg-brand-50 " +
+    "dark:text-brand-200 dark:border-brand-500/40 dark:hover:bg-brand-500/10",
   ghost:
-    "bg-transparent text-mist-600 border-transparent hover:bg-paper-200 hover:text-ink-950 " +
-    "dark:text-mist-300 dark:hover:bg-ink-850 dark:hover:text-paper-50"
+    "bg-transparent text-mist-600 hover:bg-mist-100 hover:text-ink-950 " +
+    "dark:text-mist-300 dark:hover:bg-ink-850 dark:hover:text-white",
+  /** Marketing primary — the reference's white pill with a 3px ring. */
+  white:
+    "bg-white text-black shadow-cta-ring hover:bg-[#e9fbf2] hover:shadow-[0_0_0_3px_rgba(255,255,255,0.24)]",
+  /** Marketing secondary — dark glass pill on the dark shell. */
+  glass:
+    "text-white border-brand-300/25 bg-white/[0.04] " +
+    "hover:bg-brand-500/10 hover:border-brand-300/45"
 };
 
 type CommonProps = {

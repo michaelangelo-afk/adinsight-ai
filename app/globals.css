@@ -3,26 +3,18 @@
 @tailwind utilities;
 
 /**
- * GrowthAds — "The Monday Statement".
+ * GrowthAds — Madgicx-aligned surface system.
  *
- * The marketing surface is a printed financial statement: warm paper, ink
- * rules, ledger figures, one red pen. The dashboard inherits the same stock so
- * the product and the shop window are the same object, not two themes.
+ * The marketing page is dark, product-led and softly lit. Panels are 16px
+ * rounded, bordered with white/8%, and carry a top-light sheen rather than a
+ * drop shadow. The primary CTA is a white pill with a 3px translucent ring;
+ * the secondary is a dark glass pill with a 1px accent-tinted border — both
+ * measured from the reference (see tools/design_probe.mjs).
  *
- * Rules encoded here:
- *   - no glass / blur on the page surface (`.glass-card` is now opaque paper);
- *   - every rule is 1px ink, never a drop shadow;
- *   - figures are mono + tabular, always;
- *   - motion is a 180ms colour/position change, nothing decorative.
+ * The signed-in app stays on light surfaces; only the landing shell is dark.
  */
 
 @layer base {
-  :root {
-    color-scheme: light;
-    --rule: 11 15 12; /* ink, used as rgb(var(--rule) / alpha) */
-    --paper: 241 236 223;
-  }
-
   html {
     transition: background-color 0.25s ease, color 0.25s ease;
   }
@@ -30,24 +22,7 @@
   html,
   body {
     @apply bg-surface-50 text-mist-600 antialiased;
-    font-feature-settings: "ss01", "cv01";
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Ledger paper: one hairline every 32px, barely there, plus a fixed grain
-     so large empty areas read as stock rather than as a missing section. */
-  body {
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        rgba(11, 15, 12, 0.035) 0px,
-        rgba(11, 15, 12, 0.035) 1px,
-        transparent 1px,
-        transparent 32px
-      );
-    background-attachment: fixed;
-    min-height: 100vh;
-    transition: background 0.4s ease, color 0.4s ease;
+    font-feature-settings: "cv11", "ss01";
   }
 
   html.dark,
@@ -55,15 +30,11 @@
     @apply bg-ink-950 text-mist-100;
   }
 
-  html.dark body {
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        rgba(239, 234, 221, 0.045) 0px,
-        rgba(239, 234, 221, 0.045) 1px,
-        transparent 1px,
-        transparent 32px
-      );
+  /* The landing page's dark shell. Explicit colours (not dark: twins) so the
+     marketing surface is always dark regardless of the app's theme. */
+  .shell-dark {
+    background-color: #05070b;
+    color: #ffffff;
   }
 
   button:not(:disabled),
@@ -73,329 +44,248 @@
   }
 
   ::selection {
-    background: rgba(35, 80, 46, 0.18);
-    color: #0b0f0c;
-  }
-  html.dark ::selection {
-    background: rgba(140, 182, 132, 0.3);
-    color: #f8f4ea;
+    background: rgba(16, 185, 129, 0.35);
+    color: #ffffff;
   }
 
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: #b6b09e;
-    border: 2px solid #f1ecdf;
+    background: #2a3145;
+    border: 2px solid #05070b;
+    border-radius: 9999px;
   }
-  html.dark ::-webkit-scrollbar-thumb {
-    background: #3c4a40;
-    border: 2px solid #0b0f0c;
-  }
-  ::-webkit-scrollbar-thumb:hover { background: #23502e; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a4356; }
 }
 
-/* `mist-500` is a LIGHT-stock token (#69614F, 5.2:1 on paper). On the ink
- * surfaces it drops to 3.15:1, which fails every 12px mono label that uses it
- * without a `dark:` twin. Rather than chase call sites — and forget one every
- * time a new label is added — dark mode promotes the token to its dark-stock
- * value. Unlayered on purpose: it must beat the utility of the same name. */
-html.dark .text-mist-500 {
-  color: #9f9581;
-}
-
-/* Keyboard focus: a solid ink ring with paper offset — visible on both stocks,
-   and it inherits the element's own corner so controls never change shape. */
+/* Focus: white ring on the dark shell, emerald in the app. */
 :focus-visible {
-  outline: 2px solid #23502e;
-  outline-offset: 2px;
+  outline: 2px solid #34d399;
+  outline-offset: 3px;
   border-radius: inherit;
 }
-html.dark :focus-visible {
-  outline: 2px solid #8cb684;
-  outline-offset: 2px;
+.shell-dark :focus-visible {
+  outline-color: #ffffff;
 }
 
 @layer components {
-  /* ── Editorial primitives ─────────────────────────────────────────────── */
+  /* ── Marketing primitives ─────────────────────────────────────────────── */
 
-  /* Section label: "01 — THE STATEMENT". Mono, tracked, never >12px. */
-  .kicker {
-    @apply inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-eyebrow text-mist-500;
+  /* White → 72% white headline fill, as measured on the reference h1. */
+  .headline-fade {
+    background-image: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ffffff;
+    -webkit-text-fill-color: transparent;
   }
-  html.dark .kicker {
-    @apply text-mist-400;
-  }
-
-  .display {
-    @apply font-display font-semibold text-ink-950;
-    font-variation-settings: "SOFT" 0, "WONK" 0;
-    letter-spacing: -0.03em;
-  }
-  html.dark .display {
-    @apply text-paper-50;
+  @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+    .headline-fade { background: none; -webkit-text-fill-color: #fff; }
   }
 
-  /* Every number in the product. */
-  .num {
-    @apply font-mono tabular-nums;
-    letter-spacing: -0.02em;
+  /* Saturated accent for one word — used sparingly, never for body copy. */
+  .accent-text {
+    background-image: linear-gradient(135deg, #6ee7b7 0%, #34d399 55%, #a7f3d0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #6ee7b7;
+    -webkit-text-fill-color: transparent;
   }
 
-  .rule-t { border-top: 1px solid rgb(var(--rule) / 0.16); }
-  .rule-b { border-bottom: 1px solid rgb(var(--rule) / 0.16); }
-  html.dark .rule-t { border-color: rgb(239 234 221 / 0.16); }
-  html.dark .rule-b { border-color: rgb(239 234 221 / 0.16); }
-
-  /* A rotated rubber stamp — used for "LIVE" and section annotations. */
-  .stamp {
-    @apply inline-flex items-center gap-1.5 border px-2 py-1 font-mono text-xs font-medium uppercase tracking-[0.14em];
-    border-radius: 2px;
-    border-color: #96201a;
-    color: #96201a;
-  }
-  html.dark .stamp {
-    border-color: #e8a7a1;
-    color: #e8a7a1;
+  /* Soft vertical glow behind a product plate. */
+  .glow-bed {
+    background:
+      radial-gradient(55% 45% at 50% 0%, rgba(16, 185, 129, 0.28) 0%, rgba(5, 7, 11, 0) 72%),
+      radial-gradient(40% 30% at 80% 20%, rgba(52, 211, 153, 0.12) 0%, rgba(5, 7, 11, 0) 70%);
   }
 
-  /* ── Existing surface vocabulary, retuned ─────────────────────────────── */
-
-  /* Was a blurred glass panel. Blur is a template tell and it forced a new
-     paint layer on every card; the same job is done with paper + a hairline. */
-  .glass-card {
-    @apply bg-paper-50;
-    border: 1px solid rgb(var(--rule) / 0.14);
-  }
-  html.dark .glass-card {
-    @apply bg-ink-900;
-    border-color: rgb(239 234 221 / 0.14);
+  /* Glass panel: 1px white/8 border, top sheen, 16px radius. */
+  .panel {
+    background-color: rgba(255, 255, 255, 0.025);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 55%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
   }
 
-  .hairline {
-    border: 1px solid rgb(var(--rule) / 0.14);
-  }
-  html.dark .hairline {
-    border-color: rgb(239 234 221 / 0.14);
-  }
-
-  /* Blueprint grid — used behind the hero and the closing block. Faint enough
-     to read as press registration marks, not as a techy dashboard texture. */
-  .grid-bg {
-    background-image:
-      linear-gradient(rgba(11, 15, 12, 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(11, 15, 12, 0.055) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
-  }
-  html.dark .grid-bg {
-    background-image:
-      linear-gradient(rgba(239, 234, 221, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(239, 234, 221, 0.06) 1px, transparent 1px);
+  /* Elevated product plate — 32px radius, deep shadow. */
+  .plate {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.95);
+    overflow: hidden;
   }
 
-  /* Labels are stamps: square corners, mono, one ink rule. */
-  .chip {
-    @apply inline-flex items-center gap-1.5 border px-2 py-1 font-mono text-xs font-medium uppercase tracking-[0.12em];
-    border-radius: 2px;
-    border-color: rgb(var(--rule) / 0.24);
-    color: #57513f;
-    background: transparent;
-  }
-  html.dark .chip {
-    border-color: rgb(239 234 221 / 0.26);
-    color: #c4bba7;
-  }
-
-  .chip-brand {
-    @apply chip;
-    border-color: #23502e;
-    color: #23502e;
-    background: #eef4ec;
-  }
-  html.dark .chip-brand {
-    border-color: #8cb684;
-    color: #b6d0ae;
-    background: rgba(140, 182, 132, 0.08);
-  }
-
-  .chip-warn {
-    @apply chip;
-    border-color: #96201a;
-    color: #96201a;
-    background: #fbf0ee;
-  }
-  html.dark .chip-warn {
-    border-color: #e8a7a1;
-    color: #e8a7a1;
-    background: rgba(232, 167, 161, 0.08);
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium;
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.72);
   }
 
   /* ── Buttons ──────────────────────────────────────────────────────────── */
 
   .btn {
-    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 px-5 py-2.5 font-mono text-xs font-medium uppercase tracking-[0.1em] transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none;
-    border-radius: 2px;
+    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none;
   }
 
+  /* White pill — the reference's primary CTA (60px radius, 3px ring). */
+  .btn-white {
+    @apply btn bg-white text-black;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.14);
+  }
+  .btn-white:hover {
+    background: #e9fbf2;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+  }
+
+  /* Glass pill — dark fill, accent-tinted 1px border, top-light gradient. */
+  .btn-glass {
+    @apply btn text-white;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(110, 231, 183, 0.22);
+  }
+  .btn-glass:hover {
+    border-color: rgba(110, 231, 183, 0.45);
+    background-color: rgba(110, 231, 183, 0.06);
+  }
+
+  /* App buttons (light + dark), unchanged API. */
   .btn-primary {
-    @apply btn bg-ink-950 text-paper-50;
-    border: 1px solid #0b0f0c;
+    @apply btn bg-brand-600 text-white;
   }
-  .btn-primary:hover {
-    @apply bg-brand-800 text-paper-50;
-    border-color: #1b4025;
-  }
-  html.dark .btn-primary {
-    @apply bg-paper-50 text-ink-950;
-    border-color: #f8f4ea;
-  }
-  html.dark .btn-primary:hover {
-    @apply bg-brand-200 text-ink-950;
-    border-color: #b6d0ae;
-  }
+  .btn-primary:hover { @apply bg-brand-500; }
 
   .btn-secondary {
-    @apply btn bg-transparent text-ink-950;
-    border: 1px solid rgb(var(--rule) / 0.35);
+    @apply btn bg-surface-50 text-mist-600 border border-mist-300;
   }
-  .btn-secondary:hover {
-    @apply bg-paper-100;
-    border-color: #23502e;
-  }
+  .btn-secondary:hover { @apply bg-mist-50 border-mist-400; }
   html.dark .btn-secondary {
-    @apply text-paper-50;
-    border-color: rgb(239 234 221 / 0.35);
+    @apply bg-ink-900 text-mist-100 border-ink-700;
   }
-  html.dark .btn-secondary:hover {
-    @apply bg-ink-850;
-    border-color: #8cb684;
-  }
+  html.dark .btn-secondary:hover { @apply bg-ink-850 border-ink-600; }
 
   .btn-ghost {
     @apply btn bg-transparent text-mist-600;
   }
-  .btn-ghost:hover { @apply text-ink-950; }
-  html.dark .btn-ghost { @apply text-mist-300; }
-  html.dark .btn-ghost:hover { @apply text-paper-50; }
+  .btn-ghost:hover { @apply bg-mist-100; }
+  html.dark .btn-ghost { @apply text-mist-200; }
+  html.dark .btn-ghost:hover { @apply bg-ink-850 text-white; }
 
   .btn-outline {
-    @apply btn bg-transparent text-brand-700;
-    border: 1px solid #23502e;
+    @apply btn bg-transparent text-brand-300 border border-brand-500/40;
   }
-  .btn-outline:hover { @apply bg-brand-50; }
-  html.dark .btn-outline {
-    @apply text-brand-200;
-    border-color: #8cb684;
+  .btn-outline:hover { @apply border-brand-400 bg-brand-500/10; }
+
+  /* ── Legacy vocabulary, retuned ───────────────────────────────────────── */
+
+  .glass-card {
+    @apply bg-surface-50;
+    border: 1px solid rgba(226, 232, 240, 0.9);
   }
-  html.dark .btn-outline:hover { background: rgba(140, 182, 132, 0.1); }
+  html.dark .glass-card {
+    background: rgba(255, 255, 255, 0.025);
+    border-color: rgba(255, 255, 255, 0.09);
+  }
+
+  .hairline {
+    border: 1px solid rgba(226, 232, 240, 0.9);
+  }
+  html.dark .hairline {
+    border-color: rgba(255, 255, 255, 0.09);
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(60% 60% at 50% 30%, black 0%, transparent 100%);
+  }
+  html.dark .grid-bg { background-image: none; }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium;
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.72);
+  }
+  html.dark .chip {
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .chip-brand {
+    @apply chip;
+    border-color: rgba(110, 231, 183, 0.28);
+    background: rgba(16, 185, 129, 0.10);
+    color: #a7f3d0;
+  }
+  html.dark .chip-brand {
+    border-color: rgba(110, 231, 183, 0.28);
+    background: rgba(16, 185, 129, 0.10);
+    color: #a7f3d0;
+  }
+
+  .chip-warn {
+    @apply chip;
+    border-color: rgba(252, 165, 165, 0.3);
+    background: rgba(239, 68, 68, 0.10);
+    color: #fca5a5;
+  }
 }
 
-/* ── Interaction utilities (dashboard + landing) ───────────────────────── */
+/* ── Interaction + motion ──────────────────────────────────────────────── */
 
-.hover-lift {
-  @apply transition-colors duration-200 ease-out;
-}
-.hover-lift:hover {
-  @apply shadow-lift;
-}
+.hover-lift { @apply transition-transform duration-200 ease-out; }
+.hover-lift:hover { transform: translateY(-2px); }
 
-.row-interactive {
-  @apply cursor-pointer transition-colors duration-200;
-}
-.row-interactive:hover {
-  @apply bg-paper-100;
-}
-html.dark .row-interactive:hover {
-  @apply bg-ink-850;
-}
+.row-interactive { @apply cursor-pointer transition-colors duration-200; }
+.row-interactive:hover { @apply bg-mist-50; }
+html.dark .row-interactive:hover { @apply bg-ink-850; }
 
 .icon-btn {
-  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center;
-  border-radius: 2px;
-  @apply text-mist-600 transition-colors duration-200;
-  @apply hover:bg-paper-200 hover:text-brand-700;
+  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full;
+  @apply text-mist-600 transition-colors duration-200 hover:bg-mist-100 hover:text-brand-600;
 }
-html.dark .icon-btn {
-  @apply text-mist-200 hover:bg-ink-850 hover:text-brand-300;
-}
+html.dark .icon-btn { @apply text-mist-200 hover:bg-ink-850 hover:text-brand-300; }
 
-.tap-press {
-  @apply transition-transform duration-150 ease-out;
-}
-.tap-press:active:not(:disabled) {
-  transform: translateY(1px);
-}
+.tap-press { @apply transition-transform duration-150 ease-out; }
+.tap-press:active:not(:disabled) { transform: scale(0.97); }
 
-.nav-indicator {
-  position: relative;
-}
+.nav-indicator { position: relative; }
 .nav-indicator::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 50%;
-  width: 2px;
-  height: 0;
-  background: #23502e;
+  left: 0; top: 50%;
+  width: 2px; height: 0;
+  border-radius: 9999px;
+  background: #10b981;
   transform: translateY(-50%);
   transition: height 200ms ease;
 }
-.nav-indicator.is-active::before {
-  height: 100%;
-}
-html.dark .nav-indicator::before {
-  background: #8cb684;
-}
+.nav-indicator.is-active::before { height: 100%; }
 
-.focus-glow {
-  @apply transition-colors duration-200;
-}
+.focus-glow { @apply transition-colors duration-200; }
 .focus-glow:focus,
 .focus-glow:focus-within {
   outline: none;
-  border-color: #23502e !important;
-  box-shadow: 0 0 0 3px rgba(35, 80, 46, 0.16);
-}
-html.dark .focus-glow:focus,
-html.dark .focus-glow:focus-within {
-  border-color: #8cb684 !important;
-  box-shadow: 0 0 0 3px rgba(140, 182, 132, 0.2);
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
 }
 
-/* The one keyframe on the marketing surface: the live ticker. */
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-.animate-marquee {
-  animation: marquee-scroll 44s linear infinite;
-}
+.animate-marquee { animation: marquee-scroll 48s linear infinite; }
 
-.slide-down {
-  animation: slide-down 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
+.slide-down { animation: slide-down 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes slide-down {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(11, 15, 12, 0.04) 0%,
-    rgba(11, 15, 12, 0.09) 35%,
-    rgba(11, 15, 12, 0.04) 70%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
-}
-html.dark .skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(239, 234, 221, 0.04) 0%,
-    rgba(239, 234, 221, 0.09) 35%,
-    rgba(239, 234, 221, 0.04) 70%
-  );
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.10) 35%, rgba(255,255,255,0.04) 70%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
@@ -404,111 +294,42 @@ html.dark .skeleton-shimmer {
   100% { background-position: -200% 0; }
 }
 
-.touch-target {
-  min-height: 44px;
-  min-width: 44px;
-}
+.touch-target { min-height: 44px; min-width: 44px; }
 
-/* Paper grain, fixed behind content. Kept at 4% — texture, not noise. */
 .texture-grain {
-  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 240px 240px;
-  background-repeat: repeat;
-  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
   opacity: 0.035;
   pointer-events: none;
 }
-html.dark .texture-grain {
-  mix-blend-mode: screen;
-  opacity: 0.04;
-}
 
-.shimmer-stripe {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-.shimmer-stripe::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    100deg,
-    transparent 40%,
-    rgba(239, 234, 221, 0.5) 50%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Solid ink underneath the gradients. Without it the panel's painted backdrop
- * is image-only, so if the gradient layer fails (or a tool composites it out)
- * the paper-coloured text sits on the page stock with no fallback. */
-.auth-scene-bg-light {
-  background-color: #0b0f0c;
-  background-image:
-    radial-gradient(70% 50% at 20% 0%, rgba(140, 182, 132, 0.14), transparent 65%),
-    linear-gradient(180deg, #0b0f0c 0%, #101612 60%, #0b0f0c 100%);
-}
+.auth-scene-bg-light,
 .auth-scene-bg-dark {
-  background-color: #070a08;
+  background-color: #05070b;
   background-image:
-    radial-gradient(70% 50% at 20% 0%, rgba(140, 182, 132, 0.18), transparent 65%),
-    linear-gradient(180deg, #070a08 0%, #0b100d 60%, #070a08 100%);
+    radial-gradient(60% 45% at 30% 0%, rgba(16, 185, 129, 0.20), transparent 65%),
+    linear-gradient(180deg, #05070b 0%, #0a0d14 60%, #05070b 100%);
 }
 
-/* Display headline treatment used in the two "statement" blocks. */
-.ink-block {
-  background: #0b0f0c;
-  color: #f1ecdf;
-}
-
-/* A thin red underline used on the annotation copy ("we froze it"). */
-.pen-underline {
-  background-image: linear-gradient(transparent 62%, rgba(179, 38, 30, 0.22) 62%);
-}
-
-/* Gradient text is retained for dashboard headings; on the landing it is used
-   once, for the word "grow", as a deliberate accent rather than a template
-   flourish. Opaque `color` underneath keeps tooling able to read the text. */
+/* Legacy gradient text (dashboard headings). */
 .gradient-text {
-  background: linear-gradient(100deg, #1b4025 0%, #2f6539 45%, #5f9a62 100%);
-  background-clip: text;
+  background-image: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 45%, #34d399 100%);
   -webkit-background-clip: text;
-  color: #23502e;
+  background-clip: text;
+  color: #a7f3d0;
   -webkit-text-fill-color: transparent;
 }
 html.dark .gradient-text {
-  background: linear-gradient(100deg, #b6d0ae 0%, #8cb684 55%, #d9e7d4 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: #b6d0ae;
-  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #34d399 100%);
 }
 @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-  .gradient-text,
-  html.dark .gradient-text {
-    background: none;
-    color: inherit;
-  }
+  .gradient-text { background: none; -webkit-text-fill-color: inherit; }
 }
-@media (forced-colors: active) {
-  .gradient-text {
-    background: none;
-    color: CanvasText;
-    -webkit-text-fill-color: CanvasText;
-  }
-}
-
-/* ── Motion policy ─────────────────────────────────────────────────────── */
 
 *,
 *::before,
 *::after {
-  transition-property: background-color, border-color, color, fill, stroke,
-    opacity, box-shadow, transform;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
   transition-duration: 0.18s;
   transition-timing-function: ease;
 }

@@ -63,6 +63,15 @@ const rows = await page.evaluate(() => {
     return body && body.a > 0.95 ? body : { r: 255, g: 255, b: 255, a: 1 };
   };
 
+  // Foreground alpha has to be composited over the resolved backdrop before
+  // measuring, or rgba(255,255,255,0.35) reads as pure white and passes.
+  const composite = (fg, bg) => ({
+    r: fg.r * fg.a + bg.r * (1 - fg.a),
+    g: fg.g * fg.a + bg.g * (1 - fg.a),
+    b: fg.b * fg.a + bg.b * (1 - fg.a),
+    a: 1
+  });
+
   const out = [];
   const seen = new Set();
   document.querySelectorAll("body *").forEach((el) => {
@@ -80,7 +89,7 @@ const rows = await page.evaluate(() => {
     const bold = parseInt(cs.fontWeight, 10) >= 700;
     const large = size >= 24 || (size >= 18.66 && bold);
     const need = large ? 3 : 4.5;
-    const r = ratio(fg, bg);
+    const r = ratio(composite(fg, bg), bg);
     if (r < need) {
       const key = text.slice(0, 40) + cs.color;
       if (seen.has(key)) return;

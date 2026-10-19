@@ -8,48 +8,30 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { label: "Product", href: "#features", index: "01" },
-  { label: "How it works", href: "#workflow", index: "02" },
-  { label: "Pricing", href: "#pricing", index: "03" },
-  { label: "Contact", href: "#contact", index: "04" }
+  { label: "Product", href: "#features" },
+  { label: "How it works", href: "#workflow" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Contact", href: "#contact" }
 ];
 
 export function Nav() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-surface-50 dark:bg-ink-950">
-      {/* Masthead rail — the printed edition line. Hidden on phones, where it
-          would eat the fold for information nobody needs twice. */}
-      <div className="hidden border-b border-ink-950/15 dark:border-paper-100/15 md:block">
-        <div className="mx-auto flex max-w-content items-center justify-between px-gutter py-1.5 lg:px-gutter-lg">
-          <span className="kicker text-mist-500">The weekly statement · Issue 01</span>
-          <span className="kicker text-mist-500">
-            Lagos · WAT · ₦ NGN · Paystack-billed
-          </span>
-        </div>
-      </div>
-
-      <div className="border-b border-ink-950/20 dark:border-paper-100/20">
-        <div className="mx-auto flex max-w-content items-center justify-between gap-6 px-gutter py-3 lg:px-gutter-lg">
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
+      <div className="mx-auto max-w-content">
+        <div className="flex h-16 items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.045] px-3 pl-5 backdrop-blur-xl">
           <Link href="/" className="shrink-0" aria-label="GrowthAds home">
-            <Logo />
+            <Logo onInk />
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="
-                  group flex min-h-[44px] items-center gap-1.5 font-mono text-xs font-medium
-                  uppercase tracking-[0.12em] text-mist-600 transition-colors duration-200
-                  hover:text-ink-950 dark:text-mist-300 dark:hover:text-paper-50
-                "
+                className="flex min-h-[44px] items-center rounded-full px-4 text-sm text-white/65 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white"
               >
-                <span className="text-mist-500 group-hover:text-brand-700 dark:text-mist-400 dark:group-hover:text-brand-300">
-                  {l.index}
-                </span>
                 {l.label}
               </a>
             ))}
@@ -57,11 +39,11 @@ export function Nav() {
 
           <div className="hidden items-center gap-2 lg:flex">
             <ThemeToggle />
-            <LinkButton href="/login" variant="ghost" size="sm">
+            <LinkButton href="/login" variant="ghost" size="sm" className="text-white/70 hover:text-white">
               Sign in
             </LinkButton>
-            <LinkButton href="/signup" variant="primary" size="sm">
-              Start free
+            <LinkButton href="/signup" variant="white" size="sm">
+              Try for free
             </LinkButton>
           </div>
 
@@ -69,61 +51,39 @@ export function Nav() {
             <ThemeToggle />
             <button
               type="button"
-              className="
-                inline-flex h-11 w-11 items-center justify-center border border-ink-950/35
-                text-ink-950 transition-colors duration-200 hover:border-brand-700 hover:text-brand-700
-                dark:border-paper-100/35 dark:text-paper-50 dark:hover:border-brand-300 dark:hover:text-brand-300
-              "
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white"
               onClick={() => setOpen((s) => !s)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
             >
-              {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
+              {open ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
-      </div>
 
-      {open && (
-        <div className="slide-down border-b border-ink-950/20 bg-surface-50 dark:border-paper-100/20 dark:bg-ink-950 lg:hidden">
-          <nav className="mx-auto max-w-content px-gutter" aria-label="Mobile">
+        {open && (
+          <div className="slide-down mt-2 rounded-3xl border border-white/10 bg-ink-900/95 p-3 backdrop-blur-xl lg:hidden">
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="
-                  flex items-baseline gap-3 border-b border-ink-950/12 py-4
-                  font-display text-xl text-ink-950 dark:border-paper-100/12 dark:text-paper-50
-                "
+                className="flex min-h-[44px] items-center rounded-2xl px-4 text-sm text-white/75 hover:bg-white/[0.06] hover:text-white"
               >
-                <span className="font-mono text-xs text-mist-500">{l.index}</span>
                 {l.label}
               </a>
             ))}
-            <div className="flex gap-2 py-4">
-              <LinkButton
-                href="/login"
-                variant="secondary"
-                size="sm"
-                className="flex-1"
-                onClick={() => setOpen(false)}
-              >
+            <div className="mt-2 flex gap-2 border-t border-white/10 pt-3">
+              <LinkButton href="/login" variant="glass" size="sm" className="flex-1">
                 Sign in
               </LinkButton>
-              <LinkButton
-                href="/signup"
-                variant="primary"
-                size="sm"
-                className="flex-1"
-                onClick={() => setOpen(false)}
-              >
-                Start free
+              <LinkButton href="/signup" variant="white" size="sm" className="flex-1">
+                Try for free
               </LinkButton>
             </div>
-          </nav>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </header>
   );
 }
