@@ -286,6 +286,22 @@
   }
 }
 
+/* Fixed-ink panels (auth brand panel) must NOT follow the shell flip: the
+   headline fade, eyebrow and accent are white-on-ink there in both modes. */
+html .on-ink .headline-fade {
+  background-image: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 100%);
+  color: #ffffff;
+}
+html .on-ink .accent-text {
+  background-image: linear-gradient(135deg, #6ee7b7 0%, #34d399 55%, #a7f3d0 100%);
+  color: #6ee7b7;
+}
+html .on-ink .eyebrow {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
+}
+
 /* ── Interaction + motion ──────────────────────────────────────────────── */
 
 .hover-lift { @apply transition-transform duration-200 ease-out; }

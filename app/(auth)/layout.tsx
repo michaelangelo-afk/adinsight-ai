@@ -21,8 +21,8 @@ export default function LoginLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-surface-50 lg:flex-row">
-      <aside className="auth-scene-bg-dark relative hidden w-5/12 flex-col justify-between overflow-hidden border-r border-white/10 p-12 text-white lg:flex">
+    <div className="flex min-h-screen flex-col bg-surface-50 dark:bg-ink-950 lg:flex-row">
+      <aside className="auth-scene-bg-dark on-ink relative hidden w-5/12 flex-col justify-between overflow-hidden border-r border-white/10 p-12 text-white lg:flex">
         <TextureGrain />
 
         <div className="relative z-10 flex items-center justify-between">
