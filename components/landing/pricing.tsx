@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
+import { PatternField, SignalRings } from "@/components/landing/pattern-field";
 
 /**
  * Pricing.
@@ -64,9 +65,10 @@ const TIERS: Tier[] = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="relative py-section md:py-section-lg">
+    <section id="pricing" className="relative isolate py-section md:py-section-lg">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 glow-bed opacity-60" />
 
+      <PatternField motif="dots" mask="corner-bl" className="bottom-0 left-0 h-80 w-1/3" opacity={70} />
       <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
         <div className="mx-auto max-w-2xl text-center">
           <span className="eyebrow">
@@ -76,7 +78,7 @@ export function Pricing() {
           <h2 className="headline-fade mt-5 text-5xl font-medium">
             Simple plans, billed in naira.
           </h2>
-          <p className="mt-4 text-base text-white/55">
+          <p className="mt-4 text-base text-shell/55">
             Every plan starts with a 14-day trial. Cancel anytime — no setup
             fee, no dollar conversion, no surprises.
           </p>
@@ -91,8 +93,8 @@ export function Pricing() {
                 className={
                   "relative flex flex-col rounded-2xl border p-6 sm:p-7 " +
                   (hl
-                    ? "border-brand-300/40 bg-brand-500/[0.06] ring-1 ring-brand-400/20"
-                    : "border-white/10 bg-white/[0.025]")
+                    ? "border-accent/40 bg-brand-500/[0.06] ring-1 ring-brand-400/20"
+                    : "border-shell/10 bg-shell/[0.025]")
                 }
                 style={
                   hl
@@ -101,17 +103,17 @@ export function Pricing() {
                 }
               >
                 {hl && (
-                  <span className="absolute -top-3 left-6 rounded-full border border-brand-300/40 bg-ink-950 px-3 py-1 text-xs font-medium text-brand-200">
+                  <span className="absolute -top-3 left-6 rounded-full border border-accent/40 bg-shellbg px-3 py-1 text-xs font-medium text-accent">
                     Most popular
                   </span>
                 )}
 
                 <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-xl font-medium text-white">{t.name}</h3>
-                  {hl && <span className="text-xs text-brand-300">Best value</span>}
+                  <h3 className="text-xl font-medium text-shell">{t.name}</h3>
+                  {hl && <span className="text-xs text-accent">Best value</span>}
                 </div>
 
-                <p className="mt-2 min-h-[2.5rem] text-sm leading-relaxed text-white/50">
+                <p className="mt-2 min-h-[2.5rem] text-sm leading-relaxed text-shell/55">
                   {t.blurb}
                 </p>
 
@@ -119,17 +121,17 @@ export function Pricing() {
                   {/* 3xl on phones: a 48px naira price plus "/month" was the
                       card's min-content and pushed the grid 36px past a 320px
                       viewport. */}
-                  <span className="text-3xl font-medium tracking-tight text-white sm:text-5xl">
+                  <span className="text-3xl font-medium tracking-tight text-shell sm:text-5xl">
                     {t.price}
                   </span>
-                  <span className="text-sm text-white/55">/month</span>
+                  <span className="text-sm text-shell/55">/month</span>
                 </div>
 
-                <ul className="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
+                <ul className="mt-6 flex-1 space-y-3 border-t border-shell/10 pt-6">
                   {t.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-shell/70">
                       <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand-500/15">
-                        <Check size={10} strokeWidth={3} className="text-brand-300" />
+                        <Check size={10} strokeWidth={3} className="text-accent" />
                       </span>
                       {f}
                     </li>
@@ -151,7 +153,7 @@ export function Pricing() {
           })}
         </div>
 
-        <p className="mt-6 text-center text-xs text-white/55">
+        <p className="mt-6 text-center text-xs text-shell/55">
           14-day free trial on every plan · Cancel anytime · Prices exclude VAT ·
           Billed in ₦ via Paystack
         </p>

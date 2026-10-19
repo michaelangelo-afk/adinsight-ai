@@ -43,13 +43,13 @@ const variants: Record<Variant, string> = {
   ghost:
     "bg-transparent text-mist-600 hover:bg-mist-100 hover:text-ink-950 " +
     "dark:text-mist-300 dark:hover:bg-ink-850 dark:hover:text-white",
-  /** Marketing primary — the reference's white pill with a 3px ring. */
+  /** Marketing primary — contrast pill, inverts with the shell. */
   white:
-    "bg-white text-black shadow-cta-ring hover:bg-[#e9fbf2] hover:shadow-[0_0_0_3px_rgba(255,255,255,0.24)]",
-  /** Marketing secondary — dark glass pill on the dark shell. */
+    "bg-shell text-shellbg shadow-cta-ring hover:brightness-[0.96] dark:hover:brightness-100",
+  /** Marketing secondary — glass pill, accent-tinted. */
   glass:
-    "text-white border-brand-300/25 bg-white/[0.04] " +
-    "hover:bg-brand-500/10 hover:border-brand-300/45"
+    "text-shell border-accent/30 bg-shell/[0.04] " +
+    "hover:bg-accent/10 hover:border-accent/50"
 };
 
 type CommonProps = {

@@ -1,5 +1,6 @@
 import { LinkButton } from "@/components/ui/button";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { PatternField, SignalRings } from "@/components/landing/pattern-field";
 
 /**
  * Closing CTA.
@@ -11,19 +12,22 @@ import { ArrowRight, MessageCircle } from "lucide-react";
  */
 export function Cta() {
   return (
-    <section id="contact" className="relative overflow-hidden py-section md:py-section-lg">
+    <section id="contact" className="relative isolate overflow-hidden py-section md:py-section-lg">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 h-[420px] -translate-y-1/2 bg-brand-500/15 blur-3xl"
       />
 
       <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025] px-6 py-14 text-center sm:px-12 md:py-20">
+        <div className="relative overflow-hidden rounded-3xl border border-shell/10 bg-shell/[0.025] px-6 py-14 text-center sm:px-12 md:py-20">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.22),transparent_70%)]"
           />
-          <div aria-hidden className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
+          <PatternField motif="grid" mask="radial" className="inset-0" opacity={60} />
+          <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 flex justify-center text-accent/50">
+            <SignalRings rings={6} step={72} className="relative h-[720px] w-[720px] opacity-60" />
+          </div>
 
           <div className="relative">
             <span className="eyebrow">
@@ -35,7 +39,7 @@ export function Cta() {
               Close the month knowing where every naira went.
             </h2>
 
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/55">
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-shell/55">
               Connect your platforms once. GrowthAds reads the numbers nightly,
               pauses what wastes money, and puts the next three moves in front of
               you before Monday.
@@ -66,14 +70,14 @@ export function Cta() {
                 Chat on WhatsApp
                 <span
                   aria-hidden="true"
-                  className="ml-1 rounded-full border border-white/15 px-2 py-0.5 text-xs text-white/55"
+                  className="ml-1 rounded-full border border-shell/15 px-2 py-0.5 text-xs text-shell/55"
                 >
                   demo
                 </span>
               </LinkButton>
             </div>
 
-            <p className="mt-5 text-xs text-white/55">
+            <p className="mt-5 text-xs text-shell/55">
               No card required · Paystack-billed in Naira · Cancel anytime
             </p>
           </div>

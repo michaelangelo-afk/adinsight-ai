@@ -9,10 +9,10 @@ import { Footer } from "@/components/landing/footer";
 
 export default function HomePage() {
   return (
-    <main className="shell-dark relative min-h-screen">
+    <main className="shell relative min-h-screen">
       {/* Paints the viewport (including overscroll) dark; the app's <body> is
           light and would otherwise flash white at the rubber-band edges. */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-20 bg-ink-950" />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-20 bg-shellbg" />
       <a
         href="#statement"
         className="

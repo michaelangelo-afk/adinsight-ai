@@ -30,11 +30,30 @@
     @apply bg-ink-950 text-mist-100;
   }
 
-  /* The landing page's dark shell. Explicit colours (not dark: twins) so the
-     marketing surface is always dark regardless of the app's theme. */
-  .shell-dark {
-    background-color: #05070b;
-    color: #ffffff;
+  /**
+   * Landing shell. One token set, two stocks.
+   *
+   * Every landing component consumes `text-shell/…`, `bg-shell/…`,
+   * `border-shell/…`, `bg-shellbg` and `text-accent`, so the whole marketing
+   * surface — including all pattern layers — flips with the theme instead of
+   * being permanently dark.
+   */
+  .shell {
+    --shell-bg: 5 7 11;
+    --shell-fg: 255 255 255;
+    --pattern-ink: 255 255 255;
+    --shell-accent: 110 231 183; /* brand-300, 8.6:1 on #05070B */
+    --shell-glow: 16 185 129;
+    background-color: rgb(var(--shell-bg));
+    color: rgb(var(--shell-fg));
+  }
+
+  html:not(.dark) .shell {
+    --shell-bg: 251 252 251; /* #FBFCFB — paper-white, never pure #FFF */
+    --shell-fg: 0 0 0; /* black so /55 body copy measures 4.76:1 on the stock */
+    --pattern-ink: 0 0 0;
+    --shell-accent: 4 120 87; /* brand-700 — 5.1:1 on the stock */
+    --shell-glow: 5 150 105;
   }
 
   button:not(:disabled),
@@ -71,7 +90,7 @@
 @layer components {
   /* ── Marketing primitives ─────────────────────────────────────────────── */
 
-  /* White → 72% white headline fill, as measured on the reference h1. */
+  /* Headline fill: white → 72% white on ink; ink → 72% ink on paper. */
   .headline-fade {
     background-image: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 100%);
     -webkit-background-clip: text;
@@ -79,8 +98,12 @@
     color: #ffffff;
     -webkit-text-fill-color: transparent;
   }
+  html:not(.dark) .headline-fade {
+    background-image: linear-gradient(180deg, #090f0d 0%, rgba(9, 15, 13, 0.72) 100%);
+    color: #090f0d;
+  }
   @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-    .headline-fade { background: none; -webkit-text-fill-color: #fff; }
+    .headline-fade { background: none; -webkit-text-fill-color: currentColor; }
   }
 
   /* Saturated accent for one word — used sparingly, never for body copy. */
@@ -91,35 +114,56 @@
     color: #6ee7b7;
     -webkit-text-fill-color: transparent;
   }
+  html:not(.dark) .accent-text {
+    background-image: linear-gradient(135deg, #047857 0%, #059669 55%, #065f46 100%);
+    color: #047857;
+  }
 
   /* Soft vertical glow behind a product plate. */
   .glow-bed {
     background:
-      radial-gradient(55% 45% at 50% 0%, rgba(16, 185, 129, 0.28) 0%, rgba(5, 7, 11, 0) 72%),
-      radial-gradient(40% 30% at 80% 20%, rgba(52, 211, 153, 0.12) 0%, rgba(5, 7, 11, 0) 70%);
+      radial-gradient(55% 45% at 50% 0%, rgb(var(--shell-glow) / 0.28) 0%, rgb(var(--shell-bg) / 0) 72%),
+      radial-gradient(40% 30% at 80% 20%, rgb(var(--shell-glow) / 0.12) 0%, rgb(var(--shell-bg) / 0) 70%);
   }
 
-  /* Glass panel: 1px white/8 border, top sheen, 16px radius. */
+  /* Glass panel: 1px shell/8 border, top sheen, 16px radius. */
   .panel {
-    background-color: rgba(255, 255, 255, 0.025);
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 55%);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background-color: rgb(var(--shell-fg) / 0.025);
+    background-image: linear-gradient(180deg, rgb(var(--shell-fg) / 0.06) 0%, rgb(var(--shell-fg) / 0) 55%);
+    border: 1px solid rgb(var(--shell-fg) / 0.09);
     border-radius: 16px;
+  }
+  html:not(.dark) .panel {
+    background-color: #ffffff;
+    background-image: none;
+    border-color: rgb(var(--shell-fg) / 0.08);
+    box-shadow: 0 1px 2px rgb(var(--shell-fg) / 0.04), 0 18px 40px -28px rgb(var(--shell-fg) / 0.25);
   }
 
   /* Elevated product plate — 32px radius, deep shadow. */
   .plate {
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgb(var(--shell-fg) / 0.12);
     border-radius: 24px;
     box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.95);
     overflow: hidden;
+    background: #0a0d14;
+  }
+  html:not(.dark) .plate {
+    background: #ffffff;
+    border-color: rgb(var(--shell-fg) / 0.1);
+    box-shadow: 0 2px 4px rgb(var(--shell-fg) / 0.05), 0 40px 100px -48px rgb(var(--shell-fg) / 0.35);
   }
 
   .eyebrow {
     @apply inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium;
-    border-color: rgba(255, 255, 255, 0.14);
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.72);
+    border-color: rgb(var(--shell-fg) / 0.14);
+    background: rgb(var(--shell-fg) / 0.04);
+    color: rgb(var(--shell-fg) / 0.72);
+  }
+  html:not(.dark) .eyebrow {
+    background: #ffffff;
+    border-color: rgb(var(--shell-fg) / 0.12);
+    color: rgb(var(--shell-fg) / 0.66);
   }
 
   /* ── Buttons ──────────────────────────────────────────────────────────── */
@@ -128,25 +172,34 @@
     @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none;
   }
 
-  /* White pill — the reference's primary CTA (60px radius, 3px ring). */
+  /* Contrast pill — the reference's primary CTA. Inverts with the stock:
+     white-on-ink in dark mode, ink-on-white in light mode. */
   .btn-white {
-    @apply btn bg-white text-black;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.14);
+    @apply btn bg-shell text-shellbg;
+    box-shadow: 0 0 0 3px rgb(var(--shell-fg) / 0.14);
   }
   .btn-white:hover {
-    background: #e9fbf2;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+    box-shadow: 0 0 0 3px rgb(var(--shell-fg) / 0.24);
+    filter: brightness(0.96);
+  }
+  html:not(.dark) .btn-white:hover {
+    filter: brightness(1.08);
   }
 
-  /* Glass pill — dark fill, accent-tinted 1px border, top-light gradient. */
+  /* Glass pill — shell-tinted fill, accent 1px border, top-light gradient. */
   .btn-glass {
-    @apply btn text-white;
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01));
-    border: 1px solid rgba(110, 231, 183, 0.22);
+    @apply btn text-shell;
+    background-image: linear-gradient(180deg, rgb(var(--shell-fg) / 0.07), rgb(var(--shell-fg) / 0.01));
+    border: 1px solid rgb(var(--shell-accent) / 0.28);
   }
   .btn-glass:hover {
-    border-color: rgba(110, 231, 183, 0.45);
-    background-color: rgba(110, 231, 183, 0.06);
+    border-color: rgb(var(--shell-accent) / 0.5);
+    background-color: rgb(var(--shell-accent) / 0.07);
+  }
+  html:not(.dark) .btn-glass {
+    background-color: #ffffff;
+    background-image: none;
+    border-color: rgb(var(--shell-accent) / 0.35);
   }
 
   /* App buttons (light + dark), unchanged API. */
@@ -324,6 +377,79 @@ html.dark .gradient-text {
 }
 @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
   .gradient-text { background: none; -webkit-text-fill-color: inherit; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Pattern system — "instrument field"
+ *
+ * Five motifs, one geometry. Everything is drawn on a 8px base unit and uses
+ * `rgb(var(--pattern-ink) / α)`, so the same layer is white-on-ink at night
+ * and ink-on-paper by day. Each motif is masked so it never crosses type: a
+ * pattern is a surface, not a texture over content.
+ *
+ * Pitch / stroke / alpha are fixed here and must not be re-tuned per section.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* 64px major + 16px minor plot grid, 1px hairlines. */
+.pattern-grid {
+  background-image:
+    linear-gradient(rgb(var(--pattern-ink) / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--pattern-ink) / 0.06) 1px, transparent 1px),
+    linear-gradient(rgb(var(--pattern-ink) / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--pattern-ink) / 0.025) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 16px 16px, 16px 16px;
+  background-position: -1px -1px;
+}
+
+/* 16px dot matrix, 1px dots. */
+.pattern-dots {
+  background-image: radial-gradient(rgb(var(--pattern-ink) / 0.18) 1px, transparent 1.1px);
+  background-size: 16px 16px;
+  background-position: 0 0;
+}
+
+/* 6px bar field / 8px gutter — the spend motif. */
+.pattern-bars {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgb(var(--pattern-ink) / 0.09) 0 6px,
+    transparent 6px 14px
+  );
+}
+
+/* Diagonal hatch, 45°, 1px every 8px — used only in narrow bands. */
+.pattern-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgb(var(--pattern-ink) / 0.07) 0 1px,
+    transparent 1px 8px
+  );
+}
+
+/* Masks. Each fades the layer before it reaches content. */
+.pattern-mask-radial {
+  mask-image: radial-gradient(70% 70% at 50% 40%, #000 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000 0%, transparent 100%);
+}
+.pattern-mask-top {
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+.pattern-mask-bottom {
+  mask-image: linear-gradient(to top, #000 0%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 80%);
+}
+.pattern-mask-edges {
+  mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+}
+.pattern-mask-corner-tr {
+  mask-image: radial-gradient(60% 60% at 100% 0%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(60% 60% at 100% 0%, #000 0%, transparent 72%);
+}
+.pattern-mask-corner-bl {
+  mask-image: radial-gradient(60% 60% at 0% 100%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(60% 60% at 0% 100%, #000 0%, transparent 72%);
 }
 
 *,

@@ -1,5 +1,6 @@
 import { Check, ArrowRight } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
+import { PatternField, SignalRings } from "@/components/landing/pattern-field";
 
 /**
  * Workflow — three steps.
@@ -34,8 +35,9 @@ export function Workflow() {
   return (
     <section
       id="workflow"
-      className="relative border-y border-white/5 bg-white/[0.015] py-section md:py-section-lg"
+      className="relative isolate overflow-hidden border-y border-shell/5 bg-shell/[0.015] py-section md:py-section-lg"
     >
+      <PatternField motif="grid" mask="edges" className="inset-x-0 top-0 h-[420px]" opacity={55} />
       <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
         <div className="mx-auto max-w-3xl text-center">
           <span className="eyebrow">
@@ -45,7 +47,7 @@ export function Workflow() {
           <h2 className="headline-fade mt-5 text-3xl font-medium sm:text-5xl">
             From signup to a live automation in ten minutes.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/55">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-shell/55">
             No agency. No developer. No waiting on anyone&apos;s report.
           </p>
         </div>
@@ -54,7 +56,7 @@ export function Workflow() {
           {/* Path between the milestones. Decorative only. */}
           <div
             aria-hidden
-            className="absolute left-[16%] right-[16%] top-[52px] hidden border-t border-dashed border-white/15 lg:block"
+            className="absolute left-[16%] right-[16%] top-[52px] hidden border-t border-dashed border-shell/15 lg:block"
           />
 
           <ol className="relative grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -62,24 +64,24 @@ export function Workflow() {
               <li
                 key={s.title}
                 className="
-                  relative rounded-2xl border border-white/10 bg-ink-900/90 p-6
-                  transition-colors duration-200 hover:border-white/20
+                  relative rounded-2xl border border-shell/10 bg-ink-900/90 p-6
+                  transition-colors duration-200 hover:border-shell/20
                 "
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-500/15 font-mono text-sm font-medium text-brand-200 ring-1 ring-inset ring-brand-300/25">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-500/15 font-mono text-sm font-medium text-accent ring-1 ring-inset ring-accent/25">
                     {i + 1}
                   </span>
-                  <span className="text-xs text-white/55">Step {i + 1} of 3</span>
+                  <span className="text-xs text-shell/55">Step {i + 1} of 3</span>
                 </div>
 
-                <h3 className="mt-5 text-xl font-medium text-white">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/55">{s.body}</p>
+                <h3 className="mt-5 text-xl font-medium text-shell">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-shell/55">{s.body}</p>
 
-                <ul className="mt-4 space-y-2 border-t border-white/10 pt-4">
+                <ul className="mt-4 space-y-2 border-t border-shell/10 pt-4">
                   {s.bullets.map((b) => (
-                    <li key={b} className="flex gap-2 text-sm text-white/65">
-                      <Check size={14} className="mt-1 shrink-0 text-brand-300" strokeWidth={2.5} />
+                    <li key={b} className="flex gap-2 text-sm text-shell/65">
+                      <Check size={14} className="mt-1 shrink-0 text-accent" strokeWidth={2.5} />
                       <span>{b}</span>
                     </li>
                   ))}

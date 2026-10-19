@@ -75,6 +75,15 @@ const config: Config = {
           200: "#EDF1EF",
           300: "#E2E8F0"
         },
+        /**
+         * Theme-aware landing shell. `shell` is the foreground ink (white on
+         * dark, near-black on light), `shellbg` the page stock, `accent` the
+         * emerald that stays legible on both. Driven by CSS vars set in
+         * globals.css on `.shell`, so every alpha utility flips with the theme.
+         */
+        shell: "rgb(var(--shell-fg) / <alpha-value>)",
+        shellbg: "rgb(var(--shell-bg) / <alpha-value>)",
+        accent: "rgb(var(--shell-accent) / <alpha-value>)",
         /** Red pen is gone; destructive stays for the app. */
         ledger: {
           300: "#FCA5A5",

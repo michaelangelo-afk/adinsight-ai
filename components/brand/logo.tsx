@@ -60,7 +60,7 @@ export function Logo({
           <span
             className={
               "font-mono text-xs font-medium leading-none " +
-              (onInk ? "text-brand-200" : "text-mist-500 dark:text-mist-400")
+              (onInk ? "text-brand-200" : "text-brand-700 dark:text-brand-200")
             }
           >
             NG

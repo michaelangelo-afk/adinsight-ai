@@ -9,6 +9,7 @@ import {
   type LucideIcon
 } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
+import { PatternField, SignalRings } from "@/components/landing/pattern-field";
 
 /**
  * Features — six glass cards on the dark shell.
@@ -76,17 +77,18 @@ const FEATURES: Feature[] = [
 
 export function Features() {
   return (
-    <section id="features" className="relative py-section md:py-section-lg">
+    <section id="features" className="relative isolate py-section md:py-section-lg">
+      <PatternField motif="dots" mask="corner-tr" className="right-0 top-0 h-80 w-2/5" opacity={80} />
       <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
         <div className="mx-auto max-w-3xl text-center">
           <span className="eyebrow">
-            <Sparkles size={12} className="text-brand-300" />
+            <Sparkles size={12} className="text-accent" />
             Everything in one place
           </span>
           <h2 className="headline-fade mt-5 text-3xl font-medium sm:text-5xl">
             One dashboard that reads your whole campaign.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/55">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-shell/55">
             Built for Nigerian SMEs spending ₦100k–₦500k a month across
             platforms — tired of opening five tabs just to know what&apos;s working.
           </p>
@@ -99,21 +101,21 @@ export function Features() {
               <article
                 key={f.title}
                 className="
-                  group rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent
-                  p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20
+                  group rounded-2xl border border-shell/10 bg-gradient-to-b from-shell/[0.05] to-transparent
+                  p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-shell/20
                 "
               >
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 text-brand-300 ring-1 ring-inset ring-brand-300/20">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 text-accent ring-1 ring-inset ring-accent/20">
                   <Icon size={18} strokeWidth={1.75} />
                 </span>
 
-                <h3 className="mt-5 text-xl font-medium text-white">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/55">{f.blurb}</p>
+                <h3 className="mt-5 text-xl font-medium text-shell">{f.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-shell/55">{f.blurb}</p>
 
                 <ul className="mt-4 space-y-2">
                   {f.points.map((p) => (
-                    <li key={p} className="flex gap-2 text-sm leading-relaxed text-white/65">
-                      <Check size={14} className="mt-1 shrink-0 text-brand-300" strokeWidth={2.5} />
+                    <li key={p} className="flex gap-2 text-sm leading-relaxed text-shell/65">
+                      <Check size={14} className="mt-1 shrink-0 text-accent" strokeWidth={2.5} />
                       <span>{p}</span>
                     </li>
                   ))}

@@ -1,4 +1,5 @@
 import { Logo } from "@/components/brand/logo";
+import { PatternField, SignalRings } from "@/components/landing/pattern-field";
 
 const COLS = [
   {
@@ -32,30 +33,31 @@ const COLS = [
  */
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-ink-950">
+    <footer className="relative isolate overflow-hidden border-t border-shell/10 bg-shellbg">
+      <PatternField motif="hatch" mask="top" className="inset-x-0 top-0 h-40" opacity={50} />
       <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
         <div className="flex flex-wrap items-center justify-between gap-4 py-8">
-          <Logo onInk />
-          <p className="hidden text-sm text-white/55 sm:block">
+          <Logo />
+          <p className="hidden text-sm text-shell/55 sm:block">
             The growth dashboard for Nigerian ad spend.
           </p>
         </div>
 
-        <div className="grid gap-10 border-t border-white/10 py-12 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:gap-8">
+        <div className="grid gap-10 border-t border-shell/10 py-12 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:gap-8">
           <div>
-            <p className="max-w-xs text-sm leading-relaxed text-white/55">
+            <p className="max-w-xs text-sm leading-relaxed text-shell/55">
               GrowthAds turns every naira of paid spend into a line you can read:
               what it bought, what it wasted, and what to do next week. Built for
               Nigerian SMEs running Meta, Google and TikTok.
             </p>
-            <p className="mt-4 text-xs uppercase tracking-[0.14em] text-white/55">
+            <p className="mt-4 text-xs uppercase tracking-[0.14em] text-shell/55">
               Lagos · WAT · NGN
             </p>
           </div>
 
           {COLS.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-white/55">
+              <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-shell/55">
                 {col.title}
               </h3>
               <ul className="mt-4 space-y-2.5">
@@ -63,7 +65,7 @@ export function Footer() {
                   <li key={item}>
                     <a
                       href="#"
-                      className="text-sm text-white/60 transition-colors duration-200 hover:text-white"
+                      className="text-sm text-shell/60 transition-colors duration-200 hover:text-shell"
                     >
                       {item}
                     </a>
@@ -74,11 +76,11 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-white/10 py-6 text-xs text-white/55 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-2 border-t border-shell/10 py-6 text-xs text-shell/55 md:flex-row md:items-center md:justify-between">
           <span>© 2026 GrowthAds</span>
           <span>Lagos, Nigeria</span>
           <span>NGN · Paystack</span>
-          <span className="text-white/55">Built for the Monday report.</span>
+          <span className="text-shell/55">Built for the Monday report.</span>
         </div>
       </div>
     </footer>
