@@ -1,522 +1,249 @@
-"use client";
-
 import * as React from "react";
-import { Logo } from "@/components/brand/logo";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
 import { dashboardSummary } from "@/lib/mock-data";
-import { formatDelta, formatNaira, formatPercent } from "@/lib/utils";
-import {
-  ArrowRight,
-  TrendingUp,
-  TrendingDown,
-  BadgeCheck,
-  Sparkles,
-  Zap,
-  CircleDot
-} from "lucide-react";
+import { formatNaira } from "@/lib/utils";
 
+/**
+ * Front page.
+ *
+ * The old hero was a generic SaaS split: gradient headline left, floating
+ * dashboard mockup right, glass toast on top. This one is a printed statement:
+ * an edition line, a serif headline with an italic turn, and the actual numbers
+ * set as a filed document — ruled rows, tabular figures, a red pen annotation.
+ *
+ * Everything below the headline is real data from `dashboardSummary`, so the
+ * panel cannot drift from the product it advertises.
+ */
 
-const PLATFORMS = [
-  // `tone` is the circle behind WHITE initials, so it has to clear 4.5:1 against
-  // white — not just look like the platform. Meta's stock #1877F2 scores 4.23
-  // and Google's #EA4335 scores 3.92, both under AA (measured with
-  // tools/audit_modes.mjs, which alpha-composites; the older audit missed these
-  // two entirely). These are the nearest shades that pass — #0B5FCE is 5.93:1
-  // and #C5221F is 5.80:1 — and both remain recognisably the platform's colour.
-  { name: "Meta", short: "M", tone: "#0B5FCE", lightText: false },
-  { name: "Google", short: "G", tone: "#C5221F", lightText: false },
-  { name: "TikTok", short: "T", tone: "#0F0F0F", lightText: false },
-  { name: "X", short: "X", tone: "#0F0F0F", lightText: false },
-  { name: "LinkedIn", short: "in", tone: "#0A66C2", lightText: false },
-  { name: "Snapchat", short: "Sc", tone: "#FFFC00", lightText: true }
-];
+const PLATFORM_ROWS = dashboardSummary.platformBreakdown.map((p) => ({
+  name: p.platform === "meta" ? "Meta" : p.platform === "google" ? "Google" : "TikTok",
+  spend: p.spend,
+  share: p.spend / dashboardSummary.totalSpend
+}));
 
-function MiniMetric({
+function Metric({
   label,
   value,
   delta,
-  positive
+  good
 }: {
   label: string;
   value: string;
-  delta?: string;
-  positive?: boolean;
+  delta: string;
+  good: boolean;
 }) {
   return (
-    <div
-      className="
-        rounded-2xl bg-white border border-mist-200 shadow-card p-4
-        dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
-      "
-    >
-      <div
-        className="
-          text-xs uppercase tracking-wider font-semibold
-          text-mist-500 dark:text-mist-400
-        "
-      >
-        {label}
-      </div>
-      <div className="mt-1 flex items-end justify-between">
-        <span className="text-base font-semibold text-mist-600 dark:text-mist-100">
+    <div className="border-t border-ink-950/15 py-3 dark:border-paper-100/15">
+      <div className="kicker">{label}</div>
+      <div className="mt-1 flex items-baseline justify-between gap-3">
+        <span className="num text-xl font-medium text-ink-950 dark:text-paper-50">
           {value}
         </span>
-        {delta && (
-          <span
-            className={
-              "text-xs font-semibold flex items-center gap-1 " +
-              (positive ? "text-brand-700 dark:text-brand-400" : "text-rose-500 dark:text-rose-400")
-            }
-          >
-            {positive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-            {delta}
-          </span>
-        )}
+        <span
+          className={
+            "num text-xs font-medium " +
+            (good
+              ? "text-brand-700 dark:text-brand-300"
+              : "text-ledger-700 dark:text-ledger-300")
+          }
+        >
+          {delta}
+        </span>
       </div>
     </div>
   );
 }
 
-function PlatformsStrip() {
+function SpendBars() {
+  const trend = dashboardSummary.trend;
+  const max = Math.max(...trend.map((d) => d.spend));
+
   return (
-    <div className="flex items-center gap-2 flex-wrap">
-      <span
-        className="
-          text-xs uppercase tracking-wider font-semibold mr-1
-          text-mist-500 dark:text-mist-400
-        "
-      >
-        Connected
-      </span>
-      {PLATFORMS.map((p) => (
-        <div
-          key={p.name}
-          className="
-            inline-flex items-center gap-1.5 rounded-2xl px-2 py-1
-            bg-mist-100 border border-mist-200
-            dark:bg-ink-850 dark:border-ink-700
-          "
-          title={`${p.name} — synced`}
-        >
-          <span
-            className={
-              "inline-flex items-center justify-center h-4 w-4 rounded-2xl text-xs font-bold " +
-              (p.lightText ? "text-black" : "text-white")
-            }
-            style={{ background: p.tone }}
-            aria-hidden
-          >
-            {p.short}
-          </span>
-          <span className="text-xs font-semibold text-mist-600 dark:text-mist-200">
-            {p.name}
-          </span>
-          <CircleDot size={10} className="text-brand-600 dark:text-brand-400" />
-        </div>
+    <div className="mt-5 flex h-16 items-end gap-[3px]" aria-hidden>
+      {trend.map((d, i) => (
+        <span
+          key={i}
+          className="flex-1 bg-brand-700/85 dark:bg-brand-300/80"
+          style={{ height: `${Math.max(8, (d.spend / max) * 100)}%` }}
+        />
       ))}
     </div>
   );
 }
 
-function AutomationTile() {
+function StatementPanel() {
   return (
-    <div
-      className="
-        mt-4 rounded-2xl p-4 flex items-start gap-3
-        bg-brand-50 border border-brand-200
-        dark:bg-brand-950/60 dark:border-brand-700/50
-      "
-    >
+    <figure className="relative">
+      {/* Registration marks — a printer's crop marks, drawn with rules. */}
+      <span aria-hidden className="absolute -left-3 -top-3 h-4 w-4 border-l border-t border-ink-950/40 dark:border-paper-100/40" />
+      <span aria-hidden className="absolute -bottom-3 -right-3 h-4 w-4 border-b border-r border-ink-950/40 dark:border-paper-100/40" />
+
       <div
         className="
-          mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-2xl
-          bg-brand-50 dark:bg-brand-950/60
+          relative border border-ink-950 bg-paper-50 shadow-plate
+          dark:border-paper-100/40 dark:bg-ink-900 dark:shadow-plate-dark
         "
       >
-        <Zap size={14} className="text-brand-700 dark:text-brand-400" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-semibold text-mist-600 dark:text-mist-100">
-            Auto-pause: Instagram Story ads when CPC &gt; ₦400
-          </span>
-          <span
-            className="chip chip-brand text-xs"
-          >
-            <CircleDot size={8} className="text-brand-600 dark:text-brand-400" />
-            Active · triggered 3× this week
-          </span>
-        </div>
-        <p className="text-xs text-mist-600 dark:text-mist-400 mt-1">
-          Saved an estimated ₦62,400 in stalled spend. Reinvested automatically
-          into your best-performing Lagos campaign.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function HeroPreview() {
-  return (
-    <div className="relative group">
-      <div
-        className="
-          rounded-2xl bg-white border border-mist-200 shadow-card p-5 md:p-6
-          dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
-          hover-lift
-        "
-      >
-        {/* Topbar */}
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2.5">
-            <Logo showWordmark={false} />
-            <span className="text-xs font-semibold text-mist-500 dark:text-mist-400">
-              / Performance overview
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span
-              className="
-                chip bg-mist-100 border border-mist-200 text-mist-600
-                dark:bg-ink-850 dark:border-ink-700 dark:text-mist-200
-              "
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
-              Live · last 30 days
-            </span>
-            <span
-              className="chip chip-brand text-xs"
-            >
-              + 1 rule running
-            </span>
-          </div>
-        </div>
-
-        {/* Connected platforms strip */}
-        <div
-          className="
-            rounded-2xl bg-surface-100 border border-mist-200 p-3 mb-4
-            dark:bg-ink-850 dark:border-ink-700
-          "
-        >
-          <PlatformsStrip />
-        </div>
-
-        {/* Mini metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <MiniMetric
-            label="Total spend"
-            value={formatNaira(dashboardSummary.totalSpend)}
-            delta={formatDelta(dashboardSummary.spendDelta)}
-            positive={dashboardSummary.spendDelta < 0}
-          />
-          <MiniMetric
-            label="Conversions"
-            value={dashboardSummary.totalConversions.toLocaleString()}
-            delta={formatDelta(dashboardSummary.conversionsDelta)}
-            positive
-          />
-          <MiniMetric
-            label="Avg CPC"
-            value={`₦${dashboardSummary.averageCpc.toFixed(2)}`}
-            delta={formatDelta(Math.abs(dashboardSummary.cpcDelta))}
-            positive
-          />
-          <MiniMetric
-            label="ROI"
-            value={`${dashboardSummary.roi.toFixed(2)}x`}
-            delta={formatDelta(dashboardSummary.roiDelta)}
-            positive
-          />
-        </div>
-
-        {/* Trend chart preview */}
-        <div
-          className="
-            mt-5 rounded-2xl bg-surface-100 border border-mist-200 p-5
-            dark:bg-ink-850 dark:border-ink-700
-          "
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <div className="text-sm font-semibold text-mist-600 dark:text-mist-100">
-                Spend vs. conversions
-              </div>
-              <div className="text-xs font-medium text-mist-500 dark:text-mist-400">
-                Across all connected platforms
-              </div>
+        {/* Document header */}
+        <div className="flex items-start justify-between gap-4 border-b border-ink-950/20 px-5 py-4 dark:border-paper-100/20">
+          <div>
+            <div className="kicker text-brand-700 dark:text-brand-300">
+              Performance statement
             </div>
-            <span
-              className="chip chip-brand"
-            >
-              {formatPercent(0.184, 1)} MoM uplift
-            </span>
+            <div className="mt-1 font-mono text-xs text-mist-500 dark:text-mist-400">
+              Lagos Bites · 01–30 Sep 2026
+            </div>
           </div>
-          <PreviewSpark />
+          <span className="stamp shrink-0 -rotate-3">Filed</span>
         </div>
 
-        {/* Automation tile */}
-        <AutomationTile />
-      </div>
-    </div>
-  );
-}
+        {/* Headline figure */}
+        <div className="px-5 pt-5">
+          <div className="kicker">Total ad spend</div>
+          <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="num text-5xl font-medium leading-none text-ink-950 dark:text-paper-50">
+              {formatNaira(dashboardSummary.totalSpend)}
+            </span>
+            <span className="num text-xs font-medium text-brand-700 dark:text-brand-300">
+              ↓ 12.4% · ₦69k less than August
+            </span>
+          </div>
+          <SpendBars />
+          <div className="mt-2 flex justify-between font-mono text-xs text-mist-500 dark:text-mist-400">
+            <span>01 Sep</span>
+            <span>30 Sep</span>
+          </div>
+        </div>
 
-function PreviewSpark() {
-  const data = dashboardSummary.trend;
-  const max = Math.max(...data.map((d) => d.spend));
-  const min = Math.min(...data.map((d) => d.spend));
-  const range = max - min || 1;
-  const w = 100;
-  const h = 24;
-  const pts = data
-    .map((d, i) => {
-      const x = (i / (data.length - 1)) * w;
-      const y = h - ((d.spend - min) / range) * h;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(" ");
-  return (
-    <svg
-      viewBox="0 0 100 24"
-      preserveAspectRatio="none"
-      className="w-full h-20"
-      role="img"
-      aria-label="Spend trend"
-    >
-      <defs>
-        <linearGradient id="spark" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#22C55E" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#22C55E" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polyline
-        points={`0,${h} ${pts} ${w},${h}`}
-        fill="url(#spark)"
-        stroke="none"
-      />
-      <polyline
-        points={pts}
-        fill="none"
-        stroke="#15803D"
-        strokeWidth="0.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-/** Floating glassmorphic "Live Activity" toast. */
-function LiveActivityToast() {
-  return (
-    <div
-      aria-hidden
-      className="
-        hidden lg:flex absolute -left-6 top-12 z-20 max-w-[260px]
-        
-      "
-      style={{
-        animationDelay: "600ms",
-        animationFillMode: "both"
-      }}
-    >
-      <div className="" style={{ animationDelay: "600ms" }}>
-        <div
-          className="
-            rounded-2xl backdrop-blur-md p-3 flex items-start gap-3
-            bg-white/95 border border-mist-200 shadow-card
-            dark:bg-ink-900/95 dark:border-ink-700 dark:shadow-card
-          "
-        >
-          <span
-            className="
-              relative inline-flex h-8 w-8 items-center justify-center rounded-2xl
-              bg-brand-50 dark:bg-brand-950/60
-            "
-          >
-            <Zap size={14} className="text-brand-700 dark:text-brand-300" />
-            {/* Ping halo — stays a translucent tint on purpose. A solid surface
-                token here would be invisible against the white card, and a halo is
-                the one place where alpha is the effect, not a legibility risk
-                (no text sits on it). */}
-            <span className="absolute inset-0 rounded-2xl bg-brand-500/30 animate-ping" />
-          </span>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-mist-500 dark:text-mist-400">
-                Auto-rule fired
+        {/* Ledger rows */}
+        <div className="mt-5 px-5">
+          {PLATFORM_ROWS.map((row) => (
+            <div
+              key={row.name}
+              className="grid grid-cols-[1fr_auto_auto] items-baseline gap-4 border-t border-ink-950/15 py-2.5 dark:border-paper-100/15"
+            >
+              <span className="text-sm text-ink-950 dark:text-paper-50">{row.name}</span>
+              <span className="hidden h-1 w-24 bg-ink-950/10 dark:bg-paper-100/15 sm:block">
+                <span
+                  className="block h-1 bg-brand-700 dark:bg-brand-300"
+                  style={{ width: `${row.share * 100}%` }}
+                />
               </span>
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+              <span className="num text-sm text-mist-600 dark:text-mist-300">
+                {formatNaira(row.spend)}
+              </span>
             </div>
-            <div className="mt-0.5 text-sm font-semibold text-mist-600 dark:text-mist-100 leading-snug">
-              Paused 2 ads · saved ₦24,800
-            </div>
-            <div className="text-xs font-medium text-mist-500 dark:text-mist-400 mt-0.5">
-              2 min ago · Lagos campaign
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Soft connector line tying the toast to the dashboard preview */}
-        <svg
-          aria-hidden
-          className="absolute -right-6 top-9 pointer-events-none"
-          width="28"
-          height="14"
-          viewBox="0 0 28 14"
-          fill="none"
+        {/* KPI block */}
+        <div className="mt-4 grid grid-cols-2 gap-x-6 px-5">
+          <Metric label="Conversions" value="866" delta="+18.2%" good />
+          <Metric label="Avg. CPC" value="₦16.42" delta="−8.7%" good />
+          <Metric label="Return on spend" value="3.62×" delta="+22.4%" good />
+          <Metric label="Waste removed" value="₦62,400" delta="11 ads" good />
+        </div>
+
+        {/* The pen note — the one hand-written moment on the page. */}
+        <figcaption
+          className="
+            relative mx-5 mb-5 mt-5 border-l-2 border-ledger-500 bg-ledger-500/[0.06]
+            px-3 py-2 font-mono text-xs leading-relaxed text-ledger-700
+            dark:border-ledger-300 dark:bg-ledger-300/[0.08] dark:text-ledger-300
+          "
         >
-          <path
-            d="M 0 7 L 28 7"
-            stroke="rgb(21 128 61 / 0.4)"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            className=""
-            strokeLinecap="round"
-          />
-        </svg>
+          <span className="font-display text-sm italic">Auto-paused 11 losing ads</span>
+          <br />
+          before they spent ₦62,400 more. Reinvested in Lagos.
+        </figcaption>
       </div>
-    </div>
+    </figure>
   );
 }
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60" />
-
-      {/* Decorative scattered leaves backdrop */}
-      <svg
+    <section id="statement" className="relative overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-70" />
+      {/* Oversized currency mark, set as a watermark rather than a gradient blob. */}
+      <div
         aria-hidden
-        className="
-          absolute top-32 right-[8%] w-16 h-16 -z-10 hidden md:block
-          text-brand-700/[0.07] dark:text-brand-400/[0.06]
-        "
-        viewBox="0 0 64 64"
-        fill="currentColor"
+        className="pointer-events-none absolute -right-10 top-10 -z-10 hidden select-none font-display text-[24rem] leading-none text-ink-950/[0.035] dark:text-paper-100/[0.04] lg:block"
       >
-        <path d="M32 4 C 50 10, 60 22, 60 38 C 60 50, 50 60, 32 60 C 14 60, 4 50, 4 38 C 4 22, 14 10, 32 4 Z" />
-        <path d="M32 8 L 32 56" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" fill="none" />
-      </svg>
-      <svg
-        aria-hidden
-        className="
-          absolute bottom-24 left-[5%] w-10 h-10 -z-10 hidden md:block
-          text-brand-700/[0.05] dark:text-brand-400/[0.04]
-        "
-        viewBox="0 0 64 64"
-        fill="currentColor"
-      >
-        <path d="M32 8 C 50 14, 58 24, 58 38 C 58 50, 50 58, 32 58 C 14 58, 6 50, 6 38 C 6 24, 14 14, 32 8 Z" />
-      </svg>
+        ₦
+      </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-24 md:pt-28 md:pb-32">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="">
-            <span
-              className="chip chip-brand mb-6"
-            >
-              <Sparkles size={12} />
-              Built for Nigerian SMEs running Meta, Google &amp; TikTok
-            </span>
+      <div className="mx-auto max-w-content px-gutter pb-16 pt-10 lg:px-gutter-lg md:pb-24 md:pt-14">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-7 lg:pr-8">
+            <div className="flex items-center gap-4">
+              <span className="kicker text-brand-700 dark:text-brand-300">01 — The statement</span>
+              <span className="h-px flex-1 bg-ink-950/20 dark:bg-paper-100/20" />
+              <span className="kicker">Sept 2026</span>
+            </div>
 
-            {/* Staggered headline reveal — each line fades up in sequence */}
-            <h1
-              className="
-                text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]
-                text-mist-600 dark:text-mist-50
-              "
-            >
-              <span
-                className="block "
-                style={{ animationDelay: "0ms", animationFillMode: "both" }}
-              >
-                Plant money on ads
-              </span>
-              <span
-                className="block "
-                style={{ animationDelay: "120ms", animationFillMode: "both" }}
-              >
-                that <span className="gradient-text">grow.</span>
-              </span>
-              <span
-                className="block "
-                style={{ animationDelay: "240ms", animationFillMode: "both" }}
-              >
-                Automate the rest.
-              </span>
+            <h1 className="display mt-6 text-5xl leading-[0.98] sm:text-6xl">
+              Every naira
+              <br />
+              you spend should
+              <br />
+              <span className="italic text-brand-800 dark:text-brand-200">report back.</span>
             </h1>
 
-            <p
-              className="
-                mt-6 text-base md:text-xl leading-relaxed max-w-xl 
-                text-mist-600 dark:text-mist-300
-              "
-              style={{ animationDelay: "360ms", animationFillMode: "both" }}
-            >
-              GrowthAds is the dashboard for every naira you spend on paid ads.
-              Track performance across Meta, Google, and TikTok, deploy campaigns
-              anywhere from a single screen, and let rule-based automations kill
-              bad ads and rebalance your budget while you sleep.
+            <p className="mt-7 max-w-xl text-base text-mist-600 dark:text-mist-300 md:text-xl">
+              GrowthAds reads Meta, Google and TikTok every night and hands you
+              one page on Monday: what grew, what burned, and the{" "}
+              <span className="pen-underline text-ink-950 dark:text-paper-50">
+                three moves that follow
+              </span>
+              . No dashboards to babysit.
             </p>
 
-      <div
-        className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3  w-full sm:w-auto"
-        style={{ animationDelay: "480ms", animationFillMode: "both" }}
-      >
-              <LinkButton
-                href="/dashboard"
-                variant="primary"
-                size="lg"
-                className="shadow-card touch-target group"
-              >
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <LinkButton href="/signup" variant="primary" size="lg" className="group">
                 Start free 14-day trial
-                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                <ArrowRight
+                  size={14}
+                  strokeWidth={1.75}
+                  className="transition-transform duration-200 group-hover:translate-x-1"
+                />
               </LinkButton>
               <LinkButton href="#workflow" variant="secondary" size="lg">
                 See how it works
               </LinkButton>
             </div>
 
-            <div
-              className="
-                mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm 
-                text-mist-600 dark:text-mist-300
-              "
-              style={{ animationDelay: "600ms", animationFillMode: "both" }}
-            >
-              <div className="flex items-center gap-2">
-                <BadgeCheck size={16} className="text-brand-600 dark:text-brand-400" />
-                No credit card needed
-              </div>
-              <div className="flex items-center gap-2">
-                <BadgeCheck size={16} className="text-brand-600 dark:text-brand-400" />
-                Live in under 10 minutes
-              </div>
-              <div className="flex items-center gap-2">
-                <BadgeCheck size={16} className="text-brand-600 dark:text-brand-400" />
-                Paystack-billed in Naira
-              </div>
-            </div>
+            {/* Ruled trust rail, numbered like a footnote. */}
+            <dl className="mt-10 grid grid-cols-1 border-t border-ink-950/20 dark:border-paper-100/20 sm:grid-cols-3">
+              {[
+                ["01", "No card needed"],
+                ["02", "Live in 10 minutes"],
+                ["03", "Paystack · billed in ₦"]
+              ].map(([n, label]) => (
+                <div
+                  key={n}
+                  className="flex items-baseline gap-2 border-b border-ink-950/12 py-2.5 dark:border-paper-100/12 sm:border-b-0"
+                >
+                  <dt className="num text-xs text-mist-500">{n}</dt>
+                  <dd className="font-mono text-xs uppercase tracking-[0.08em] text-mist-600 dark:text-mist-300">
+                    {label}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.1em] text-mist-500">
+              Trusted by 1,200+ Nigerian teams ·{" "}
+              <Link href="#pricing" className="text-brand-700 underline decoration-1 underline-offset-4 dark:text-brand-300">
+                see pricing
+              </Link>
+            </p>
           </div>
 
-          <div
-            className="relative "
-            style={{ animationDelay: "120ms", animationFillMode: "both" }}
-          >
-            <LiveActivityToast />
-            {/* Orbiting badge floating above the dashboard preview — adds a
-                motion-path anchor above the HeroPreview. */}
-            <div className="absolute -top-6 -right-6 z-20 hidden lg:block">
-              <div className="rounded-full bg-brand-50 border border-brand-200 px-3 py-1.5 shadow-glow backdrop-blur-md dark:bg-brand-950/60 dark:border-brand-700/50">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 dark:text-brand-300">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand-500 " />
-                  LIVE
-                </span>
-              </div>
-            </div>
-            <HeroPreview />
+          <div className="lg:col-span-5">
+            <StatementPanel />
           </div>
         </div>
       </div>

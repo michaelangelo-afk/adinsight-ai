@@ -210,7 +210,7 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
         <button type="button" className="hidden lg:flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-sm text-slate-500 dark:text-mist-300 w-64 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
           <Search size={14} className="transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300" />
           <span className="text-slate-500 dark:text-mist-500">Search campaigns…</span>
-          <kbd className="ml-auto text-xs text-slate-500 dark:text-mist-500 px-1.5 py-0.5 rounded-2xl bg-white dark:bg-ink-900 border border-mist-200 dark:border-transparent group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors">
+          <kbd className="ml-auto text-xs text-slate-500 dark:text-mist-500 px-1.5 py-0.5 rounded-2xl bg-paper-50 dark:bg-ink-900 border border-mist-200 dark:border-transparent group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors">
             ⌘K
           </kbd>
         </button>
@@ -255,7 +255,7 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
       {menuOpen && (
         <div
           id="dashboard-mobile-nav"
-          className="sm:hidden border-t border-mist-200 dark:border-mist-50/[0.04] bg-white/95 dark:bg-ink-950/85 backdrop-blur-xl"
+          className="sm:hidden border-t border-mist-200 dark:border-mist-50/[0.04] bg-paper-50/95 dark:bg-ink-950/85 backdrop-blur-xl"
           role="dialog"
           aria-label="Dashboard navigation"
         >

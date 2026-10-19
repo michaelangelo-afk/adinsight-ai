@@ -19,17 +19,17 @@ export function ThemeToggle() {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       aria-pressed={isDark}
       className="
-        relative inline-flex h-11 w-11 items-center justify-center rounded-2xl
-        bg-white border border-mist-300 hover:border-brand-400 hover:bg-brand-50 hover:shadow-glow
-        dark:bg-ink-900 dark:border-ink-700 dark:hover:border-brand-500/60 dark:hover:bg-ink-850
-        transition-all duration-200 tap-press touch-target
+        relative inline-flex h-11 w-11 items-center justify-center
+        border border-ink-950/35 text-ink-950 hover:border-brand-700 hover:text-brand-700
+        dark:border-paper-100/35 dark:text-paper-50 dark:hover:border-brand-300 dark:hover:text-brand-300
+        transition-colors duration-200 tap-press touch-target
       "
     >
       {/* Animated sun/moon: each icon spins in from outside the visible disc while the other spins out */}
       <Sun
         size={16}
         strokeWidth={2}
-        className={`absolute h-4 w-4 text-amber-500 transition-all duration-300 ease-out drop-shadow-glow ${
+        className={`absolute h-4 w-4 transition-all duration-300 ease-out ${
           isDark
             ? "rotate-90 scale-0 opacity-0"
             : "rotate-0 scale-100 opacity-100"
@@ -39,7 +39,7 @@ export function ThemeToggle() {
       <Moon
         size={16}
         strokeWidth={2}
-        className={`absolute h-4 w-4 text-brand-300 transition-all duration-300 ease-out drop-shadow-glow ${
+        className={`absolute h-4 w-4 transition-all duration-300 ease-out ${
           isDark
             ? "rotate-0 scale-100 opacity-100"
             : "-rotate-90 scale-0 opacity-0"

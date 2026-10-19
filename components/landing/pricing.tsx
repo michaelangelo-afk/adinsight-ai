@@ -1,6 +1,13 @@
 import { LinkButton } from "@/components/ui/button";
-import { Check, Sparkles, Crown } from "lucide-react";
-import { cn } from "@/lib/utils";
+
+/**
+ * Rate card.
+ *
+ * Was three floating cards with a gradient rule, a crown icon and a lift on
+ * hover — the default SaaS pricing block. This is a printed rate card: column
+ * headings, ruled rows, right-aligned figures, and one inverted ink band for
+ * the plan most people take. No card floats anywhere.
+ */
 
 type Tier = {
   name: string;
@@ -55,150 +62,177 @@ const TIERS: Tier[] = [
   }
 ];
 
+const COLUMNS = "lg:grid-cols-[minmax(0,1.15fr)_minmax(0,2fr)_auto_auto]";
+
+function TierRow({ tier }: { tier: Tier }) {
+  const inv = tier.highlight;
+
+  return (
+    <div
+      className={
+        "grid gap-5 px-5 py-6 sm:px-6 lg:items-start lg:gap-8 " +
+        COLUMNS +
+        (inv
+          ? " bg-ink-950 text-paper-50 dark:bg-paper-50 dark:text-ink-950"
+          : "")
+      }
+    >
+      {/* Plan */}
+      <div className="order-1 lg:order-none">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3
+            className={
+              "display text-xl " +
+              // `.display` forces paper-50 in dark mode; the inverted row is
+              // paper-on-ink there, so its title has to win that rule outright.
+              (inv ? "text-paper-50 dark:!text-ink-950" : "")
+            }
+          >
+            {tier.name}
+          </h3>
+          {inv && (
+            <span
+              className="
+                inline-flex border px-1.5 py-0.5 font-mono text-xs font-medium uppercase tracking-[0.14em]
+                border-paper-100/45 text-paper-100
+                dark:border-ink-950/45 dark:text-ink-950
+              "
+            >
+              Most chosen
+            </span>
+          )}
+        </div>
+        <p
+          className={
+            "mt-2 max-w-xs text-sm leading-relaxed " +
+            (inv
+              ? "text-paper-200 dark:text-ink-600"
+              : "text-mist-600 dark:text-mist-300")
+          }
+        >
+          {tier.blurb}
+        </p>
+      </div>
+
+      {/* Included */}
+      <ul className="order-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:order-none lg:grid-cols-1 xl:grid-cols-2">
+        {tier.features.map((f) => (
+          <li
+            key={f}
+            className={
+              "flex items-baseline gap-2 font-mono text-xs leading-relaxed " +
+              (inv
+                ? "text-paper-200 dark:text-ink-600"
+                : "text-mist-600 dark:text-mist-300")
+            }
+          >
+            <span
+              aria-hidden
+              className={
+                inv
+                  ? "text-brand-300 dark:text-brand-700"
+                  : "text-brand-700 dark:text-brand-300"
+              }
+            >
+              +
+            </span>
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      {/* Price */}
+      <div className="order-2 lg:order-none lg:text-right">
+        <span
+          className={
+            "num text-3xl font-medium " +
+            (inv ? "text-paper-50 dark:text-ink-950" : "text-ink-950 dark:text-paper-50")
+          }
+        >
+          {tier.price}
+        </span>
+        <span
+          className={
+            "ml-1 font-mono text-xs " +
+            (inv ? "text-paper-200 dark:text-ink-600" : "text-mist-500")
+          }
+        >
+          /month
+        </span>
+      </div>
+
+      {/* Action */}
+      <div className="order-4 lg:order-none">
+        <LinkButton
+          href="/dashboard"
+          variant={inv ? "primary" : "secondary"}
+          size="sm"
+          className={
+            inv
+              ? "!border-paper-50 !bg-paper-50 !text-ink-950 hover:!bg-brand-200 hover:!border-brand-200 dark:!border-ink-950 dark:!bg-ink-950 dark:!text-paper-50 dark:hover:!bg-brand-800 dark:hover:!border-brand-800"
+              : ""
+          }
+        >
+          {tier.cta}
+        </LinkButton>
+      </div>
+    </div>
+  );
+}
+
 export function Pricing() {
   return (
     <section
       id="pricing"
-      className="
-        relative py-section md:py-section-lg
-        bg-surface-100 dark:bg-ink-900
-      "
+      className="relative py-section md:py-section-lg bg-surface-100 dark:bg-ink-900"
     >
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="text-center max-w-2xl mx-auto">
-          <span
-            className="chip chip-brand"
-          >
-            Pricing
-          </span>
-          <h2
-            className="
-              mt-5 text-3xl font-bold tracking-tight
-              text-mist-600 dark:text-mist-50
-            "
-          >
-            Simple monthly plans.{" "}
-            <span className="gradient-text">Paystack-billed.</span>
+      <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
+        <div className="flex items-center gap-4">
+          <span className="kicker text-brand-700 dark:text-brand-300">04 — Rate card</span>
+          <span className="h-px flex-1 bg-ink-950/20 dark:bg-paper-100/20" />
+          <span className="kicker">NGN · monthly</span>
+        </div>
+
+        <div className="mt-6 max-w-2xl">
+          <h2 className="display text-3xl leading-tight sm:text-5xl">
+            One price list.
+            <br />
+            No setup fee, no dollar conversion.
           </h2>
-          <p
-            className="
-              mt-4 leading-relaxed text-mist-600 dark:text-mist-300
-            "
-          >
-            14-day free trial on every plan. Cancel anytime. No setup fees —
-            billed in Naira the way you already pay.
+          <p className="mt-4 text-base text-mist-600 dark:text-mist-300">
+            Every plan includes the 14-day trial. Cancel whenever — the card is
+            billed in Naira through Paystack, the way you already pay.
           </p>
         </div>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-6">
+        {/* The rate card */}
+        <div className="mt-10 border border-ink-950/20 dark:border-paper-100/20">
+          {/* Column headings (desktop only) */}
+          <div
+            className={
+              "hidden border-b border-ink-950/20 px-6 py-2.5 lg:grid lg:gap-8 dark:border-paper-100/20 " +
+              COLUMNS
+            }
+          >
+            <span className="kicker">Plan</span>
+            <span className="kicker">Included</span>
+            <span className="kicker justify-end">Per month</span>
+            <span className="sr-only">Action</span>
+          </div>
+
           {TIERS.map((t) => (
             <div
               key={t.name}
-              className={cn(
-                "relative rounded-2xl overflow-hidden p-6 md:p-7 transition-all duration-300 hover-lift group",
-                t.highlight
-                  ? "bg-white border-2 border-brand-700/60 shadow-card dark:border-brand-500/60 dark:shadow-card dark:bg-ink-900"
-                  : "bg-white border border-mist-200 shadow-card dark:bg-ink-900 dark:border-ink-700 dark:shadow-card hover:border-brand-300/60"
-              )}
+              className="border-b border-ink-950/15 last:border-b-0 dark:border-paper-100/15"
             >
-              {t.highlight && (
-                <div
-                  className="absolute inset-x-0 -top-px h-[3px] rounded-t-2xl-2xl "
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(90deg, #14532D 0%, #15803D 20%, #16A34A 40%, #22C55E 60%, #16A34A 80%, #15803D 100%)",
-                    backgroundSize: "200% 100%"
-                  }}
-                />
-              )}
-              {t.highlight && (
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -inset-px rounded-2xl opacity-60 dark:opacity-70 "
-                  style={{
-                    background:
-                      "radial-gradient(80% 60% at 50% 0%, rgba(16,185,129,0.18), transparent 70%)"
-                  }}
-                />
-              )}
-              {t.highlight && (
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute top-6 right-6"
-                >
-                  <Crown
-                    size={20}
-                    strokeWidth={2.2}
-                    className="text-brand-500 "
-                  />
-                </div>
-              )}
-              <div className="flex items-center justify-between">
-                <h3
-                  className="
-                    text-base font-semibold tracking-tight
-                    text-mist-600 dark:text-mist-50
-                  "
-                >
-                  {t.name}
-                </h3>
-                {t.highlight && (
-                  <span
-                    className="chip chip-brand font-semibold"
-                  >
-                    <Sparkles size={11} />
-                    Most popular
-                  </span>
-                )}
-              </div>
-              <div className="mt-4">
-                <span
-                  className="
-                    text-3xl font-bold tracking-tight
-                    text-mist-600 dark:text-mist-50
-                  "
-                >
-                  {t.price}
-                </span>
-                <span className="text-mist-500 dark:text-mist-400 ml-1">/ month</span>
-              </div>
-              <p className="mt-3 text-sm text-mist-600 dark:text-mist-300">
-                {t.blurb}
-              </p>
-              <ul className="mt-6 space-y-3">
-                {t.features.map((f) => (
-                  <li
-                    key={f}
-                    className="
-                      flex items-start gap-2.5 text-sm
-                      text-mist-700 dark:text-mist-200
-                    "
-                  >
-                    <span
-                      className="
-                        mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full
-                        bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300
-                        dark:bg-brand-500/20 dark:text-brand-300
-                      "
-                    >
-                      <Check size={10} strokeWidth={3.5} />
-                    </span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-7">
-                <LinkButton
-                  href="/dashboard"
-                  variant={t.highlight ? "primary" : "secondary"}
-                  size="md"
-                  className={cn("w-full touch-target group/cta", t.highlight && "shadow-card hover:shadow-glow")}
-                >
-                  {t.cta}
-                </LinkButton>
-              </div>
+              <TierRow tier={t} />
             </div>
           ))}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 font-mono text-xs text-mist-500 dark:text-mist-400">
+          <span>14-day free trial on every plan · Cancel anytime · No setup fees</span>
+          <span>Billed in ₦ via Paystack · Prices exclude VAT</span>
         </div>
       </div>
     </section>

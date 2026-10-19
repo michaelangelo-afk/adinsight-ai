@@ -35,7 +35,7 @@ interface SidebarProps {
 export function Sidebar({ orgName }: SidebarProps) {
   const pathname = usePathname();
   return (
-    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-200 dark:border-mist-50/[0.04] bg-white/80 dark:bg-ink-900/40">
+    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-200 dark:border-mist-50/[0.04] bg-paper-50/80 dark:bg-ink-900/40">
       <div className="px-5 py-5">
         <Link href="/" className="inline-flex">
           <Logo />

@@ -138,7 +138,7 @@ export function OnboardingForm() {
                 onChange={(e) => setBusinessName(e.target.value)}
                 required
                 placeholder="Lagos Bites"
-                className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+                className="w-full rounded-2xl border border-mist-300 bg-paper-50 py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export function OnboardingForm() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+234 803 555 0123"
-              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 px-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
+              className="w-full rounded-2xl border border-mist-300 bg-paper-50 py-2.5 px-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500"
             />
           </div>
         </div>
@@ -170,7 +170,7 @@ export function OnboardingForm() {
                 "rounded-2xl border p-4 text-center transition-all",
                 monthlyBudget === opt.value
                   ? "border-brand-700/60 bg-brand-700/10 text-brand-700 dark:border-brand-500/60 dark:bg-brand-500/15 dark:text-brand-200 shadow-card"
-                  : "border-mist-200 bg-white hover:border-brand-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-brand-700/40"
+                  : "border-mist-200 bg-paper-50 hover:border-brand-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-brand-700/40"
               )}
             >
               <Wallet
@@ -209,7 +209,7 @@ export function OnboardingForm() {
                 "w-full rounded-2xl border p-4 text-left flex items-start gap-3 transition-all",
                 objective === obj.value
                   ? "border-brand-700/60 bg-brand-700/10 dark:border-brand-500/60 dark:bg-brand-500/15 shadow-card"
-                  : "border-mist-200 bg-white hover:border-brand-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-brand-700/40"
+                  : "border-mist-200 bg-paper-50 hover:border-brand-700/30 dark:border-ink-700 dark:bg-ink-900 dark:hover:border-brand-700/40"
               )}
             >
               <Target

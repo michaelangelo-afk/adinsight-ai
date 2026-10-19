@@ -1,71 +1,71 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Wordmark + mark.
+ *
+ * The mark is a ruled square containing three rising bars — the smallest
+ * possible statement of the product ("spend that goes up and to the right").
+ * It is drawn in ink, so it survives on paper and on the dark stock without a
+ * second asset, and it has none of the glossy gradient of the old leaf.
+ */
 export function Logo({
   className,
-  showWordmark = true
+  showWordmark = true,
+  onInk = false
 }: {
   className?: string;
   showWordmark?: boolean;
+  /** Forces the paper-on-ink treatment for fixed dark panels, where the
+   *  theme-aware `dark:` twin cannot apply (the page may be in light mode). */
+  onInk?: boolean;
 }) {
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-white dark:bg-ink-800 ring-1 ring-mist-200 dark:ring-ink-700 overflow-hidden">
-        <svg
-          viewBox="0 0 36 36"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          aria-hidden
-        >
-          <defs>
-            <linearGradient id="logo-grad" x1="0" y1="0" x2="36" y2="36">
-              <stop offset="0%" stopColor="#15803D" />
-              <stop offset="55%" stopColor="#16A34A" />
-              <stop offset="100%" stopColor="#22C55E" />
-            </linearGradient>
-            <linearGradient id="logo-fill" x1="0" y1="36" x2="36" y2="0">
-              <stop offset="0%" stopColor="#052E16" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#22C55E" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          {/* Stylized leaf shape — rounded-2xl teardrop representing a sprout */}
-          <path
-            d="M18 4 C 27 8, 31 14, 31 22 C 31 28, 26 32, 18 32 C 10 32, 5 28, 5 22 C 5 14, 9 8, 18 4 Z"
-            fill="url(#logo-grad)"
-          />
-          <path
-            d="M18 4 C 27 8, 31 14, 31 22 C 31 28, 26 32, 18 32 C 10 32, 5 28, 5 22 C 5 14, 9 8, 18 4 Z"
-            fill="url(#logo-fill)"
-            opacity="0.6"
-          />
-          {/* Midrib + ascending chevron = the "growth" mark */}
-          <path
-            d="M18 9 L 18 30"
-            stroke="#FFFFFF"
-            strokeOpacity="0.55"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-          />
-          <path
-            d="M14 22 L 18 18 L 22 22 M 14 27 L 18 23 L 22 27"
-            stroke="#FFFFFF"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-        </svg>
+      <span
+        className={
+          "relative inline-flex h-9 w-9 shrink-0 items-end justify-center gap-[3px] px-[7px] pb-[8px] pt-[9px] " +
+          (onInk
+            ? "border border-paper-100 bg-paper-100"
+            : "border border-ink-950 bg-ink-950 dark:border-paper-100 dark:bg-paper-100")
+        }
+        aria-hidden
+      >
+        <span
+          className={
+            "h-[6px] w-[4px] " + (onInk ? "bg-brand-500" : "bg-brand-300 dark:bg-brand-800")
+          }
+        />
+        <span
+          className={
+            "h-[10px] w-[4px] " + (onInk ? "bg-brand-700" : "bg-brand-200 dark:bg-brand-700")
+          }
+        />
+        <span
+          className={
+            "h-[14px] w-[4px] " + (onInk ? "bg-brand-900" : "bg-paper-50 dark:bg-brand-900")
+          }
+        />
       </span>
       {showWordmark && (
-        <div className="flex flex-col leading-none">
-          <span className="font-bold text-mist-600 tracking-tight text-sm">
-            Growth<span className="text-brand-700 dark:text-brand-300">Ads</span>
+        <span className="flex items-baseline gap-1.5">
+          <span
+            className={
+              "font-display text-xl font-semibold leading-none tracking-[-0.02em] " +
+              (onInk ? "text-paper-50" : "text-ink-950 dark:text-paper-50")
+            }
+          >
+            GrowthAds
           </span>
-          <span className="text-xs uppercase tracking-[0.20em] text-mist-500 dark:text-mist-300 font-medium">
-            Built for Nigeria
+          <span
+            className={
+              "font-mono text-xs font-medium leading-none " +
+              (onInk ? "text-brand-200" : "text-mist-500 dark:text-mist-400")
+            }
+          >
+            NG
           </span>
-        </div>
+        </span>
       )}
     </div>
   );

@@ -1,31 +1,26 @@
 import type { Config } from "tailwindcss";
 
 /**
- * GrowthAds design system.
+ * GrowthAds design system — "The Monday Statement" (rebuilt 2026-10-13).
  *
- * Rebuilt 2026-10-01 after measuring the rendered CSS (see tools/audit_ui.mjs).
- * The rules this file enforces, and why:
+ * The product's promise is financial: know which naira grew. The interface is
+ * therefore built like a printed statement rather than a SaaS template — paper
+ * ground, ink rules, ledger figures, one signal red. Three rules keep it from
+ * drifting back into generics:
  *
- * 1. ONE green ramp, named `brand`, with EVERY step declared explicitly.
- *    The previous config set `theme.extend.violet` = green, which MERGES with
- *    Tailwind's default *purple* violet for any step it didn't declare.
- *    Result: 39 usages rendered purple in a green product (violet-50/100/200)
- *    and `naira-100/200` rendered nothing at all. Every step is now explicit,
- *    so no default can bleed through.
+ * 1. SURFACES ARE PAPER, NOT WHITE. `paper` / `surface` are warm stocks; `ink`
+ *    is a green-black. There is no pure #FFFFFF page, and no glass blur on the
+ *    marketing surface.
  *
- * 2. `naira` is gone. It was a second green ramp (emerald) sitting alongside
- *    a green ramp named `violet`. Sixteen tokens for one colour family.
+ * 2. GEOMETRY IS SQUARE. Radii are 0 / 2px / full (dot only). No 16px card
+ *    corners, no floating card shadows. Structure is drawn with 1px rules.
  *
- * 3. ONE shadow token. There were eight, with inconsistent elevation.
+ * 3. THREE FACES, THREE JOBS. Fraunces (display, editorial serif) for
+ *    headlines; Instrument Sans for interface copy; JetBrains Mono for every
+ *    figure, label and section number. Never mix the jobs.
  *
- * 4. ZERO custom keyframes. There were 24. Madgicx, the reference, has none —
- *    its whole motion personality is `transition: 0.2s ease`, which now lives
- *    as a single base rule in app/globals.css. Motion should be felt, not seen.
- *
- * What is deliberately NOT in this file:
- *   - border radii are handled by migrating component classes to
- *     `rounded-2xl` (16px) + `rounded-full`, so only two steps are used;
- *   - type sizes are handled the same way, down to six steps.
+ * Every colour step is declared explicitly so no Tailwind default can bleed
+ * through (the violet-named-green incident of 2026-10-01).
  */
 const config: Config = {
   darkMode: "class",
@@ -37,122 +32,123 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        /**
-         * THE brand green. Every step declared — 50..950 — so nothing
-         * falls back to a Tailwind default. Forest → emerald.
-         */
+        /** Bottle green. Text-safe from 600 down, surfaces from 50–200. */
         brand: {
-          50: "#F0FDF4",
-          100: "#DCFCE7",
-          200: "#BBF7D0",
-          300: "#86EFAC",
-          400: "#4ADE80",
-          500: "#22C55E",
-          600: "#16A34A",
-          700: "#15803D",
-          800: "#166534",
-          900: "#14532D",
-          950: "#052E16"
+          50: "#EEF4EC",
+          100: "#D9E7D4",
+          200: "#B6D0AE",
+          300: "#8CB684",
+          400: "#5F9A62",
+          500: "#3F7D48",
+          600: "#2F6539",
+          700: "#23502E",
+          800: "#1B4025",
+          900: "#15331E",
+          950: "#0A2114"
         },
-        /** Dark dashboard surfaces. */
+        /** Warm paper stock (light surfaces) and green-black ink (dark). */
+        paper: {
+          50: "#F8F4EA",
+          100: "#F1ECDF",
+          200: "#E7E0CF",
+          300: "#D8CFB9"
+        },
         ink: {
-          950: "#070710",
-          900: "#0b0b18",
-          850: "#10102a",
-          800: "#15162e",
-          700: "#1d1e3a",
-          600: "#272a4d",
-          500: "#3a3d62"
+          950: "#0B0F0C",
+          900: "#101612",
+          850: "#161E18",
+          800: "#1D2620",
+          700: "#2A352D",
+          600: "#3C4A40",
+          500: "#55655A"
         },
-        /** Neutral text + borders (slate). */
+        /** Warm neutral text + hairline borders. */
         mist: {
-          50: "#F8FAFC",
-          100: "#F1F5F9",
-          200: "#E2E8F0",
-          300: "#CBD5E1",
-          400: "#94A3B8",
-          500: "#64748B",
-          600: "#475569"
+          50: "#F7F4EC",
+          100: "#EFEADD",
+          200: "#DED7C6",
+          300: "#C4BBA7",
+          400: "#9F9581",
+          /** Darkened 2026-10-19: #7A7260 measured 4.04:1 on paper-100 and
+           *  3.7:1 on surface-100, under AA for the 12px mono labels it carries. */
+          500: "#69614F",
+          600: "#57513F"
         },
-        /** Light page surfaces. */
+        /** Page surfaces — aliases kept so existing components stay valid. */
         surface: {
-          50: "#FFFFFF",
-          100: "#FAFBF7",
-          200: "#F1F4EC",
-          300: "#E2E8F0",
-          400: "#CBD5E1"
+          50: "#F1ECDF",
+          100: "#E9E2D2",
+          200: "#E1D8C5",
+          300: "#D8CFB9",
+          400: "#C4BBA7"
+        },
+        /** Editorial red: negative deltas, annotations, the accountant's pen. */
+        ledger: {
+          300: "#E8A7A1",
+          500: "#B3261E",
+          600: "#96201A",
+          700: "#7A1A15"
         }
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-inter)", "system-ui", "sans-serif"]
+        sans: ["var(--font-instrument)", "system-ui", "sans-serif"],
+        display: ["var(--font-fraunces)", "Georgia", "serif"],
+        mono: ["var(--font-jetbrains)", "ui-monospace", "monospace"]
       },
       backgroundImage: {
-        "brand-gradient":
-          "linear-gradient(135deg, #15803D 0%, #16A34A 45%, #22C55E 100%)",
-        "brand-gradient-soft":
-          "linear-gradient(135deg, rgba(21, 128, 61, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%)"
+        "brand-gradient": "linear-gradient(135deg, #1B4025 0%, #23502E 55%, #2F6539 100%)",
+        "brand-gradient-soft": "linear-gradient(135deg, rgba(35, 80, 46, 0.07) 0%, rgba(63, 125, 72, 0.05) 100%)"
       },
       /**
-       * Elevation + emphasis. Three NAMED tokens, not eight.
-       *
-       * Before: `shadow-card` plus ~20 hand-written glow values spread across
-       * components (`shadow-[0_0_40px_-5px_rgba(34,197,94,0.55)]`,
-       * `shadow-[0_0_30px_-4px_rgba(16,185,129,0.6)]`, `drop-shadow(0 14px 30px …)`, …).
-       * Every one of those magic numbers is actually one of two ideas — a resting
-       * card, or a green emphasis bloom — so they collapse into `card` and `glow`.
-       * `lift` is the hover elevation, previously expressed as a `filter:
-       * drop-shadow()`, which forced a new paint layer instead of reusing the
-       * shadow the element already had.
-       *
-       * Rule: nothing may write an arbitrary `shadow-[…]` any more. Pick a token.
+       * Elevation is drawn, not floated: one hairline, one offset. Anything
+       * heavier reads as a template card and breaks the printed-page idea.
        */
       boxShadow: {
-        card: "0 1px 2px rgba(15, 23, 42, 0.05), 0 12px 32px -12px rgba(15, 23, 42, 0.12)",
-        lift: "0 2px 4px rgba(15, 23, 42, 0.06), 0 22px 44px -18px rgba(15, 23, 42, 0.22)",
-        glow: "0 0 32px -6px rgba(16, 185, 129, 0.45)"
+        card: "0 1px 0 rgba(11, 15, 12, 0.10)",
+        lift: "0 2px 0 rgba(11, 15, 12, 0.14)",
+        glow: "0 0 0 4px rgba(63, 125, 72, 0.16)",
+        /** Offset plate: the printed-sheet shadow used on statement blocks. */
+        plate: "8px 8px 0 0 rgba(11, 15, 12, 0.07)",
+        "plate-dark": "8px 8px 0 0 rgba(239, 234, 221, 0.08)"
       },
-      /**
-       * Semantic spacing rhythm.
-       *
-       * The numeric scale stays (Tailwind's 4px base is already a rhythm), but the
-       * measurements that repeat hundreds of times get a NAME so they can't drift:
-       * card padding, the page gutter, section rhythm and table-row height. Before
-       * this, card interiors were `p-3`, `p-4`, `p-5 sm:p-6`, `p-6` and `p-7`
-       * depending on which component you opened — same intent, five values.
-       *
-       * Everything is a multiple of 2px so nested paddings and gaps line up on a
-       * shared grid at every breakpoint.
-       */
+      borderRadius: {
+        none: "0",
+        xs: "2px",
+        sm: "2px",
+        DEFAULT: "2px",
+        md: "2px",
+        lg: "2px",
+        xl: "2px",
+        "2xl": "2px",
+        "3xl": "2px",
+        full: "9999px"
+      },
       spacing: {
-        gutter: "1.5rem", // 24px — horizontal page gutter (mobile)
-        "gutter-lg": "2rem", // 32px — gutter at md+
-        card: "1.25rem", // 20px — card interior (mobile)
-        "card-lg": "1.5rem", // 24px — card interior at sm+
-        row: "0.875rem", // 14px — list/table row padding-y
-        section: "6rem", // 96px — vertical section rhythm
-        "section-lg": "8rem" // 128px — section rhythm at md+
+        gutter: "1.5rem",
+        "gutter-lg": "2rem",
+        card: "1.25rem",
+        "card-lg": "1.5rem",
+        row: "0.875rem",
+        section: "5.5rem",
+        "section-lg": "8rem"
       },
       /**
-       * Line-height + tracking for the sanctioned type ramp only
-       * (12 / 14 / 16 / 20 / 32 / 48 / 60). Any size not in this ramp is a bug:
-       * it means someone used `text-lg` (18px) or `text-4xl` (36px) and drifted off
-       * the system. `tools/audit_ui.mjs` counts distinct rendered sizes, so drift is
-       * measurable rather than a matter of opinion.
+       * One ramp, declared. Display steps are optical sizes for Fraunces; the
+       * mono label sits at 12px. Nothing renders off this list.
        */
       fontSize: {
-        xs: ["12px", { lineHeight: "1.1rem" }],
-        sm: ["14px", { lineHeight: "1.35rem" }],
-        base: ["16px", { lineHeight: "1.6rem" }],
-        xl: ["20px", { lineHeight: "1.75rem", letterSpacing: "-0.01em" }],
-        "3xl": ["32px", { lineHeight: "2.375rem", letterSpacing: "-0.022em" }],
-        "5xl": ["48px", { lineHeight: "3.25rem", letterSpacing: "-0.028em" }],
-        "6xl": ["60px", { lineHeight: "3.75rem", letterSpacing: "-0.032em" }]
+        xs: ["12px", { lineHeight: "1.05rem" }],
+        sm: ["14px", { lineHeight: "1.4rem" }],
+        base: ["16px", { lineHeight: "1.65rem" }],
+        xl: ["20px", { lineHeight: "1.75rem", letterSpacing: "-0.005em" }],
+        "3xl": ["34px", { lineHeight: "2.35rem", letterSpacing: "-0.02em" }],
+        "5xl": ["46px", { lineHeight: "2.95rem", letterSpacing: "-0.025em" }],
+        "6xl": ["64px", { lineHeight: "3.85rem", letterSpacing: "-0.03em" }],
+        "7xl": ["92px", { lineHeight: "5rem", letterSpacing: "-0.04em" }]
       },
       letterSpacing: {
-        eyebrow: "0.16em" // uppercase micro-labels only
+        eyebrow: "0.18em"
       },
-      /** Minimum comfortable hit area for anything interactive (WCAG 2.5.5). */
       minHeight: {
         control: "44px"
       },
@@ -160,9 +156,8 @@ const config: Config = {
         control: "44px"
       },
       maxWidth: {
-        content: "80rem" // 1280px — one content rail for nav, sections, footer
+        content: "80rem"
       }
-      // NOTE: no `keyframes` and no `animation`. Deliberate — see header.
     }
   },
   plugins: []

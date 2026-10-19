@@ -8,111 +8,100 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { label: "Product", href: "#features" },
-  { label: "Platforms", href: "#platforms" },
-  { label: "Automations", href: "#automations" },
-  { label: "Pricing", href: "#pricing" }
+  { label: "Product", href: "#features", index: "01" },
+  { label: "How it works", href: "#workflow", index: "02" },
+  { label: "Pricing", href: "#pricing", index: "03" },
+  { label: "Contact", href: "#contact", index: "04" }
 ];
 
 export function Nav() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50">
-      <div
-        className="
-          absolute inset-0 -z-10 backdrop-blur-xl
-          bg-surface-50/95 border-b border-mist-200/70
-          dark:bg-ink-950/90 dark:border-ink-700/60
-        "
-      />
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-6 py-4">
-        <Link href="/" className="shrink-0">
-          <Logo />
-        </Link>
-
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-          {NAV_LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="
-                relative text-sm font-medium text-mist-600 hover:text-brand-700
-                dark:text-mist-200 dark:hover:text-brand-300
-                transition-colors duration-200
-                after:absolute after:left-0 after:right-0 after:-bottom-1
-                after:h-px after:origin-left after:scale-x-0 after:bg-brand-600
-                after:transition-transform after:duration-300 after:ease-out
-                hover:after:scale-x-100 dark:after:bg-brand-400
-              "
-            >
-              {l.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="hidden lg:flex items-center gap-2">
-          <ThemeToggle />
-          {/* With real Supabase auth wired up, the buttons should respect the
-              actual flows: existing users → /login, new users → /signup. */}
-          <LinkButton href="/login" variant="ghost" size="sm">
-            Sign in
-          </LinkButton>
-          <LinkButton
-            href="/signup"
-            variant="primary"
-            size="sm"
-            className="shadow-card"
-          >
-            Start free
-          </LinkButton>
+    <header className="sticky top-0 z-50 bg-surface-50 dark:bg-ink-950">
+      {/* Masthead rail — the printed edition line. Hidden on phones, where it
+          would eat the fold for information nobody needs twice. */}
+      <div className="hidden border-b border-ink-950/15 dark:border-paper-100/15 md:block">
+        <div className="mx-auto flex max-w-content items-center justify-between px-gutter py-1.5 lg:px-gutter-lg">
+          <span className="kicker text-mist-500">The weekly statement · Issue 01</span>
+          <span className="kicker text-mist-500">
+            Lagos · WAT · ₦ NGN · Paystack-billed
+          </span>
         </div>
+      </div>
 
-        <div className="lg:hidden flex items-center gap-2">
-          <ThemeToggle />
-          <button
-            className="
-              inline-flex h-11 w-11 items-center justify-center rounded-2xl
-              bg-white border border-mist-300 hover:border-brand-400 hover:bg-brand-50
-              dark:bg-ink-900 dark:border-ink-700 dark:hover:border-brand-500/60 dark:hover:bg-ink-850
-              transition-all duration-200 tap-press touch-target
-            "
-            onClick={() => setOpen((s) => !s)}
-            aria-label="Toggle menu"
-            aria-expanded={open}
-          >
-            {open ? <X size={18} /> : <Menu size={18} />}
-          </button>
+      <div className="border-b border-ink-950/20 dark:border-paper-100/20">
+        <div className="mx-auto flex max-w-content items-center justify-between gap-6 px-gutter py-3 lg:px-gutter-lg">
+          <Link href="/" className="shrink-0" aria-label="GrowthAds home">
+            <Logo />
+          </Link>
+
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
+            {NAV_LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="
+                  group flex min-h-[44px] items-center gap-1.5 font-mono text-xs font-medium
+                  uppercase tracking-[0.12em] text-mist-600 transition-colors duration-200
+                  hover:text-ink-950 dark:text-mist-300 dark:hover:text-paper-50
+                "
+              >
+                <span className="text-mist-500 group-hover:text-brand-700 dark:text-mist-400 dark:group-hover:text-brand-300">
+                  {l.index}
+                </span>
+                {l.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="hidden items-center gap-2 lg:flex">
+            <ThemeToggle />
+            <LinkButton href="/login" variant="ghost" size="sm">
+              Sign in
+            </LinkButton>
+            <LinkButton href="/signup" variant="primary" size="sm">
+              Start free
+            </LinkButton>
+          </div>
+
+          <div className="flex items-center gap-2 lg:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="
+                inline-flex h-11 w-11 items-center justify-center border border-ink-950/35
+                text-ink-950 transition-colors duration-200 hover:border-brand-700 hover:text-brand-700
+                dark:border-paper-100/35 dark:text-paper-50 dark:hover:border-brand-300 dark:hover:text-brand-300
+              "
+              onClick={() => setOpen((s) => !s)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+            >
+              {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
+            </button>
+          </div>
         </div>
       </div>
 
       {open && (
-        <div
-          className="
-            lg:hidden border-t slide-down
-            border-mist-200 bg-white/95 backdrop-blur-xl
-            dark:border-ink-700 dark:bg-ink-950/95
-          "
-        >
-          <div className="px-6 py-4 flex flex-col gap-3">
+        <div className="slide-down border-b border-ink-950/20 bg-surface-50 dark:border-paper-100/20 dark:bg-ink-950 lg:hidden">
+          <nav className="mx-auto max-w-content px-gutter" aria-label="Mobile">
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
                 className="
-                  text-sm text-mist-600 hover:text-brand-700
-                  dark:text-mist-200 dark:hover:text-brand-300
-                  transition-colors
+                  flex items-baseline gap-3 border-b border-ink-950/12 py-4
+                  font-display text-xl text-ink-950 dark:border-paper-100/12 dark:text-paper-50
                 "
               >
+                <span className="font-mono text-xs text-mist-500">{l.index}</span>
                 {l.label}
-            </a>
+              </a>
             ))}
-            {/* FIX: desktop buttons use <LinkButton> with href="/dashboard". The
-                mobile dropdown was using plain <Button> which had no href/onClick
-                handler — clicks were silent no-ops. Link buttons + auto-close. */}
-            <div className="flex gap-2 pt-2">
+            <div className="flex gap-2 py-4">
               <LinkButton
                 href="/login"
                 variant="secondary"
@@ -126,13 +115,13 @@ export function Nav() {
                 href="/signup"
                 variant="primary"
                 size="sm"
-                className="flex-1 shadow-card"
+                className="flex-1"
                 onClick={() => setOpen(false)}
               >
                 Start free
               </LinkButton>
             </div>
-          </div>
+          </nav>
         </div>
       )}
     </header>

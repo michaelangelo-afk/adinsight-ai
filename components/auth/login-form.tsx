@@ -90,7 +90,7 @@ export function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="adaeze@lagosbites.com"
-              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-paper-50 py-2.5 pl-10 pr-3 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 dark:placeholder:text-mist-500 touch-target"
             />
           </div>
         </div>
@@ -113,7 +113,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full rounded-2xl border border-mist-300 bg-white py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 touch-target"
+              className="w-full rounded-2xl border border-mist-300 bg-paper-50 py-2.5 pl-10 pr-10 text-sm text-mist-600 placeholder:text-mist-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 dark:bg-ink-900 dark:border-ink-700 dark:text-mist-100 touch-target"
             />
             <button
               type="button"

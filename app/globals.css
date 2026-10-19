@@ -2,10 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * GrowthAds — "The Monday Statement".
+ *
+ * The marketing surface is a printed financial statement: warm paper, ink
+ * rules, ledger figures, one red pen. The dashboard inherits the same stock so
+ * the product and the shop window are the same object, not two themes.
+ *
+ * Rules encoded here:
+ *   - no glass / blur on the page surface (`.glass-card` is now opaque paper);
+ *   - every rule is 1px ink, never a drop shadow;
+ *   - figures are mono + tabular, always;
+ *   - motion is a 180ms colour/position change, nothing decorative.
+ */
+
 @layer base {
   :root {
     color-scheme: light;
-    /* The inline FlashThemeScript overrides .colorScheme on dark. */
+    --rule: 11 15 12; /* ink, used as rgb(var(--rule) / alpha) */
+    --paper: 241 236 223;
   }
 
   html {
@@ -15,19 +30,24 @@
   html,
   body {
     @apply bg-surface-50 text-mist-600 antialiased;
-    /* Inter's tabular figures + slashed zero, so KPI columns and currency
-       values line up digit-for-digit instead of jittering as they update. */
-    font-feature-settings: "cv11", "ss01", "tnum";
+    font-feature-settings: "ss01", "cv01";
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Tailwind's preflight leaves <button> at the default arrow cursor, which made
-   * every control in the product feel inert. Fix it once, globally, rather than
-   * sprinkling `cursor-pointer` across ~50 call sites (and forgetting some).
-   * Disabled controls opt out. */
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  summary {
-    cursor: pointer;
+  /* Ledger paper: one hairline every 32px, barely there, plus a fixed grain
+     so large empty areas read as stock rather than as a missing section. */
+  body {
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(11, 15, 12, 0.035) 0px,
+        rgba(11, 15, 12, 0.035) 1px,
+        transparent 1px,
+        transparent 32px
+      );
+    background-attachment: fixed;
+    min-height: 100vh;
+    transition: background 0.4s ease, color 0.4s ease;
   }
 
   html.dark,
@@ -35,270 +55,277 @@
     @apply bg-ink-950 text-mist-100;
   }
 
-  body {
-    background-image:
-      radial-gradient(110vw 560px at 50% -240px, rgba(16, 185, 129, 0.10), transparent 78%),
-      radial-gradient(900px 480px at 84% 6%, rgba(21, 128, 61, 0.05), transparent 70%);
-    background-attachment: fixed;
-    min-height: 100vh;
-    transition: background 0.4s ease, color 0.4s ease;
-  }
-
   html.dark body {
     background-image:
-      radial-gradient(110vw 560px at 50% -240px, rgba(16, 185, 129, 0.18), transparent 78%),
-      radial-gradient(900px 480px at 84% 6%, rgba(34, 197, 94, 0.08), transparent 70%);
+      repeating-linear-gradient(
+        to bottom,
+        rgba(239, 234, 221, 0.045) 0px,
+        rgba(239, 234, 221, 0.045) 1px,
+        transparent 1px,
+        transparent 32px
+      );
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
   }
 
   ::selection {
-    background: rgba(22, 163, 74, 0.18);
-    color: #052e16;
+    background: rgba(35, 80, 46, 0.18);
+    color: #0b0f0c;
   }
   html.dark ::selection {
-    background: rgba(34, 197, 94, 0.32);
-    color: #ecfdf5;
+    background: rgba(140, 182, 132, 0.3);
+    color: #f8f4ea;
   }
 
-  /* Scrollbars — green family, swap border + colors per mode */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #34d399, #15803d);
-    border-radius: 9999px;
-    border: 2px solid #ffffff;
+    background: #b6b09e;
+    border: 2px solid #f1ecdf;
   }
-  ::-webkit-scrollbar-thumb:hover { background: #16a34a; }
   html.dark ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #10b981, #064e3b);
-    border: 2px solid #070710;
+    background: #3c4a40;
+    border: 2px solid #0b0f0c;
   }
+  ::-webkit-scrollbar-thumb:hover { background: #23502e; }
 }
 
-/* Global keyboard focus ring — emerald on either surface.
- *
- * `border-radius: inherit` (was a hard-coded 8px) — that value actively broke
- * shape on focus: a `rounded-full` pill or a `rounded-2xl` card visibly snapped
- * to an 8px corner the moment it received keyboard focus, so the control changed
- * shape under the user. Inheriting keeps every control's own geometry and makes
- * the ring follow the real corner radius.
- *
- * The ring colour is brand-500 (#22C55E) rather than emerald-500 (#10B981) so
- * focus uses the same single green ramp as the rest of the product instead of
- * introducing a second, un-ramped green. */
+/* `mist-500` is a LIGHT-stock token (#69614F, 5.2:1 on paper). On the ink
+ * surfaces it drops to 3.15:1, which fails every 12px mono label that uses it
+ * without a `dark:` twin. Rather than chase call sites — and forget one every
+ * time a new label is added — dark mode promotes the token to its dark-stock
+ * value. Unlayered on purpose: it must beat the utility of the same name. */
+html.dark .text-mist-500 {
+  color: #9f9581;
+}
+
+/* Keyboard focus: a solid ink ring with paper offset — visible on both stocks,
+   and it inherits the element's own corner so controls never change shape. */
 :focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #22c55e;
+  outline: 2px solid #23502e;
+  outline-offset: 2px;
   border-radius: inherit;
 }
 html.dark :focus-visible {
-  box-shadow: 0 0 0 2px #070710, 0 0 0 4px #22c55e;
+  outline: 2px solid #8cb684;
+  outline-offset: 2px;
 }
 
 @layer components {
-  /* Gradient headline text.
-   *
-   * The visible fill is the gradient (painted via `-webkit-text-fill-color:
-   * transparent` + `background-clip: text`), but `color` stays a REAL, opaque
-   * brand value. Previously `color: transparent` meant that any tool — or any
-   * user agent — that doesn't implement background-clip:text (contrast checkers,
-   * forced-colors/high-contrast mode, screen-reader text extraction, older
-   * engines) saw fully transparent text and reported it as invisible. The audit
-   * scored every headline 1.0:1 for exactly that reason. Painting is unchanged;
-   * the element now always has a legible fallback colour underneath the clip. */
-  .gradient-text {
-    background: linear-gradient(135deg, #15803d 0%, #16a34a 25%, #10b981 75%, #34d399 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: #15803d;
-    -webkit-text-fill-color: transparent;
+  /* ── Editorial primitives ─────────────────────────────────────────────── */
+
+  /* Section label: "01 — THE STATEMENT". Mono, tracked, never >12px. */
+  .kicker {
+    @apply inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-eyebrow text-mist-500;
   }
-  html.dark .gradient-text {
-    background: linear-gradient(135deg, #4ade80 0%, #34d399 30%, #10b981 70%, #6ee7b7 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: #86efac;
-    -webkit-text-fill-color: transparent;
-  }
-  @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-    .gradient-text,
-    html.dark .gradient-text {
-      background: none;
-      color: inherit;
-    }
-  }
-  @media (forced-colors: active) {
-    .gradient-text {
-      background: none;
-      color: CanvasText;
-      -webkit-text-fill-color: CanvasText;
-    }
+  html.dark .kicker {
+    @apply text-mist-400;
   }
 
+  .display {
+    @apply font-display font-semibold text-ink-950;
+    font-variation-settings: "SOFT" 0, "WONK" 0;
+    letter-spacing: -0.03em;
+  }
+  html.dark .display {
+    @apply text-paper-50;
+  }
+
+  /* Every number in the product. */
+  .num {
+    @apply font-mono tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .rule-t { border-top: 1px solid rgb(var(--rule) / 0.16); }
+  .rule-b { border-bottom: 1px solid rgb(var(--rule) / 0.16); }
+  html.dark .rule-t { border-color: rgb(239 234 221 / 0.16); }
+  html.dark .rule-b { border-color: rgb(239 234 221 / 0.16); }
+
+  /* A rotated rubber stamp — used for "LIVE" and section annotations. */
+  .stamp {
+    @apply inline-flex items-center gap-1.5 border px-2 py-1 font-mono text-xs font-medium uppercase tracking-[0.14em];
+    border-radius: 2px;
+    border-color: #96201a;
+    color: #96201a;
+  }
+  html.dark .stamp {
+    border-color: #e8a7a1;
+    color: #e8a7a1;
+  }
+
+  /* ── Existing surface vocabulary, retuned ─────────────────────────────── */
+
+  /* Was a blurred glass panel. Blur is a template tell and it forced a new
+     paint layer on every card; the same job is done with paper + a hairline. */
   .glass-card {
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(226, 232, 240, 0.7);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 4px 24px -6px rgba(15, 23, 42, 0.06);
+    @apply bg-paper-50;
+    border: 1px solid rgb(var(--rule) / 0.14);
   }
   html.dark .glass-card {
-    background: rgba(16, 16, 42, 0.65);
-    border: 1px solid rgba(34, 197, 94, 0.12);
-    box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.55);
+    @apply bg-ink-900;
+    border-color: rgb(239 234 221 / 0.14);
   }
 
   .hairline {
-    border: 1px solid rgba(226, 232, 240, 0.7);
+    border: 1px solid rgb(var(--rule) / 0.14);
   }
   html.dark .hairline {
-    border: 1px solid rgba(34, 197, 94, 0.10);
+    border-color: rgb(239 234 221 / 0.14);
   }
 
+  /* Blueprint grid — used behind the hero and the closing block. Faint enough
+     to read as press registration marks, not as a techy dashboard texture. */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(16, 185, 129, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16, 185, 129, 0.07) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, black 30%, transparent 80%);
+      linear-gradient(rgba(11, 15, 12, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11, 15, 12, 0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
   }
   html.dark .grid-bg {
     background-image:
-      linear-gradient(rgba(16, 185, 129, 0.11) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16, 185, 129, 0.11) 1px, transparent 1px);
+      linear-gradient(rgba(239, 234, 221, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(239, 234, 221, 0.06) 1px, transparent 1px);
   }
 
-  /* Chips are STATUS surfaces, not glass. They were mostly brand-700/10-over-
-   * gradient tints, which at 12px left text sitting on a semi-transparent wash
-   * and made measured contrast unreadable (the audit scored 1.5:1 on three of
-   * them). A solid surface + a saturated foreground reads crisply on both themes
-   * and is measurable — hence `chip` (neutral), `chip-brand` and `chip-warn`.
-   * Use the tone variants rather than hand-rolling bg-brand-x/10 again. */
+  /* Labels are stamps: square corners, mono, one ink rule. */
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold;
-    @apply border-mist-200 bg-white text-mist-600;
+    @apply inline-flex items-center gap-1.5 border px-2 py-1 font-mono text-xs font-medium uppercase tracking-[0.12em];
+    border-radius: 2px;
+    border-color: rgb(var(--rule) / 0.24);
+    color: #57513f;
+    background: transparent;
   }
   html.dark .chip {
-    @apply border-ink-700 bg-ink-900 text-mist-200;
+    border-color: rgb(239 234 221 / 0.26);
+    color: #c4bba7;
   }
 
   .chip-brand {
-    @apply chip border-brand-200 bg-brand-50 text-brand-700;
+    @apply chip;
+    border-color: #23502e;
+    color: #23502e;
+    background: #eef4ec;
   }
   html.dark .chip-brand {
-    @apply border-brand-700/40 bg-brand-950/60 text-brand-300;
+    border-color: #8cb684;
+    color: #b6d0ae;
+    background: rgba(140, 182, 132, 0.08);
   }
 
   .chip-warn {
-    @apply chip border-amber-200 bg-amber-50 text-amber-700;
+    @apply chip;
+    border-color: #96201a;
+    color: #96201a;
+    background: #fbf0ee;
   }
   html.dark .chip-warn {
-    @apply border-amber-500/30 bg-amber-500/10 text-amber-300;
+    border-color: #e8a7a1;
+    color: #e8a7a1;
+    background: rgba(232, 167, 161, 0.08);
   }
 
-  /* Every button clears the 44px hit-area floor, keeps a pointer cursor (the
-   * preflight doesn't add one to <button>), and reserves its geometry while busy
-   * so a loading state can't reflow the row it sits in. */
+  /* ── Buttons ──────────────────────────────────────────────────────────── */
+
   .btn {
-    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 px-5 py-2.5 font-mono text-xs font-medium uppercase tracking-[0.1em] transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none;
+    border-radius: 2px;
   }
 
   .btn-primary {
-    @apply btn bg-brand-700 text-white hover:bg-brand-600 shadow-card;
+    @apply btn bg-ink-950 text-paper-50;
+    border: 1px solid #0b0f0c;
+  }
+  .btn-primary:hover {
+    @apply bg-brand-800 text-paper-50;
+    border-color: #1b4025;
   }
   html.dark .btn-primary {
-    @apply shadow-card;
+    @apply bg-paper-50 text-ink-950;
+    border-color: #f8f4ea;
+  }
+  html.dark .btn-primary:hover {
+    @apply bg-brand-200 text-ink-950;
+    border-color: #b6d0ae;
   }
 
   .btn-secondary {
-    @apply btn bg-white text-mist-600 border border-mist-300 hover:bg-mist-50 hover:border-mist-400;
+    @apply btn bg-transparent text-ink-950;
+    border: 1px solid rgb(var(--rule) / 0.35);
+  }
+  .btn-secondary:hover {
+    @apply bg-paper-100;
+    border-color: #23502e;
   }
   html.dark .btn-secondary {
-    @apply bg-ink-900 text-mist-100 border-ink-700 hover:bg-ink-850 hover:border-mist-500/40;
+    @apply text-paper-50;
+    border-color: rgb(239 234 221 / 0.35);
+  }
+  html.dark .btn-secondary:hover {
+    @apply bg-ink-850;
+    border-color: #8cb684;
   }
 
   .btn-ghost {
-    @apply btn bg-transparent text-mist-600 hover:bg-mist-100;
+    @apply btn bg-transparent text-mist-600;
   }
-  html.dark .btn-ghost {
-    @apply text-mist-200 hover:bg-ink-850 hover:text-mist-50;
-  }
+  .btn-ghost:hover { @apply text-ink-950; }
+  html.dark .btn-ghost { @apply text-mist-300; }
+  html.dark .btn-ghost:hover { @apply text-paper-50; }
 
   .btn-outline {
-    @apply btn bg-white text-brand-700 border border-brand-300 hover:border-brand-600 hover:text-brand-700;
+    @apply btn bg-transparent text-brand-700;
+    border: 1px solid #23502e;
   }
+  .btn-outline:hover { @apply bg-brand-50; }
   html.dark .btn-outline {
-    @apply bg-ink-900 text-brand-300 border-brand-700/40 hover:border-brand-500 hover:text-brand-300;
+    @apply text-brand-200;
+    border-color: #8cb684;
   }
+  html.dark .btn-outline:hover { background: rgba(140, 182, 132, 0.1); }
 }
 
-/* Respect user motion preferences globally */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
-}
+/* ── Interaction utilities (dashboard + landing) ───────────────────────── */
 
-/* ───────── Polished micro-interaction utilities (Wave 2) ───────── */
-
-/* Card/elevated surface lift on hover. Reusable across pricing cards,
-   feature cards, recommendations, etc.
-   `will-change` is intentionally gated on `(hover: hover)` so touch
-   devices (which keep `:hover` sticky after a tap) don't keep a GPU
-   layer alive forever — saves battery and avoids paint cost.
-
-   The lift now uses the tokenised `shadow-lift` elevation instead of
-   `filter: drop-shadow(...)`. A filter forces the browser to rasterise the
-   whole subtree into a new layer on every frame just to draw a shadow, and it
-   can't be animated as cheaply as box-shadow. One token, cheaper paint, and the
-   hover elevation actually matches the resting `shadow-card` family. */
 .hover-lift {
-  @apply transition-all duration-200 ease-out;
+  @apply transition-colors duration-200 ease-out;
 }
 .hover-lift:hover {
-  @apply -translate-y-0.5 shadow-lift;
-}
-@media (hover: hover) {
-  .hover-lift:hover {
-    will-change: transform, box-shadow;
-  }
+  @apply shadow-lift;
 }
 
-/* Interactive row/panel: a flat surface that gains an edge on hover. Use for
-   table rows, list items and picker tiles — anything where lifting the whole box
-   would be too loud. */
 .row-interactive {
   @apply cursor-pointer transition-colors duration-200;
 }
 .row-interactive:hover {
-  @apply bg-mist-50;
+  @apply bg-paper-100;
 }
 html.dark .row-interactive:hover {
   @apply bg-ink-850;
 }
 
-/* Icon button: square, 44px floor, centred, with the shared press tactility.
-   Existed inline in ~10 places at four different sizes. */
 .icon-btn {
-  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-2xl;
+  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center;
+  border-radius: 2px;
   @apply text-mist-600 transition-colors duration-200;
-  @apply hover:bg-mist-100 hover:text-brand-700;
+  @apply hover:bg-paper-200 hover:text-brand-700;
 }
 html.dark .icon-btn {
   @apply text-mist-200 hover:bg-ink-850 hover:text-brand-300;
 }
 
-/* Standardised press tactility for any button-like element. */
 .tap-press {
   @apply transition-transform duration-150 ease-out;
 }
 .tap-press:active:not(:disabled) {
-  transform: scale(0.965);
+  transform: translateY(1px);
 }
 
-/* Animated border-bottom indicator for nav rail items (Sidebar). */
 .nav-indicator {
   position: relative;
 }
@@ -307,92 +334,57 @@ html.dark .icon-btn {
   position: absolute;
   left: 0;
   top: 50%;
-  width: 3px;
+  width: 2px;
   height: 0;
-  border-radius: 9999px;
-  background: linear-gradient(180deg, #15803d, #10b981);
+  background: #23502e;
   transform: translateY(-50%);
-  transition: height 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: height 200ms ease;
 }
 .nav-indicator.is-active::before {
-  height: 60%;
+  height: 100%;
+}
+html.dark .nav-indicator::before {
+  background: #8cb684;
 }
 
-/* Input focus glow used by auth forms + any future inputs. */
 .focus-glow {
-  @apply transition-all duration-200;
+  @apply transition-colors duration-200;
 }
 .focus-glow:focus,
 .focus-glow:focus-within {
   outline: none;
-  box-shadow:
-    0 0 0 4px rgba(22, 163, 74, 0.18),
-    0 0 24px -4px rgba(16, 185, 129, 0.45);
-  border-color: rgb(22 163 74 / 1) !important;
+  border-color: #23502e !important;
+  box-shadow: 0 0 0 3px rgba(35, 80, 46, 0.16);
+}
+html.dark .focus-glow:focus,
+html.dark .focus-glow:focus-within {
+  border-color: #8cb684 !important;
+  box-shadow: 0 0 0 3px rgba(140, 182, 132, 0.2);
 }
 
-/* Icon-target parent/child hover pattern (deprecated). All current
-   polish uses direct `group-hover:rotate-X group-hover:scale-X` on
-   the icon's parent flex container, so this utility is dead code.
-   Kept here only as a comment so future maintainers know the pattern
-   was considered and replaced by Tailwind's `group-hover:`. */
-
-/* Subtle ripple for primary actions. Works with the Button. */
-.tap-ripple {
-  position: relative;
-  overflow: hidden;
-}
-.tap-ripple::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at var(--ripple-x, 50%) var(--ripple-y, 50%),
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0) 60%
-  );
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 280ms ease-out;
-}
-.tap-ripple.is-rippling::after {
-  opacity: 1;
-  transition: opacity 0ms;
-}
-
-/* Stats marquee — the ONE sanctioned keyframe animation. Fills the
-   doubled track so the loop wraps seamlessly. Not covered by the calm
-   `transition` rule (that only covers transitions, not keyframes). */
+/* The one keyframe on the marketing surface: the live ticker. */
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
 .animate-marquee {
-  animation: marquee-scroll 36s linear infinite;
+  animation: marquee-scroll 44s linear infinite;
 }
 
-/* Mobile slide-in transition helper used by Nav mobile menu. */
 .slide-down {
-  animation: slide-down 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slide-down 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Skeleton shimmer placeholder for loading states. */
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(15, 23, 42, 0.04) 0%,
-    rgba(15, 23, 42, 0.10) 35%,
-    rgba(15, 23, 42, 0.04) 70%
+    rgba(11, 15, 12, 0.04) 0%,
+    rgba(11, 15, 12, 0.09) 35%,
+    rgba(11, 15, 12, 0.04) 70%
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
@@ -400,9 +392,9 @@ html.dark .icon-btn {
 html.dark .skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.10) 35%,
-    rgba(255, 255, 255, 0.04) 70%
+    rgba(239, 234, 221, 0.04) 0%,
+    rgba(239, 234, 221, 0.09) 35%,
+    rgba(239, 234, 221, 0.04) 70%
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
@@ -412,31 +404,25 @@ html.dark .skeleton-shimmer {
   100% { background-position: -200% 0; }
 }
 
-/* Touch-target floor — preserve Apple/Material 44px minimum. */
 .touch-target {
   min-height: 44px;
   min-width: 44px;
 }
 
-/* ─── Elevation wave: alive background + motion utilities ─── */
-
-/* Film-grain noise overlay. Use as a fixed-position pseudo-layer after
-   the gradient blobs. mix-blend-mode: overlay keeps it subtle on both
-   white and ink-950 surfaces. pointer-events: none. */
+/* Paper grain, fixed behind content. Kept at 4% — texture, not noise. */
 .texture-grain {
-  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 220px 220px;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
   background-repeat: repeat;
-  mix-blend-mode: overlay;
-  opacity: 0.06;
+  mix-blend-mode: multiply;
+  opacity: 0.035;
   pointer-events: none;
 }
 html.dark .texture-grain {
-  opacity: 0.08;
+  mix-blend-mode: screen;
+  opacity: 0.04;
 }
 
-/* Subtle inner shimmer stripe for marquee pills, CTA buttons, anything
-   that wants an "always alive" feel. */
 .shimmer-stripe {
   position: relative;
   overflow: hidden;
@@ -448,73 +434,92 @@ html.dark .texture-grain {
   inset: 0;
   background: linear-gradient(
     100deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.35) 48%,
-    rgba(255, 255, 255, 0.65) 50%,
-    rgba(255, 255, 255, 0.35) 52%,
-    transparent 70%
+    transparent 40%,
+    rgba(239, 234, 221, 0.5) 50%,
+    transparent 60%
   );
   background-size: 200% 100%;
-  mix-blend-mode: overlay;
   pointer-events: none;
   z-index: 1;
 }
-html.dark .shimmer-stripe::before {
-  background: linear-gradient(
-    100deg,
-    transparent 30%,
-    rgba(34, 197, 94, 0.10) 50%,
-    rgba(16, 185, 129, 0.18) 50%,
-    rgba(34, 197, 94, 0.10) 52%,
-    transparent 70%
-  );
-  background-size: 200% 100%;
-}
 
-/* Premium split-panel background for (auth)/layout.tsx. Vertical
-   gradient + radial sweep punch. Light + dark. */
+/* Solid ink underneath the gradients. Without it the panel's painted backdrop
+ * is image-only, so if the gradient layer fails (or a tool composites it out)
+ * the paper-coloured text sits on the page stock with no fallback. */
 .auth-scene-bg-light {
-  background:
-    radial-gradient(60% 60% at 30% 10%, rgba(16, 185, 129, 0.16), transparent 60%),
-    radial-gradient(50% 50% at 80% 90%, rgba(21, 128, 61, 0.18), transparent 65%),
-    linear-gradient(180deg, #051E14 0%, #0A1E1A 60%, #070C1A 100%);
+  background-color: #0b0f0c;
+  background-image:
+    radial-gradient(70% 50% at 20% 0%, rgba(140, 182, 132, 0.14), transparent 65%),
+    linear-gradient(180deg, #0b0f0c 0%, #101612 60%, #0b0f0c 100%);
 }
 .auth-scene-bg-dark {
-  background:
-    radial-gradient(60% 60% at 30% 10%, rgba(34, 197, 94, 0.22), transparent 60%),
-    radial-gradient(50% 50% at 80% 90%, rgba(16, 185, 129, 0.20), transparent 65%),
-    linear-gradient(180deg, #050816 0%, #080E1C 60%, #050816 100%);
+  background-color: #070a08;
+  background-image:
+    radial-gradient(70% 50% at 20% 0%, rgba(140, 182, 132, 0.18), transparent 65%),
+    linear-gradient(180deg, #070a08 0%, #0b100d 60%, #070a08 100%);
 }
 
-/* ------------------------------------------------------------------
- * Motion: ONE rule.
- *
- * The project previously shipped 24 keyframe animations (aurora-drift,
- * halo-breathing, wiggle-3d, logo-leaf-grow, icon-bob …). Measured against
- * the reference product, Madgicx, whose entire motion personality on its
- * marketing site is three `ease` transitions of 0.15–0.3s.
- *
- * So: every interactive element transitions its colour, border, shadow,
- * opacity and transform in 0.2s ease. Elements that already declare their
- * own `transition` class keep it — a class rule beats this base rule.
- * Nothing decorative animates on its own.
- * ------------------------------------------------------------------ */
+/* Display headline treatment used in the two "statement" blocks. */
+.ink-block {
+  background: #0b0f0c;
+  color: #f1ecdf;
+}
+
+/* A thin red underline used on the annotation copy ("we froze it"). */
+.pen-underline {
+  background-image: linear-gradient(transparent 62%, rgba(179, 38, 30, 0.22) 62%);
+}
+
+/* Gradient text is retained for dashboard headings; on the landing it is used
+   once, for the word "grow", as a deliberate accent rather than a template
+   flourish. Opaque `color` underneath keeps tooling able to read the text. */
+.gradient-text {
+  background: linear-gradient(100deg, #1b4025 0%, #2f6539 45%, #5f9a62 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: #23502e;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .gradient-text {
+  background: linear-gradient(100deg, #b6d0ae 0%, #8cb684 55%, #d9e7d4 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: #b6d0ae;
+  -webkit-text-fill-color: transparent;
+}
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .gradient-text,
+  html.dark .gradient-text {
+    background: none;
+    color: inherit;
+  }
+}
+@media (forced-colors: active) {
+  .gradient-text {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+}
+
+/* ── Motion policy ─────────────────────────────────────────────────────── */
+
 *,
 *::before,
 *::after {
   transition-property: background-color, border-color, color, fill, stroke,
-    opacity, box-shadow, transform, filter;
-  transition-duration: 0.2s;
+    opacity, box-shadow, transform;
+  transition-duration: 0.18s;
   transition-timing-function: ease;
 }
 
-/* Reduced-motion users get no transition at all. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms;
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
   }
 }

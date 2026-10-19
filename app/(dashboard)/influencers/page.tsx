@@ -270,7 +270,7 @@ export default async function InfluencersPage({
                   </a>
                 <a
                   href="/influencers?c=inf_01"
-                  className="inline-flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-sm font-semibold tap-press bg-white/5 text-mist-200 border border-mist-50/10 hover:text-mist-50 hover:border-brand-500/40 touch-target"
+                  className="inline-flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-sm font-semibold tap-press bg-paper-50/5 text-mist-200 border border-mist-50/10 hover:text-mist-50 hover:border-brand-500/40 touch-target"
                 >
                   <Plus size={14} aria-hidden />
                   See the top match

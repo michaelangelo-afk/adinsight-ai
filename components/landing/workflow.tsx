@@ -1,165 +1,113 @@
-import { Plug, Sparkles, LineChart, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { LinkButton } from "@/components/ui/button";
+
+/**
+ * Three acts.
+ *
+ * No cards, no connector arrows, no icon tiles. Each act is a column of a
+ * printed page: an oversized numeral, a rule, the title, the argument, and the
+ * facts in mono. The vertical rules do the work that the old arrows pretended
+ * to do.
+ */
 
 const STEPS = [
   {
-    icon: Plug,
-    eyebrow: "Step 1",
     title: "Connect and deploy",
-    body:
-      "One-click OAuth for Meta, Google, TikTok, X, and LinkedIn. Push new campaigns live to every platform from a single editor — using each platform’s own API. No spreadsheets, no tabs.",
+    body: "One-click OAuth for Meta, Google, TikTok, X, and LinkedIn. Push new campaigns live to every platform from a single editor — using each platform’s own API. No spreadsheets, no tabs.",
     bullets: ["OAuth-secured", "Native platform APIs", "Daily auto-sync"]
   },
   {
-    icon: Sparkles,
-    eyebrow: "Step 2",
     title: "Build automations",
-    body:
-      "Set the rules once: pause any Instagram Story ad when CPC passes ₦400, rotate creative every Tuesday, or rebalance 10% of any under-performing budget into your top Lagos campaign. The engine does the rest.",
+    body: "Set the rules once: pause any Instagram Story ad when CPC passes ₦400, rotate creative every Tuesday, or rebalance 10% of any under-performing budget into your top Lagos campaign. The engine does the rest.",
     bullets: ["Visual rule editor", "Trigger + condition + action", "Full audit log"]
   },
   {
-    icon: LineChart,
-    eyebrow: "Step 3",
     title: "Analyze and scale",
-    body:
-      "One dashboard tells you which naira is growing and which is going to waste. A polished Monday-ready PDF lands in your inbox with the numbers, the wins, and your next three moves.",
+    body: "One dashboard tells you which naira is growing and which is going to waste. A polished Monday-ready PDF lands in your inbox with the numbers, the wins, and your next three moves.",
     bullets: ["Multi-platform ROI view", "AI-prioritised actions", "Branded weekly report"]
   }
 ];
 
 export function Workflow() {
   return (
-    <section id="workflow" className="relative py-section md:py-section-lg">
-
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-2xl">
-          <span
-            className="chip chip-brand"
-          >
-            How it works
+    <section
+      id="workflow"
+      className="relative py-section md:py-section-lg bg-surface-100 dark:bg-ink-900"
+    >
+      <div className="mx-auto max-w-content px-gutter lg:px-gutter-lg">
+        <div className="flex items-center gap-4">
+          <span className="kicker text-brand-700 dark:text-brand-300">
+            03 — How it works
           </span>
-          <h2
-            className="
-              mt-5 text-3xl font-bold tracking-tight
-              text-mist-600 dark:text-mist-50
-            "
-          >
-            From signup to your first live automation{" "}
-            <span className="gradient-text">in under 10 minutes.</span>
+          <span className="h-px flex-1 bg-ink-950/20 dark:bg-paper-100/20" />
+          <span className="kicker">Ten minutes</span>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:gap-10">
+          <h2 className="display text-3xl sm:text-5xl lg:col-span-8">
+            From signup to your first live automation, before lunch.
           </h2>
-          <p
-            className="
-              mt-4 text-base md:text-xl leading-relaxed
-              text-mist-600 dark:text-mist-300
-            "
-          >
+          <p className="text-base leading-relaxed text-mist-600 dark:text-mist-300 lg:col-span-4 lg:pt-2">
             No agency. No developer. No waiting on anyone’s report.
           </p>
         </div>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-6 relative">
-          {STEPS.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <div
-                key={s.title}
-                className="
-                  group relative rounded-2xl p-6 md:p-7 transition-all duration-300 hover-lift
-                  bg-white border border-mist-200 shadow-card
-                  hover:border-brand-700/40 hover:shadow-card
-                  dark:bg-ink-900 dark:border-ink-700 dark:shadow-card
-                  dark:hover:border-brand-700/40 dark:hover:shadow-card
-                "
-              >
-                <div className="flex items-center justify-between">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient shadow-card transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg] group-hover:shadow-glow">
-                    <Icon size={20} className="text-white" strokeWidth={2.4} />
-                  </div>
-                  <span
-                    className="
-                      text-xs font-semibold uppercase tracking-[0.18em]
-                      text-mist-500 dark:text-mist-400
-                    "
-                  >
-                    {s.eyebrow}
-                  </span>
-                </div>
-                <h3
-                  className="
-                    mt-6 text-xl font-bold tracking-tight
-                    text-mist-600 dark:text-mist-50
-                  "
+        <div className="mt-14 grid grid-cols-1 lg:grid-cols-3">
+          {STEPS.map((s, i) => (
+            <article
+              key={s.title}
+              className={
+                "pt-8 " +
+                (i === 0
+                  ? ""
+                  : "border-t border-ink-950/15 dark:border-paper-100/15 lg:border-t-0 lg:border-l lg:pl-8")
+              }
+            >
+              <div className="flex items-baseline justify-between gap-4 border-t border-ink-950/20 pt-4 dark:border-paper-100/20">
+                <span
+                  aria-hidden
+                  className="display text-6xl leading-none text-brand-700/25 dark:text-brand-300/25"
                 >
-                  {s.title}
-                </h3>
-                <p
-                  className="
-                    mt-3 text-sm leading-relaxed
-                    text-mist-600 dark:text-mist-300
-                  "
-                >
-                  {s.body}
-                </p>
-                <ul className="mt-5 space-y-2">
-                  {s.bullets.map((b) => (
-                    <li
-                      key={b}
-                      className="
-                        flex items-center gap-2.5 text-sm
-                        text-mist-700 dark:text-mist-200
-                      "
-                    >
-                      <span
-                        className="
-                          inline-flex h-4 w-4 items-center justify-center rounded-full
-                          bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300
-                          dark:bg-brand-500/20 dark:text-brand-300
-                        "
-                      >
-                        <Check size={10} strokeWidth={3.5} />
-                      </span>
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-                {i < STEPS.length - 1 && (
-                  <>
-                    <svg
-                      aria-hidden
-                      className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 pointer-events-none"
-                      width="56"
-                      height="24"
-                      viewBox="0 0 56 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M 46 4 L 54 12 L 46 20"
-                        stroke="rgb(21 128 61 / 0.8)"
-                        className="dark:stroke-[rgb(16,185,129,0.85)]"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"
-                      />
-                      <circle cx="56" cy="12" r="2" fill="rgb(22 163 74)" className="dark:fill-[rgb(16,185,129)]" />
-                    </svg>
-                  </>
-                )}
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="kicker">Act {i + 1}</span>
               </div>
-            );
-          })}
+
+              <h3 className="display mt-8 text-xl md:text-3xl">{s.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-mist-600 dark:text-mist-300">
+                {s.body}
+              </p>
+
+              <ul className="mt-6 border-t border-ink-950/15 pt-4 dark:border-paper-100/15">
+                {s.bullets.map((b) => (
+                  <li
+                    key={b}
+                    className="flex gap-2 py-1 font-mono text-xs uppercase tracking-[0.08em] text-mist-600 dark:text-mist-300"
+                  >
+                    <span aria-hidden className="text-brand-700 dark:text-brand-300">
+                      —
+                    </span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </div>
 
-        {/* Subtle dotted background pattern to reinforce the pipeline metaphor */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04] dark:opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, #15803D 1px, transparent 1px)",
-            backgroundSize: "24px 24px"
-          }}
-        />
+        <div className="mt-12 flex flex-col gap-4 border-t border-ink-950/20 pt-6 dark:border-paper-100/20 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-md font-mono text-xs uppercase tracking-[0.08em] text-mist-500">
+            Connect once. The statement writes itself every Monday.
+          </p>
+          <LinkButton href="#pricing" variant="secondary" size="md" className="group">
+            See the rate card
+            <ArrowRight
+              size={14}
+              strokeWidth={1.75}
+              className="transition-transform duration-200 group-hover:translate-x-1"
+            />
+          </LinkButton>
+        </div>
       </div>
     </section>
   );

@@ -1,12 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Fraunces, Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/app/theme-provider";
 import { FlashThemeScript } from "@/app/flash-theme";
 
-const inter = Inter({
+/** Editorial serif — headlines only. */
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+  display: "swap"
+});
+
+/** Interface face. Narrow, quiet, nothing like Inter at display sizes. */
+const instrument = Instrument_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-instrument",
+  display: "swap"
+});
+
+/** Every figure, label and section number. Tabular by nature. */
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-jetbrains",
   display: "swap"
 });
 
@@ -27,8 +46,8 @@ export const viewport: Viewport = {
   // Default theme-color is the light surface; the FlashThemeScript in <head>
   // can replace it on dark-mode landing via meta swap if we ever want to.
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
-    { media: "(prefers-color-scheme: dark)", color: "#070710" }
+    { media: "(prefers-color-scheme: light)", color: "#F1ECDF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0F0C" }
   ],
   colorScheme: "normal"
 };
@@ -41,7 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable}`}
+      className={`${fraunces.variable} ${instrument.variable} ${jetbrains.variable}`}
       // The dark class is set imperatively by the inline script in <head>.
       // suppressHydrationWarning prevents React's noisy diff for that one
       // controlled mutation.
