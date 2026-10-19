@@ -38,7 +38,7 @@ export function Nav() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
-            <ThemeToggle />
+            <ThemeToggle onDark />
             <LinkButton href="/login" variant="ghost" size="sm" className="text-white/70 hover:text-white">
               Sign in
             </LinkButton>
@@ -48,7 +48,7 @@ export function Nav() {
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <ThemeToggle />
+            <ThemeToggle onDark />
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white"
