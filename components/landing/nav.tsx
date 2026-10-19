@@ -31,7 +31,7 @@ export function Nav() {
           <Logo />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-7 lg:gap-8">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {NAV_LINKS.map((l) => (
             <a
               key={l.href}
@@ -51,7 +51,7 @@ export function Nav() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2">
           <ThemeToggle />
           {/* With real Supabase auth wired up, the buttons should respect the
               actual flows: existing users → /login, new users → /signup. */}
@@ -68,7 +68,7 @@ export function Nav() {
           </LinkButton>
         </div>
 
-        <div className="md:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-2">
           <ThemeToggle />
           <button
             className="
@@ -89,7 +89,7 @@ export function Nav() {
       {open && (
         <div
           className="
-            md:hidden border-t slide-down
+            lg:hidden border-t slide-down
             border-mist-200 bg-white/95 backdrop-blur-xl
             dark:border-ink-700 dark:bg-ink-950/95
           "

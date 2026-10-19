@@ -67,11 +67,7 @@ export function Pricing() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="text-center max-w-2xl mx-auto">
           <span
-            className="
-              chip
-              bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
-              dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
-            "
+            className="chip chip-brand"
           >
             Pricing
           </span>
@@ -148,11 +144,7 @@ export function Pricing() {
                 </h3>
                 {t.highlight && (
                   <span
-                    className="
-                      chip bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
-                      dark:bg-brand-950/60 dark:border-brand-700/40 dark:text-brand-300
-                      font-semibold
-                    "
+                    className="chip chip-brand font-semibold"
                   >
                     <Sparkles size={11} />
                     Most popular

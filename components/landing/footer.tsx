@@ -91,20 +91,12 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-2 text-xs">
             <span
-              className="
-                chip font-medium
-                bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
-                dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
-              "
+              className="chip chip-brand font-medium"
             >
               Paystack-secured
             </span>
             <span
-              className="
-                chip font-medium
-                bg-brand-50 border border-brand-200 text-brand-700
-                dark:bg-brand-950/50 dark:border-brand-500/40 dark:text-brand-300
-              "
+              className="chip chip-brand font-medium"
             >
               Meta Business Partner
             </span>

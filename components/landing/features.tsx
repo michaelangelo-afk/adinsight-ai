@@ -213,11 +213,7 @@ export function Features() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
           <span
-            className="
-              chip
-              bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
-              dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
-            "
+            className="chip chip-brand"
           >
             The four pillars · now with automations
           </span>

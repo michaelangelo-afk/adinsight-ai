@@ -33,11 +33,7 @@ export function Cta() {
           <div className="relative grid md:grid-cols-[1.4fr,1fr] items-center gap-8 p-10 md:p-14">
             <div>
               <span
-                className="
-                  chip
-                  bg-brand-50 border border-brand-200 text-brand-700 dark:text-brand-300 dark:border-brand-500/40 dark:bg-brand-950/50
-                  dark:bg-brand-950/60 dark:border-brand-700/50 dark:text-brand-300
-                "
+                className="chip chip-brand"
               >
                 <Sparkles />
                 Start growing today
