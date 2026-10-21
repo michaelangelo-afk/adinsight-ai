@@ -14,11 +14,14 @@
 import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
+  Megaphone,
   Sparkles,
   FileText,
   Users,
   Wallet,
-  Settings
+  Rocket,
+  LogIn,
+  UserPlus
 } from "lucide-react";
 
 export interface NavItem {
@@ -41,6 +44,7 @@ export interface NavItem {
  */
 export const NAV_ITEMS: ReadonlyArray<NavItem> = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
+  { label: "Channels", icon: Megaphone, href: "/channels" },
   {
     label: "Recommendations",
     icon: Sparkles,
@@ -57,8 +61,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     // matches the "12 vetted creators" copy on the /influencers hero.
     badge: 12
   },
-  { label: "Billing", icon: Wallet, href: "/billing" },
-  { label: "Settings", icon: Settings, href: "#", stub: true }
+  { label: "Billing", icon: Wallet, href: "/billing" }
 ];
 
 /**
@@ -68,6 +71,36 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
  * identical on both surfaces so the active state lights up the same
  * link everywhere.
  */
+/**
+ * Account / entry pages. These live OUTSIDE the dashboard rail (they are
+ * the front door to it), but they are still real routes — so the landing
+ * nav and the footer render them from here instead of hard-coding
+ * hrefs. Auth is optional, which is why /login and /signup sit beside
+ * /onboarding rather than gating them.
+ */
+export const ACCOUNT_ITEMS: ReadonlyArray<NavItem> = [
+  { label: "Get started", icon: Rocket, href: "/onboarding" },
+  { label: "Sign in", icon: LogIn, href: "/login" },
+  { label: "Create account", icon: UserPlus, href: "/signup" }
+];
+
+/**
+ * Every page in the product, grouped the way the nav surfaces present
+ * them. `NAV_ITEMS` + `ACCOUNT_ITEMS` + the marketing home make the full
+ * route map: `/`, /dashboard, /channels, /recommendations, /reports,
+ * /influencers, /billing, /onboarding, /login, /signup.
+ */
+export const SITE_GROUPS: ReadonlyArray<{
+  title: string;
+  items: ReadonlyArray<NavItem>;
+}> = [
+  {
+    title: "Workspace",
+    items: [{ label: "Overview", icon: LayoutDashboard, href: "/dashboard" }, ...NAV_ITEMS.filter((n) => n.href !== "/dashboard")]
+  },
+  { title: "Account", items: ACCOUNT_ITEMS }
+];
+
 export function isNavActive(
   pathname: string | null | undefined,
   href: string

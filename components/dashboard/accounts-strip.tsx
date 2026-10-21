@@ -1,7 +1,7 @@
 import { Plus, RefreshCw, Link2, Sparkles, ExternalLink } from "lucide-react";
 import type { AdAccount } from "@/lib/types";
 import { connectMeta, connectDemoMeta, syncInsights } from "@/app/actions/meta";
-import { MetaLogo } from "@/components/brand/meta-logo";
+import { PlatformLogo } from "@/components/brand/platform-logo";
 import { MetricTooltip } from "@/components/ui/tooltip";
 import { DemoPillTip } from "@/lib/metric-tooltips";
 
@@ -18,18 +18,22 @@ const PLATFORM_META: Record<string, { name: string; color: string }> = {
 };
 
 /**
- * Renders the brand mark for a platform. Meta gets the official M
- * gradient mark; other platforms keep a colored dot for now until
- * Google + TikTok brand marks are added in a follow-up.
+ * Renders the real platform mark. The colored dot survives only as the
+ * fallback for a platform whose logo asset has not been added yet.
  */
 function PlatformMark({ platform }: { platform: string }) {
-  if (platform === "meta") return <MetaLogo size="xs" />;
   const color = PLATFORM_META[platform]?.color ?? "#9b6cff";
   return (
-    <span
-      className="h-2 w-2 rounded-full shrink-0"
-      style={{ background: color }}
-      aria-hidden="true"
+    <PlatformLogo
+      platform={platform}
+      size="xs"
+      fallback={
+        <span
+          className="h-2 w-2 rounded-full shrink-0"
+          style={{ background: color }}
+          aria-hidden="true"
+        />
+      }
     />
   );
 }
@@ -73,7 +77,7 @@ export function AccountsStrip({
           data-demo-pill="1"
           className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-brand-500/15 hairline text-xs"
         >
-          <MetaLogo size="xs" />
+          <PlatformLogo platform="meta" size="xs" />
           <span className="text-ink-900 dark:text-mist-100">
             <MetricTooltip
               content={DemoPillTip}

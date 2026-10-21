@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Pause, Play, ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PlatformLogo } from "@/components/brand/platform-logo";
 import { MetricTooltip } from "@/components/ui/tooltip";
 import type { CampaignSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
@@ -55,9 +56,16 @@ function PlatformDot({ platform }: { platform: string }) {
     tiktok: "#5ee5ad"
   };
   return (
-    <span
-      className="h-2 w-2 rounded-full inline-block"
-      style={{ background: map[platform] ?? "#9b6cff" }}
+    <PlatformLogo
+      platform={platform}
+      size="sm"
+      className="inline-block h-3.5 w-3.5"
+      fallback={
+        <span
+          className="h-2 w-2 rounded-full inline-block"
+          style={{ background: map[platform] ?? "#9b6cff" }}
+        />
+      }
     />
   );
 }
@@ -155,7 +163,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                   </MetricTooltip>
                 </span>
               </th>
-              <th className="text-right py-3 px-2 font-medium">
+              <th className="text-right py-3 px-2 font-medium hidden sm:table-cell">
                 <span className="inline-flex items-baseline justify-end w-full">
                   <MetricTooltip
                     content={TrendSparklineTip}
@@ -190,9 +198,12 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                   className="border-b border-mist-50/[0.04] last:border-0 group hover:bg-mist-50/[0.06] transition-colors duration-200"
                 >
                   <td className="py-3 px-2">
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex min-w-0 items-center gap-2.5">
                       <PlatformDot platform={c.platform} />
-                      <span className="text-mist-50 font-medium">
+                      {/* Truncate on phones so the row fits 390px without
+                          horizontal scrolling; the platform + CTR line
+                          below still carries the full context. */}
+                      <span className="max-w-[9.5rem] truncate text-mist-50 font-medium sm:max-w-none">
                         {c.name}
                       </span>
                     </div>
@@ -209,7 +220,7 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                   <td className="py-3 px-2 text-right tabular-nums text-mist-200 hidden md:table-cell">
                     ₦{c.cpc.toFixed(2)}
                   </td>
-                  <td className="py-3 px-2 text-right">
+                  <td className="hidden py-3 px-2 text-right sm:table-cell">
                     <div className="inline-flex justify-end">
                       <Sparkline
                         data={c.trend}

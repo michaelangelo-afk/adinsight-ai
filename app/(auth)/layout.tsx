@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Logo } from "@/components/brand/logo";
+import { AuthNav } from "@/components/auth/auth-nav";
 import { TextureGrain } from "@/components/motion/texture-grain";
 import { Check } from "lucide-react";
 
@@ -66,9 +67,12 @@ export default function LoginLayout({
 
       <main className="relative flex flex-1 flex-col items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
-          <div className="mb-8 flex justify-center lg:hidden">
+          <div className="mb-6 flex justify-center lg:hidden">
             <Logo />
           </div>
+          {/* Entry pages are part of the browsable product, so they carry
+              a real nav: Home / Dashboard / Sign in / Create account. */}
+          <AuthNav />
           {children}
         </div>
       </main>

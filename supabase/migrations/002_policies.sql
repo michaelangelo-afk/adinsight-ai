@@ -177,7 +177,7 @@ create index idx_reports_org on reports (organization_id);
 --   '0 1 * * *',  -- 1am WAT daily
 --   $$
 --   select net.http_post(
---     url := 'https://dyfeolrotkjmeauiknbx.supabase.co/functions/v1/meta-sync',
+--     url := 'https://bmejdbiwaehdqgqnwvyk.supabase.co/functions/v1/meta-sync',
 --     headers := '{"Authorization": "Bearer <ANON_KEY>"}'::jsonb
 --   )
 --   $$

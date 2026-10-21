@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
+import { isAuthDisabled } from "@/lib/auth/auth-disabled";
 
 /**
  * Middleware session updater.
@@ -22,6 +23,13 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/favicon") ||
     path === "/auth/callback"
   ) {
+    return NextResponse.next({ request });
+  }
+
+  // --- Temporary auth bypass (NEXT_PUBLIC_DISABLE_AUTH=true) ---
+  // No session refresh, no /login redirect: every route renders as if
+  // the visitor were signed in. See lib/auth/auth-disabled.ts.
+  if (isAuthDisabled()) {
     return NextResponse.next({ request });
   }
 

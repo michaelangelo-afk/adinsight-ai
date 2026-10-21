@@ -2,10 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Plus,
-  LogOut
-} from "lucide-react";
+import { Plus, LogOut, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/app/actions/auth";
 import { Logo } from "@/components/brand/logo";
@@ -98,7 +95,7 @@ export function Sidebar({ orgName }: SidebarProps) {
                 {n.label}
               </span>
               {n.badge !== undefined && (
-                <span className="inline-flex items-center justify-center rounded-2xl bg-brand-500 px-1.5 h-5 text-xs font-semibold text-white ">
+                <span className="inline-flex items-center justify-center rounded-2xl bg-brand-500 px-1.5 h-5 text-xs font-semibold text-ink-950 ">
                   {n.badge}
                 </span>
               )}
@@ -120,6 +117,14 @@ export function Sidebar({ orgName }: SidebarProps) {
             Upgrade
           </button>
         </div>
+
+        <Link
+          href="/"
+          className="mt-4 inline-flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors duration-200 hover:text-brand-700 dark:text-mist-300 dark:hover:text-brand-300 tap-press"
+        >
+          <ArrowLeft size={14} aria-hidden />
+          Back to site
+        </Link>
 
         {/*
           Server-action form: posts to signOut() and redirects in middleware.

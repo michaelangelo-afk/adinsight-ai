@@ -4,7 +4,7 @@
 --   psql "$SUPABASE_DB_URL" -f supabase/migrations/0001_meta_tables.sql
 --   supabase db push --file supabase/migrations/0001_meta_tables.sql
 --   Or pasted via the Supabase SQL editor at:
---     https://supabase.com/dashboard/project/dyfeolrotkjmeauiknbx/sql/new
+--     https://supabase.com/dashboard/project/bmejdbiwaehdqgqnwvyk/sql/new
 
 -- ============================================================================
 -- Maintainer note — read this BEFORE changing meta_connections schema.

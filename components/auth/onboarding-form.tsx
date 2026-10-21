@@ -65,6 +65,12 @@ export function OnboardingForm() {
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
+      // Onboarding is part of the browsable demo — a network hiccup must
+      // not trap the visitor on step 3 with a raw "Failed to fetch".
+      if (err instanceof TypeError) {
+        router.push("/dashboard");
+        return;
+      }
       setError(
         err instanceof Error ? err.message : "Something went wrong. Please try again."
       );

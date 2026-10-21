@@ -1,35 +1,25 @@
+import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
-import { PatternField, SignalRings } from "@/components/landing/pattern-field";
+import { PatternField } from "@/components/landing/pattern-field";
+import { ACCOUNT_ITEMS, NAV_ITEMS } from "@/lib/dashboard/nav";
 
-const COLS = [
-  {
-    title: "Product",
-    items: [
-      "Dashboard",
-      "Automations",
-      "Analytics",
-      "Deployment",
-      "AI recommendations",
-      "Influencer marketplace"
-    ]
-  },
-  {
-    title: "Company",
-    items: ["About", "Pricing", "Careers", "Press"]
-  },
-  {
-    title: "Legal",
-    items: ["Privacy", "Terms", "Security", "Data processing"]
-  }
+const SECTION_LINKS = [
+  { label: "How it works", href: "/#workflow" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Contact", href: "/#contact" }
 ];
 
 /**
  * Footer.
  *
- * Dark, quiet and wide: identity on the left, three link columns on the right,
- * a fine-print bar at the foot. No rules-as-decoration, no stamps — the only
- * lines are the two that separate the page from the colophon and the colophon
- * from the fine print.
+ * Dark, quiet and wide: identity on the left, three link columns on the
+ * right, a fine-print bar at the foot.
+ *
+ * The columns are real navigation, not decoration: Product lists every
+ * in-app page from `NAV_ITEMS`, Account lists every entry page from
+ * `ACCOUNT_ITEMS`, and Company carries the marketing anchors + home.
+ * Before this, all twelve footer links were `href="#"` — dead ends that
+ * also let the mobile tap-target audit fail (17px tall rows).
  */
 export function Footer() {
   return (
@@ -43,7 +33,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="grid gap-10 border-t border-shell/10 py-12 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:gap-8">
+        <div className="grid gap-8 border-t border-shell/10 py-10 sm:grid-cols-2 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:gap-8">
           <div>
             <p className="max-w-xs text-sm leading-relaxed text-shell/55">
               GrowthAds turns every naira of paid spend into a line you can read:
@@ -55,25 +45,67 @@ export function Footer() {
             </p>
           </div>
 
-          {COLS.map((col) => (
-            <nav key={col.title} aria-label={col.title}>
-              <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-shell/55">
-                {col.title}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {col.items.map((item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="text-sm text-shell/60 transition-colors duration-200 hover:text-shell"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+          <nav aria-label="Product">
+            <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-shell/55">
+              Product
+            </h3>
+            <ul className="mt-3 space-y-0.5">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="inline-flex min-h-[44px] items-center text-sm text-shell/65 transition-colors duration-200 hover:text-shell"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Account">
+            <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-shell/55">
+              Account
+            </h3>
+            <ul className="mt-3 space-y-0.5">
+              {ACCOUNT_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="inline-flex min-h-[44px] items-center text-sm text-shell/65 transition-colors duration-200 hover:text-shell"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Company">
+            <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-shell/55">
+              Company
+            </h3>
+            <ul className="mt-3 space-y-0.5">
+              <li>
+                <Link
+                  href="/"
+                  className="inline-flex min-h-[44px] items-center text-sm text-shell/65 transition-colors duration-200 hover:text-shell"
+                >
+                  Home
+                </Link>
+              </li>
+              {SECTION_LINKS.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className="inline-flex min-h-[44px] items-center text-sm text-shell/65 transition-colors duration-200 hover:text-shell"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
         <div className="flex flex-col gap-2 border-t border-shell/10 py-6 text-xs text-shell/55 md:flex-row md:items-center md:justify-between">

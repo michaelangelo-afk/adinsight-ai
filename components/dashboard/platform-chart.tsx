@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import type { DashboardSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
-import { MetaLogo } from "@/components/brand/meta-logo";
+import { PlatformLogo } from "@/components/brand/platform-logo";
 import { MetricTooltip } from "@/components/ui/tooltip";
 import {
   MetaBriefTip,
@@ -124,15 +124,17 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
               : `What ${p.platform} Ads means`;
           return (
             <div key={p.platform} className="flex items-center gap-3">
-              {p.orig === "meta" ? (
-                <MetaLogo size="xs" />
-              ) : (
-                <span
-                  className="h-2 w-2 rounded-full shrink-0"
-                  style={{ background: p.color }}
-                  aria-hidden="true"
-                />
-              )}
+              <PlatformLogo
+                platform={p.orig}
+                size="xs"
+                fallback={
+                  <span
+                    className="h-2 w-2 rounded-full shrink-0"
+                    style={{ background: p.color }}
+                    aria-hidden="true"
+                  />
+                }
+              />
               <span className="text-sm text-ink-800 dark:text-mist-200 flex-1">
                 {tip ? (
                   <MetricTooltip

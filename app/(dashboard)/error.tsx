@@ -58,7 +58,7 @@ export default function DashboardError({
               Retry
             </button>
             <a
-              href="https://supabase.com/dashboard/project/dyfeolrotkjmeauiknbx"
+              href="https://supabase.com/dashboard/project/bmejdbiwaehdqgqnwvyk"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-2xl bg-mist-50/[0.04] hairline px-4 py-2.5 text-sm font-medium text-mist-200 hover:bg-mist-50/[0.08] transition-colors"

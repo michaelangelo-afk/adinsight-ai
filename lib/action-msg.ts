@@ -6,6 +6,7 @@
 // components/dashboard/meta-action-toast.tsx.
 
 import { cookies } from "next/headers";
+import { isAuthDisabled } from "@/lib/auth/auth-disabled";
 
 export interface MetaActionMsg {
   tone: "success" | "error";
@@ -77,5 +78,8 @@ export function parseMetaDemoFlag(raw: string | undefined): boolean {
  *     round-tripping to Supabase (cookie reverts to mock on refresh).
  */
 export function isDemoMode(): boolean {
-  return cookies().get(META_DEMO_COOKIE)?.value === "1";
+  // The auth bypass doubles as demo mode: with no session there is no
+  // organization to query, so every data action must serve the mock set
+  // instead of throwing "Not authenticated".
+  return isAuthDisabled() || cookies().get(META_DEMO_COOKIE)?.value === "1";
 }

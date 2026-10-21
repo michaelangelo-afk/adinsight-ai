@@ -52,6 +52,7 @@ export interface TopbarProfile {
 
 export function Topbar({ profile }: { profile: TopbarProfile }) {
   const pathname = usePathname();
+  const activeNav = NAV_ITEMS.find((n) => isNavActive(pathname, n.href));
   // Mobile-nav sheet open state. Phones (<sm, 640px) have neither the
   // sidebar rail (lg+) nor the horizontal nav strip (sm+) — before
   // this state, there was literally no way to reach /influencers /
@@ -129,7 +130,9 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
           >
             /
           </Link>
-          <div className="text-sm font-medium text-slate-800 dark:text-mist-100">Overview</div>
+          <div className="text-sm font-medium text-slate-800 dark:text-mist-100">
+            {activeNav?.label ?? "Overview"}
+          </div>
         </div>
 
         {/* Phase 6 — Horizontal nav strip. Visible at md and above so
@@ -143,9 +146,9 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
         <nav
           aria-label="Main navigation"
           className="
-            hidden sm:flex items-center gap-1 rounded-2xl
+            hidden sm:flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-2xl
             bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 px-1.5 py-1
-            mx-2 lg:mx-4
+            mx-2 lg:mx-3
           "
         >
           {NAV_ITEMS.map((n) => {
@@ -178,15 +181,15 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
                     )}
                   />
                   {/* Phase 6 viewport fix — labels were crowding the
-                      768px md row visually. Icons-only at md (so even
-                      on narrow tablets 6 chips fit), full label tips
-                      in at lg+. Badge pills are reserved for xl+
-                      where horizontal space is plentiful. The
-                      aria-label / title above carry the full label
-                      for screen readers at every breakpoint. */}
-                  <span className="hidden lg:inline">{n.label}</span>
+                      tablet row visually. Icons-only below 2xl (so all
+                      seven chips fit next to search/profile at 1024–1535),
+                      full label tips in at 2xl+. Badge pills are reserved
+                      for xl+ where horizontal space is plentiful. The
+                      aria-label / title above carry the full label for
+                      screen readers at every breakpoint. */}
+                  <span className="hidden xl:inline">{n.label}</span>
                   {n.badge !== undefined && (
-                    <span className="hidden xl:inline-flex ml-0.5 items-center justify-center rounded-2xl bg-brand-500 px-1.5 h-4 text-xs font-semibold text-white ">
+                    <span className="hidden 2xl:inline-flex ml-0.5 items-center justify-center rounded-2xl bg-brand-500 px-1.5 h-4 text-xs font-semibold text-ink-950 ">
                       {n.badge}
                     </span>
                   )}
@@ -199,18 +202,19 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
             spacer pushes the utility cluster to the right. */}
         <div className="flex-1 md:flex-initial" />
 
-        {/* Date range pill */}
-        <button type="button" className="hidden sm:flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-sm text-slate-700 dark:text-mist-200 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
+        {/* Date range pill — xl+ only; below that the nav needs the room */}
+        <button type="button" className="hidden xl:flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-sm text-slate-700 dark:text-mist-200 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
           <Calendar size={14} className="transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300" />
           Last 30 days
           <ChevronDown size={14} className="text-slate-400 dark:text-mist-400 transition-transform group-hover:rotate-180 duration-300" />
         </button>
 
-        {/* Search */}
-        <button type="button" className="hidden lg:flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-sm text-slate-500 dark:text-mist-300 w-64 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
+        {/* Search — 2xl+ only. It is a stub today, so it yields space to
+            the nav labels rather than crowding them at 1280–1535. */}
+        <button type="button" className="hidden 2xl:flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-sm text-slate-500 dark:text-mist-300 w-64 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
           <Search size={14} className="transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300" />
-          <span className="text-slate-500 dark:text-mist-500">Search campaigns…</span>
-          <kbd className="ml-auto text-xs text-slate-500 dark:text-mist-500 px-1.5 py-0.5 rounded-2xl bg-paper-50 dark:bg-ink-900 border border-mist-200 dark:border-transparent group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors">
+          <span className="text-slate-600 dark:text-mist-400">Search campaigns…</span>
+          <kbd className="ml-auto text-xs text-slate-600 dark:text-mist-400 px-1.5 py-0.5 rounded-2xl bg-paper-50 dark:bg-ink-900 border border-mist-200 dark:border-transparent group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors">
             ⌘K
           </kbd>
         </button>
@@ -224,13 +228,13 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
         <ThemeToggle />
 
         {/* Notifications */}
-        <button type="button" className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-slate-600 dark:text-mist-200 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target">
+        <button type="button" className="relative hidden sm:inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 text-slate-600 dark:text-mist-200 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target">
           <Bell size={16} />
           <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-brand-500 ring-2 ring-ink-950 " />
         </button>
 
         {/* Profile */}
-        <button type="button" className="flex items-center gap-2 rounded-2xl pl-2 pr-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
+        <button type="button" className="hidden sm:flex items-center gap-2 rounded-2xl pl-2 pr-3 py-1.5 bg-slate-100 dark:bg-mist-50/[0.04] border border-mist-200 dark:border-mist-50/10 hover:bg-slate-200/70 dark:hover:bg-mist-50/[0.08] hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group">
           <div className="h-7 w-7 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold text-white shadow-glow group-hover:scale-110 transition-transform duration-300">
             {profile.avatar || "?"}
           </div>
@@ -238,7 +242,7 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
             <span className="text-xs font-medium text-slate-900 dark:text-mist-50">
               {profile.fullName}
             </span>
-            <span className="text-xs text-slate-500 dark:text-mist-400">
+            <span className="text-xs text-slate-600 dark:text-mist-400">
               {profile.businessName}
             </span>
           </div>
@@ -255,13 +259,29 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
       {menuOpen && (
         <div
           id="dashboard-mobile-nav"
-          className="sm:hidden border-t border-mist-200 dark:border-mist-50/[0.04] bg-paper-50/95 dark:bg-ink-950/85 backdrop-blur-xl"
+          className="sm:hidden border-t border-mist-200 dark:border-mist-50/[0.04] bg-paper-50/95 dark:bg-ink-950/85 backdrop-blur-xl px-3 py-3"
           role="dialog"
           aria-label="Dashboard navigation"
         >
+          {/* Who / where — the sheet is the only nav on phones, so it
+              carries the account context the hidden profile chip drops. */}
+          <div className="mb-2 flex items-center gap-3 rounded-2xl bg-mist-50/[0.04] px-3 py-2.5">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-gradient text-xs font-semibold text-white">
+              {profile.avatar || "?"}
+            </div>
+            <div className="min-w-0 leading-tight">
+              <div className="truncate text-sm font-medium text-slate-900 dark:text-mist-50">
+                {profile.fullName}
+              </div>
+              <div className="truncate text-xs text-slate-600 dark:text-mist-400">
+                {profile.businessName}
+              </div>
+            </div>
+          </div>
+
           <nav
             aria-label="Mobile navigation"
-            className="px-3 py-3 space-y-1"
+            className="px-0 py-1 space-y-1"
           >
             {NAV_ITEMS.map((n) => {
               const Icon = n.icon;
@@ -295,7 +315,7 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
                   />
                   <span className="flex-1">{n.label}</span>
                   {n.badge !== undefined && (
-                    <span className="inline-flex items-center justify-center rounded-2xl bg-brand-600 dark:bg-brand-500 px-1.5 h-5 text-xs font-semibold text-white ">
+                    <span className="inline-flex items-center justify-center rounded-2xl bg-brand-600 dark:bg-brand-500 px-1.5 h-5 text-xs font-semibold text-ink-950 ">
                       {n.badge}
                     </span>
                   )}
@@ -310,6 +330,17 @@ export function Topbar({ profile }: { profile: TopbarProfile }) {
                 </Link>
               );
             })}
+
+            <Link
+              href="/"
+              onClick={() => setMenuOpen(false)}
+              className="tap-press touch-target flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 dark:text-mist-300 dark:hover:bg-mist-50/[0.06] dark:hover:text-mist-50"
+            >
+              <span className="flex h-4 w-4 items-center justify-center text-xs">
+                ⌂
+              </span>
+              <span className="flex-1">Back to site</span>
+            </Link>
           </nav>
         </div>
       )}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { readSupabaseEnv, formatEnvError } from "@/lib/supabase/env";
+import { friendlyAuthError } from "@/lib/auth/auth-errors";
 
 export function LoginForm() {
   const router = useRouter();
@@ -35,19 +36,16 @@ export function LoginForm() {
       });
 
       if (authError) {
-        setError(authError.message);
+        setError(friendlyAuthError(authError));
         return;
       }
 
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
-      // Surface the real error so it's debuggable — not just an opaque "unexpected".
-      setError(
-        err instanceof Error
-          ? err.message
-          : "An unexpected error occurred. Please try again."
-      );
+      // A dead backend surfaces as `TypeError: Failed to fetch` — translate
+      // it into something a visitor can act on instead of echoing it.
+      setError(friendlyAuthError(err));
     } finally {
       setLoading(false);
     }
@@ -151,6 +149,18 @@ export function LoginForm() {
           </Link>
         </p>
       </form>
+
+      <div className="mt-6 border-t border-mist-200 dark:border-mist-50/10 pt-5 text-center">
+        <Link
+          href="/dashboard"
+          className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-full px-4 text-sm font-medium text-mist-600 underline decoration-mist-300 underline-offset-4 transition-colors duration-200 hover:text-brand-700 hover:decoration-brand-400 dark:text-mist-300 dark:hover:text-brand-300"
+        >
+          Skip sign-in — open the demo dashboard
+        </Link>
+        <p className="mt-2 text-xs text-mist-400 dark:text-mist-500">
+          No account needed. Every page is browsable.
+        </p>
+      </div>
     </div>
   );
 }

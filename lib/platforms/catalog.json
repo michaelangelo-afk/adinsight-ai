@@ -1,0 +1,877 @@
+[
+  {
+    "id": "google-business",
+    "name": "Google Business Profile",
+    "group": "local",
+    "wave": 1,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "people",
+      "asOf": "2026-10",
+      "source": "Google Business Profile; no Nigerian reach figure published",
+      "note": "Reaches Search and Maps at the moment someone looks for the business. No ad spend."
+    },
+    "economics": {
+      "model": "free",
+      "entry": "Free",
+      "benchmark": "No media cost. Posts, offers, photos, hours and review replies are free."
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "free",
+      "quota": "Project quota granted after access approval; 429 when exceeded",
+      "docs": "https://developers.google.com/my-business"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "The Business Profile API is the sanctioned path. The web UI is not licensed for automated posting."
+    },
+    "effort": "S",
+    "playbook": "Claim the profile, add hours, photos and a first Offer post. For Nigerian SMEs this is the highest-return zero-naira channel and the least contested."
+  },
+  {
+    "id": "google-merchant",
+    "name": "Google Merchant Center",
+    "group": "search",
+    "wave": 1,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "people",
+      "asOf": "2026-10",
+      "source": "Google Merchant Center; Nigeria appears on third-party supported-country lists",
+      "note": "Free product listings across Search, Maps and YouTube; confirm Nigerian eligibility in a live Merchant Center account before promising it."
+    },
+    "economics": {
+      "model": "free",
+      "entry": "Free listings",
+      "benchmark": "No media cost for free listings. Shopping ads are optional and auction-priced."
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "account",
+      "cost": "free",
+      "quota": "Merchant API per-method quotas; feed size limits apply",
+      "docs": "https://developers.google.com/merchant/api"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Merchant API is the sanctioned read/write surface; UI automation is not permitted."
+    },
+    "effort": "M",
+    "playbook": "One feed is the whole integration. Push product title, price, availability, image and GTIN; fix disapprovals before spending on Shopping ads."
+  },
+  {
+    "id": "meta",
+    "name": "Meta Ads (Facebook)",
+    "group": "social",
+    "wave": 2,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 38000000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / Meta ad tools",
+      "note": "Facebook ad reach. Instagram adds 10.0M, but the audiences overlap and must not be summed."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum; NGN card or prepaid",
+      "benchmark": "Nigeria CPM ≈ $1.50 (≈₦1,995); CPC ≈ $0.12 (≈₦160) — 2026 country benchmarks"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "business-verification",
+      "cost": "free",
+      "quota": "Limited tier 60 points / 300s; Full tier 9,000 points",
+      "docs": "https://developers.facebook.com/docs/marketing-apis"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Meta Platform Terms bar automated access without written permission. OAuth plus app review is the only sanctioned route."
+    },
+    "effort": "M",
+    "playbook": "Start on Limited access for one ad account. Full Access needs 500+ calls in 15 days, error rate under 15%, app review and business verification."
+  },
+  {
+    "id": "instagram",
+    "name": "Instagram Ads",
+    "group": "social",
+    "wave": 2,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 10000000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / Meta ad tools",
+      "note": "Ad reach only; overlaps heavily with Facebook."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum; same Meta ad account",
+      "benchmark": "Same auction as Meta; Reels placements usually cheaper than Feed in Nigeria"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "business-verification",
+      "cost": "free",
+      "quota": "Same Marketing API tiers as Meta",
+      "docs": "https://developers.facebook.com/docs/marketing-apis"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Runs through the Meta Marketing API; no separate browser automation route."
+    },
+    "effort": "S",
+    "playbook": "Treat as a placement, not a channel: one Meta connector, Reels-first creative, separate reporting dimension."
+  },
+  {
+    "id": "google-ads",
+    "name": "Google Ads",
+    "group": "search",
+    "wave": 2,
+    "reach": {
+      "metric": "monthly-visits",
+      "value": 322910000,
+      "unit": "visits",
+      "asOf": "2026-09",
+      "source": "Semrush Trending Websites Nigeria, September 2026",
+      "note": "google.com visits in Nigeria — a demand signal, not the ads audience."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum; NGN billing supported",
+      "benchmark": "Auction-priced. Search CPC is usually higher than Meta's ₦160; start with exact-match local intent."
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "free",
+      "quota": "Explorer 2,880 ops/day on production; Basic 15,000; Standard unlimited",
+      "docs": "https://developers.google.com/google-ads/api/docs/api-policy/access-levels"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Google Ads API Terms require API use for programmatic management; browser automation of the UI is not sanctioned."
+    },
+    "effort": "M",
+    "playbook": "Developer tokens sunset on 9 September 2026. Enable the API in a Google Cloud project, then apply for Explorer — auto-approved in most cases and enough for SME campaign creation."
+  },
+  {
+    "id": "youtube",
+    "name": "YouTube Ads",
+    "group": "social",
+    "wave": 3,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 30500000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / Google ad tools",
+      "note": "YouTube ad reach in Nigeria."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum; Google Ads account",
+      "benchmark": "Auction; view-based. Cheapest for reach with 6-second bumpers, expensive for conversions."
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "free",
+      "quota": "Same Google Ads API access levels",
+      "docs": "https://developers.google.com/google-ads/api/docs/api-policy/access-levels"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Runs through the Google Ads API; no browser route."
+    },
+    "effort": "M",
+    "playbook": "Bundle with Google Ads. Nigerian mobile data costs make 6s bumpers and 15s skippables the practical formats."
+  },
+  {
+    "id": "tiktok",
+    "name": "TikTok Ads",
+    "group": "social",
+    "wave": 2,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 47800000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / TikTok ad tools",
+      "note": "18+ ad reach. It equals the total Nigerian social-media identity figure, so treat it as a ceiling rather than a forecast."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum; prepaid in NGN",
+      "benchmark": "Auction; usually below Meta CPM in Nigeria, but creative production is the real cost"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "business-verification",
+      "cost": "free",
+      "quota": "Per-app quotas; campaign endpoints are rate-limited",
+      "docs": "https://business-api.tiktok.com/portal/docs"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "TikTok's terms bar bots, scraping and automated interaction without written approval. API for Business is the sanctioned path."
+    },
+    "effort": "M",
+    "playbook": "Business verification first (certificate plus legal rep ID), then industry review. Organic-first: post 3–5 videos a week, amplify winners with Spark Ads."
+  },
+  {
+    "id": "snapchat",
+    "name": "Snapchat Ads",
+    "group": "social",
+    "wave": 2,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 23000000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / Snap ad tools",
+      "note": "Ad reach; skews young and camera-first. Verify engagement before budgeting."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum documented",
+      "benchmark": "Auction; cheap reach, weaker lower-funnel intent in Nigeria"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "account",
+      "cost": "free",
+      "quota": "Per-app; refresh-token rotation required",
+      "docs": "https://developers.snap.com/marketing-api/home"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "The Marketing API is explicitly open to all developers; UI automation is not needed and not sanctioned."
+    },
+    "effort": "S",
+    "playbook": "The easiest major write integration in 2026: business account, OAuth app, scopes, no general app-review gate documented. Add it after Meta for a second social write path."
+  },
+  {
+    "id": "whatsapp",
+    "name": "WhatsApp Business",
+    "group": "messaging",
+    "wave": 1,
+    "reach": {
+      "metric": "percent-internet-users",
+      "value": 96.5,
+      "unit": "percent",
+      "asOf": "2026",
+      "source": "Statista / Krestel Digital 2026 Nigeria report (self-declared use, 16+)",
+      "note": "Highest-reach platform in Nigeria, but it is a messaging channel, not a discovery surface."
+    },
+    "economics": {
+      "model": "per-message",
+      "entry": "1,000 free service messages per business number per month",
+      "benchmark": "Marketing template $0.0516 ≈ ₦69; utility/service $0.0067 ≈ ₦9 per delivered message (1 Oct 2026 rates)"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "business-verification",
+      "cost": "included",
+      "quota": "Messaging limits per number; template approval required",
+      "docs": "https://developers.facebook.com/docs/whatsapp/cloud-api"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Cloud API only. Automating WhatsApp Web or the consumer app violates the terms and risks the number."
+    },
+    "effort": "M",
+    "playbook": "Use Click-to-WhatsApp ads and the free 72-hour entry window. Keep marketing templates rare; utility messages (order, delivery, COD) are ~₦9 and far more welcome."
+  },
+  {
+    "id": "jiji",
+    "name": "Jiji",
+    "group": "marketplace",
+    "wave": 1,
+    "reach": {
+      "metric": "monthly-visits",
+      "value": 6100000,
+      "unit": "visits",
+      "asOf": "2026-09",
+      "source": "Semrush jiji.ng traffic, September 2026",
+      "note": "Global visits; 2.47M from Nigeria. 3.36 pages/visit, 9m29s average session."
+    },
+    "economics": {
+      "model": "prepaid",
+      "entry": "Free listings; Boost packages; Pro Sales needs ₦2,500 minimum balance",
+      "benchmark": "Fixed package pricing, not auction. Cheapest paid visibility for physical goods in Nigeria."
+    },
+    "api": {
+      "read": false,
+      "write": "assisted",
+      "gate": "account",
+      "cost": "free",
+      "quota": "No public API",
+      "docs": "https://jiji.ng/rules.html"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Jiji Terms 7.14 prohibit software that interferes with normal operation; no developer API exists."
+    },
+    "effort": "S",
+    "playbook": "Assisted posting: generate title, description, price and photos, open the Jiji sell form prefilled where possible, human presses publish. Paid Boost/Pro Sales from the same screen."
+  },
+  {
+    "id": "nairaland",
+    "name": "Nairaland Ads",
+    "group": "local",
+    "wave": 1,
+    "reach": {
+      "metric": "monthly-visits",
+      "value": 5570000,
+      "unit": "visits",
+      "asOf": "2026-09",
+      "source": "Semrush nairaland.com traffic, September 2026",
+      "note": "Global visits; 2.65M from Nigeria. 4.59 pages/visit, 10m38s average session, 38.6% bounce."
+    },
+    "economics": {
+      "model": "prepaid",
+      "entry": "₦5,000 minimum ad credit; 318×106 banner; six slots per section",
+      "benchmark": "Sep 2026: Health ₦9,927/mo, Fashion ₦3,219/mo, Adverts ₦34,662/mo, Business ₦333,908/mo, Top Pages ₦878,687/mo"
+    },
+    "api": {
+      "read": false,
+      "write": "assisted",
+      "gate": "account",
+      "cost": "prepaid",
+      "quota": "No public API; /campaign is a web console",
+      "docs": "https://www.nairaland.com/adrates"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "No API, and the forum runs an aggressive anti-spam bot that bans accounts for automated ad posting."
+    },
+    "effort": "S",
+    "playbook": "Buy section banners, not forum posts. At ₦9,927/month, a Health placement beats Meta's ≈₦1,995 CPM only above ~5,000 monthly impressions — measure before renewing."
+  },
+  {
+    "id": "opera-ads",
+    "name": "Opera Ads",
+    "group": "network",
+    "wave": 2,
+    "reach": {
+      "metric": "browser-share",
+      "value": 14.23,
+      "unit": "percent",
+      "asOf": "2026-09",
+      "source": "Statcounter Nigeria browser market share, September 2026",
+      "note": "Opera is the #2 browser in Nigeria after Chrome (69.1%); Opera News adds in-app inventory."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "Self-serve; minimum budget was $100 (≈₦133,000) at launch — confirm current",
+      "benchmark": "CPC or CPM; strong mobile reach, weaker targeting than Meta"
+    },
+    "api": {
+      "read": true,
+      "write": "read-only",
+      "gate": "account",
+      "cost": "free",
+      "quota": "Report API token issued by Opera",
+      "docs": "https://doc.adx.opera.com/advertiser/report-api"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Only reporting and server-to-server conversion APIs are documented. Campaign creation stays in the console."
+    },
+    "effort": "M",
+    "playbook": "Integrate reporting first. For writes, use assisted launch: prepare the campaign in GrowthAds, then open Opera Ad Manager with the plan beside it."
+  },
+  {
+    "id": "facebook-marketplace",
+    "name": "Facebook Marketplace & buy/sell groups",
+    "group": "marketplace",
+    "wave": 1,
+    "reach": {
+      "metric": "listings",
+      "value": 835000,
+      "unit": "listings/month",
+      "asOf": "2026-10",
+      "source": "Facebook Marketplace 10-year Nigeria release, October 2026",
+      "note": "New listings per month in Nigeria; electronics alone exceeds 180,000/month."
+    },
+    "economics": {
+      "model": "free",
+      "entry": "Free",
+      "benchmark": "No media cost. Paid boosts optional but not required."
+    },
+    "api": {
+      "read": false,
+      "write": "assisted",
+      "gate": "account",
+      "cost": "free",
+      "quota": "No Marketplace listing API for third parties",
+      "docs": "https://www.facebook.com/help/1557451221155310"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "No listing API. Meta's terms prohibit automated access; group rules also ban spam."
+    },
+    "effort": "S",
+    "playbook": "Generate a listing kit (title, price, 5 photos, first message) and a deep link. The owner posts to Marketplace and 3–5 local groups; no bot."
+  },
+  {
+    "id": "microsoft-ads",
+    "name": "Microsoft Advertising",
+    "group": "search",
+    "wave": 3,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "people",
+      "asOf": "2026-10",
+      "source": "Microsoft Advertising; no Nigerian reach figure published",
+      "note": "Small in Nigeria but cheap search inventory and a real write API."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum; NGN card",
+      "benchmark": "Low competition; useful only where Bing/Copilot search intent exists"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "free",
+      "quota": "Developer token; third-party approval up to 5 business days",
+      "docs": "https://learn.microsoft.com/en-us/advertising/guides/"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "The Advertising API is the sanctioned surface; UI automation is not."
+    },
+    "effort": "M",
+    "playbook": "Defer until Google Ads is live. Reuse the same search campaign draft with a different adapter."
+  },
+  {
+    "id": "x",
+    "name": "X Ads",
+    "group": "social",
+    "wave": 3,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 6950000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / X ad tools",
+      "note": "Ad reach; male-skewed and concentrated in Lagos/Abuja professional audiences."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "Ads account; API is separately pay-per-use",
+      "benchmark": "X API (organic posting) is $0.015/post from 20 April 2026; the Ads API is separately restricted"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "paid",
+      "quota": "Pay-per-usage credits; legacy $200 Basic only for existing subscribers",
+      "docs": "https://docs.x.com/x-api/getting-started/pricing"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "X terms and developer agreement bar scraping and automated interaction outside the API."
+    },
+    "effort": "M",
+    "playbook": "Not a free channel in 2026. Use organic posts plus a deep link; only add the paid API when a client's audience justifies it."
+  },
+  {
+    "id": "linkedin",
+    "name": "LinkedIn Ads",
+    "group": "social",
+    "wave": 3,
+    "reach": {
+      "metric": "members",
+      "value": 13000000,
+      "unit": "members",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / LinkedIn ad tools",
+      "note": "Registered members, not monthly active users."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum documented; high CPC",
+      "benchmark": "Most expensive per click of the majors; use for B2B lead gen only"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "partner",
+      "cost": "included",
+      "quota": "Marketing API partner agreement required",
+      "docs": "https://learn.microsoft.com/en-us/linkedin/marketing/"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "User Agreement bars bots and scraping; Marketing API access is partner-gated."
+    },
+    "effort": "L",
+    "playbook": "Do not build in wave 1. Offer assisted campaign setup and reporting exports until partner approval is realistic."
+  },
+  {
+    "id": "pinterest",
+    "name": "Pinterest Ads",
+    "group": "social",
+    "wave": 3,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "people",
+      "asOf": "2026-10",
+      "source": "Pinterest; no Nigerian reach figure published in the 2026 report",
+      "note": "Low Nigerian relevance; useful for fashion, decor and food discovery."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum documented",
+      "benchmark": "Auction; cheap awareness, weak local intent"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "free",
+      "quota": "Per-app; standard v5 quotas",
+      "docs": "https://developers.pinterest.com/docs/api/v5/"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Pinterest API terms prohibit automated access outside the API."
+    },
+    "effort": "M",
+    "playbook": "Defer. If a fashion client asks, publish organic Pins from a content calendar and skip the ads integration."
+  },
+  {
+    "id": "reddit",
+    "name": "Reddit Ads",
+    "group": "social",
+    "wave": 4,
+    "reach": {
+      "metric": "ad-reach",
+      "value": 811000,
+      "unit": "people",
+      "asOf": "2025-10",
+      "source": "DataReportal Digital 2026 Nigeria / Reddit ad tools",
+      "note": "Very small Nigerian audience."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "No minimum documented",
+      "benchmark": "Cheap global inventory, negligible Nigerian scale"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "app-review",
+      "cost": "free",
+      "quota": "Ads API access request",
+      "docs": "https://ads-api.reddit.com/docs/"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Reddit's terms prohibit automated access outside approved API use."
+    },
+    "effort": "M",
+    "playbook": "Skip for Nigeria. Revisit only for diaspora or developer-tool campaigns."
+  },
+  {
+    "id": "adsterra",
+    "name": "Adsterra",
+    "group": "network",
+    "wave": 2,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "impressions",
+      "asOf": "2026-10",
+      "source": "Adsterra; global network, no Nigerian reach figure published",
+      "note": "Popunder/native inventory; Nigerian traffic is available but quality varies."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "Minimum deposit varies by payment method",
+      "benchmark": "CPM/CPA; cheap volume, weak brand safety"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "account",
+      "cost": "free",
+      "quota": "Ads API v3; account token",
+      "docs": "https://adsterra.com/blog/api-v3/"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Documented REST API for campaign creation; no need for browser automation."
+    },
+    "effort": "S",
+    "playbook": "Use only for app-install or sweepstake-style offers. Keep it out of the default SME plan; brand safety is poor."
+  },
+  {
+    "id": "propellerads",
+    "name": "PropellerAds",
+    "group": "network",
+    "wave": 2,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "impressions",
+      "asOf": "2026-10",
+      "source": "PropellerAds; global network",
+      "note": "Push/pop/interstitial inventory; API open to all advertisers."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "Minimum deposit varies",
+      "benchmark": "Cheap CPM; low intent"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "account",
+      "cost": "free",
+      "quota": "REST API; account token",
+      "docs": "https://propellerads.com/blog/adv-propellerads-opens-up-its-api-to-all-advertisers/"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "API is open to all advertisers."
+    },
+    "effort": "S",
+    "playbook": "Same role as Adsterra. One adapter can cover both if the payloads are normalised."
+  },
+  {
+    "id": "mgid",
+    "name": "MGID",
+    "group": "network",
+    "wave": 3,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "impressions",
+      "asOf": "2026-10",
+      "source": "MGID; global native network",
+      "note": "Native content placements; low Nigerian brand demand."
+    },
+    "economics": {
+      "model": "ad-spend",
+      "entry": "Account; minimum deposit varies",
+      "benchmark": "CPC/CPM; native CTR depends entirely on creative"
+    },
+    "api": {
+      "read": true,
+      "write": "full",
+      "gate": "account",
+      "cost": "free",
+      "quota": "REST API for advertisers",
+      "docs": "https://help.mgid.com/api-advertisers"
+    },
+    "automation": {
+      "officialApi": true,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Documented add/modify API."
+    },
+    "effort": "M",
+    "playbook": "Defer until there is a content-led client. Native ads need editorial creative, which is a different production workflow."
+  },
+  {
+    "id": "jumia",
+    "name": "Jumia",
+    "group": "marketplace",
+    "wave": 3,
+    "reach": {
+      "metric": "monthly-visits",
+      "value": 6690000,
+      "unit": "visits",
+      "asOf": "2026-09",
+      "source": "Semrush, cited in Jiji competitor panel, September 2026",
+      "note": "Marketplace visits; seller centre, not an ad-buying API."
+    },
+    "economics": {
+      "model": "sales-led",
+      "entry": "Seller account; commissions and fulfilment fees",
+      "benchmark": "Retail media and sponsored products are sales-led"
+    },
+    "api": {
+      "read": false,
+      "write": "assisted",
+      "gate": "account",
+      "cost": "sales-led",
+      "quota": "Seller portal; no self-serve ads API documented",
+      "docs": "https://sellercenter.jumia.com.ng/"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "Seller portal only; no public campaign API."
+    },
+    "effort": "L",
+    "playbook": "Partner conversation, not an integration. Offer catalogue export and let the seller team upload."
+  },
+  {
+    "id": "konga",
+    "name": "Konga",
+    "group": "marketplace",
+    "wave": 4,
+    "reach": {
+      "metric": "monthly-visits",
+      "value": 3130000,
+      "unit": "visits",
+      "asOf": "2026-09",
+      "source": "Semrush, cited in Jiji competitor panel, September 2026",
+      "note": "Marketplace visits; seller portal."
+    },
+    "economics": {
+      "model": "sales-led",
+      "entry": "Seller account; commissions",
+      "benchmark": "Sponsored placements are sales-led"
+    },
+    "api": {
+      "read": false,
+      "write": "assisted",
+      "gate": "account",
+      "cost": "sales-led",
+      "quota": "Seller portal; no public ads API",
+      "docs": "https://www.konga.com/sell-on-konga"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "No public campaign API."
+    },
+    "effort": "L",
+    "playbook": "Defer. Lower traffic than Jumia and the same sales-led shape."
+  },
+  {
+    "id": "transsion",
+    "name": "Transsion Ads (TECNO / Infinix / itel)",
+    "group": "sales-led",
+    "wave": 4,
+    "reach": {
+      "metric": "devices",
+      "value": null,
+      "unit": "devices/day",
+      "asOf": "2026-10",
+      "source": "Transsion Ads; vendor claims 300M+ unique devices per day globally",
+      "note": "Device-level inventory across Palmstore, HiOS, XOS and itelOS. No Nigerian breakdown published."
+    },
+    "economics": {
+      "model": "sales-led",
+      "entry": "Insertion order; contact ad.mid@transsion.com",
+      "benchmark": "Direct-sold CPM/CPA; likely a high minimum"
+    },
+    "api": {
+      "read": false,
+      "write": "none",
+      "gate": "sales-led",
+      "cost": "sales-led",
+      "quota": "No documented self-serve API",
+      "docs": "https://transsion.com/en"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "No self-serve surface to automate."
+    },
+    "effort": "L",
+    "playbook": "Best reached through a media agency. Keep as a partnership option for brand campaigns, not an SME self-serve channel."
+  },
+  {
+    "id": "terragon",
+    "name": "Terragon",
+    "group": "sales-led",
+    "wave": 4,
+    "reach": {
+      "metric": "unknown",
+      "value": null,
+      "unit": "people",
+      "asOf": "2026-10",
+      "source": "Terragon; no public reach figure",
+      "note": "Nigerian ad-tech and data company; campaigns are sales-led."
+    },
+    "economics": {
+      "model": "sales-led",
+      "entry": "Insertion order",
+      "benchmark": "Quoted per campaign"
+    },
+    "api": {
+      "read": false,
+      "write": "none",
+      "gate": "sales-led",
+      "cost": "sales-led",
+      "quota": "No documented self-serve API",
+      "docs": "https://terragongroup.com/"
+    },
+    "automation": {
+      "officialApi": false,
+      "browserAutomation": "prohibited",
+      "playwrightVerdict": "never",
+      "why": "No self-serve surface."
+    },
+    "effort": "L",
+    "playbook": "Agency partnership only. Do not put it on the product roadmap."
+  }
+]

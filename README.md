@@ -42,23 +42,26 @@ Node ≥ 20.
 
 1. Copy `.env.local.example` to `.env.local` and fill in:
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (your project's anon/jwt-format key)
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (your project's **anon / jwt-format** key)
    - `SUPABASE_SERVICE_ROLE_KEY` (server actions only — **never expose to client**)
+
+   Use the legacy **JWT** keys (Project Settings → API → `anon` / `service_role`), not the newer `sb_publishable_…` / `sb_secret_…` keys: `lib/supabase/server.ts` passes them straight to `supabase-js` as the `apikey`, and the service-role JWT is what bypasses RLS for onboarding/sync.
 2. Run migrations against your project.
 
 ### Option A: SQL Editor (simplest, fully under your control)
-Open https://supabase.com/dashboard/project/dyfeolrotkjmeauiknbx/sql and paste the contents of each file in order. Run them as **separate** statements (do not combine into one batch):
+Open https://supabase.com/dashboard/project/bmejdbiwaehdqgqnwvyk/sql and paste the contents of each file in order. Run them as **separate** statements (do not combine into one batch):
    ```
    1. supabase/migrations/001_schema.sql       ← tables + enums + extensions
    2. supabase/migrations/002_policies.sql     ← RLS policies + triggers + indexes
    3. supabase/migrations/003_fix_ad_accounts_access.sql ← column-level GRANTs + SELECT policy
+   4. supabase/migrations/0001_meta_tables.sql ← Meta OAuth connection/account/campaign tables
    ```
-   *Why three separate files?* The `organizations` RLS policy references `users`, but `users` references `auth.users`. Postgres rejects policies that reference tables not yet created. The 003 migration is a follow-up fix because `security_invoker=true` views can't carry RLS policies on all PG versions.
+   *Why separate files, in that order?* The `organizations` RLS policy references `users`, but `users` references `auth.users`. Postgres rejects policies that reference tables not yet created. The 003 migration is a follow-up fix because `security_invoker=true` views can't carry RLS policies on all PG versions, and 0001_meta_tables depends on `auth.users` (not on 001–003), so it runs last.
 
 ### Option B: Supabase CLI
 ```
 supabase login                    # generate / paste a personal access token
-supabase link --project-ref dyfeolrotkjmeauiknbx
+supabase link --project-ref bmejdbiwaehdqgqnwvyk
 supabase db push                  # apply all migrations in supabase/migrations/
 ```
 
@@ -67,7 +70,7 @@ supabase db push                  # apply all migrations in supabase/migrations/
 PAT=sbp_xxx...   # personal access token from https://supabase.com/dashboard/account/tokens
 for f in supabase/migrations/0*.sql; do
   curl -X POST -H "Authorization: Bearer $PAT" -H "Content-Type: application/json" \
-    "https://api.supabase.com/v1/projects/dyfeolrotkjmeauiknbx/database/query" \
+    "https://api.supabase.com/v1/projects/bmejdbiwaehdqgqnwvyk/database/query" \
     --data-binary "$(python3 -c "import json; print(json.dumps({'query': open('$f').read()}))")"
 done
 ```

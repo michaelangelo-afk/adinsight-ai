@@ -108,8 +108,8 @@ export function CurrentPlanCard({
           </ul>
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-3">
-          <div className="text-xs text-mist-400">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0 text-xs text-mist-400">
             <div className="flex items-center gap-1.5">
               <CreditCard size={11} aria-hidden />
               {formatDelta(0).replace(/^[▲▼]\s*/, "")} saved vs Starter
@@ -120,7 +120,7 @@ export function CurrentPlanCard({
               {plan.limits.recommendationsPerMonth} recs/mo
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button variant="outline" size="sm">
               Manage payment
             </Button>

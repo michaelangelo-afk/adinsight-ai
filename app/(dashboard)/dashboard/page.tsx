@@ -139,12 +139,19 @@ export default async function DashboardPage() {
 
           <MetricsGrid summary={summary} />
 
-          <div className="grid lg:grid-cols-[1.6fr,1fr] gap-6">
+          {/* Two-up only from xl (1280px). Between the sidebar becoming
+              visible (lg, 1024px) and xl there simply isn't room: the
+              campaign table's min-content width is ~530px, so a 1.4fr
+              track beside the rail used to overflow and get clipped by
+              the overflow-x-hidden wrapper. `[&>*]:min-w-0` lets the
+              fr tracks shrink below min-content instead of pushing the
+              page wide. */}
+          <div className="grid gap-6 [&>*]:min-w-0 xl:grid-cols-[1.6fr,1fr]">
             <TrendChart data={summary.trend} />
             <PlatformChart data={summary.platformBreakdown} />
           </div>
 
-          <div className="grid lg:grid-cols-[1.4fr,1fr] gap-6">
+          <div className="grid gap-6 [&>*]:min-w-0 xl:grid-cols-[1.4fr,1fr]">
             <CampaignsTable campaigns={campaigns ?? []} />
             <RecommendationsPanel recommendations={recommendations ?? []} />
           </div>
