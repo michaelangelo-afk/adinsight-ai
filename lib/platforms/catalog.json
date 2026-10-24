@@ -15,7 +15,14 @@
     "economics": {
       "model": "free",
       "entry": "Free",
-      "benchmark": "No media cost. Posts, offers, photos, hours and review replies are free."
+      "benchmark": "No media cost. Posts, offers, photos, hours and review replies are free.",
+      "asOf": "2026-10",
+      "source": "No media cost — research note, zero-naira stack (2026-10)",
+      "rate": {
+        "metric": "none",
+        "amountNgn": 0,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -50,7 +57,14 @@
     "economics": {
       "model": "free",
       "entry": "Free listings",
-      "benchmark": "No media cost for free listings. Shopping ads are optional and auction-priced."
+      "benchmark": "No media cost for free listings. Shopping ads are optional and auction-priced.",
+      "asOf": "2026-10",
+      "source": "No media cost for free listings — research note (2026-10)",
+      "rate": {
+        "metric": "none",
+        "amountNgn": 0,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -85,7 +99,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum; NGN card or prepaid",
-      "benchmark": "Nigeria CPM ≈ $1.50 (≈₦1,995); CPC ≈ $0.12 (≈₦160) — 2026 country benchmarks"
+      "benchmark": "Nigeria CPM ≈ $1.50 (≈₦1,995); CPC ≈ $0.12 (≈₦160) — 2026 country benchmarks",
+      "asOf": "2026-10",
+      "source": "Adamigo, Meta Ads CPM & CPC benchmarks by country 2026 — third-party benchmark, not Meta-reported (adamigo.ai/blog/meta-ads-cpm-cpc-benchmarks-by-country-2026)",
+      "rate": {
+        "metric": "cpm",
+        "amountNgn": 1995,
+        "note": "≈$1.50 CPM, CPC ≈ ₦160. Auctions move 2–3× with creative and seasonality."
+      }
     },
     "api": {
       "read": true,
@@ -120,7 +141,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum; same Meta ad account",
-      "benchmark": "Same auction as Meta; Reels placements usually cheaper than Feed in Nigeria"
+      "benchmark": "Same auction as Meta; Reels placements usually cheaper than Feed in Nigeria",
+      "asOf": "2026-10",
+      "source": "Adamigo, Meta Ads CPM & CPC benchmarks by country 2026 — third-party benchmark, not Meta-reported (adamigo.ai/blog/meta-ads-cpm-cpc-benchmarks-by-country-2026)",
+      "rate": {
+        "metric": "cpm",
+        "amountNgn": 1995,
+        "note": "Same Meta auction; Reels placements usually cheaper than Feed in Nigeria."
+      }
     },
     "api": {
       "read": true,
@@ -155,7 +183,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum; NGN billing supported",
-      "benchmark": "Auction-priced. Search CPC is usually higher than Meta's ₦160; start with exact-match local intent."
+      "benchmark": "Auction-priced. Search CPC is usually higher than Meta's ₦160; start with exact-match local intent.",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -190,7 +225,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum; Google Ads account",
-      "benchmark": "Auction; view-based. Cheapest for reach with 6-second bumpers, expensive for conversions."
+      "benchmark": "Auction; view-based. Cheapest for reach with 6-second bumpers, expensive for conversions.",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -225,7 +267,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum; prepaid in NGN",
-      "benchmark": "Auction; usually below Meta CPM in Nigeria, but creative production is the real cost"
+      "benchmark": "Auction; usually below Meta CPM in Nigeria, but creative production is the real cost",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "No credible public Nigerian CPM benchmark — read it from a live campaign console."
+      }
     },
     "api": {
       "read": true,
@@ -260,7 +309,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum documented",
-      "benchmark": "Auction; cheap reach, weaker lower-funnel intent in Nigeria"
+      "benchmark": "Auction; cheap reach, weaker lower-funnel intent in Nigeria",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -295,7 +351,14 @@
     "economics": {
       "model": "per-message",
       "entry": "1,000 free service messages per business number per month",
-      "benchmark": "Marketing template $0.0516 ≈ ₦69; utility/service $0.0067 ≈ ₦9 per delivered message (1 Oct 2026 rates)"
+      "benchmark": "Marketing template $0.0516 ≈ ₦69; utility/service $0.0067 ≈ ₦9 per delivered message (1 Oct 2026 rates)",
+      "asOf": "2026-10",
+      "source": "Meta WhatsApp Business pricing, 1 Oct 2026 rate card (developers.facebook.com → WhatsApp → pricing)",
+      "rate": {
+        "metric": "per-delivered-message",
+        "amountNgn": 69,
+        "note": "Marketing template. Utility/auth/service ≈ ₦9; 1,000 free service messages per number per month."
+      }
     },
     "api": {
       "read": true,
@@ -330,7 +393,14 @@
     "economics": {
       "model": "prepaid",
       "entry": "Free listings; Boost packages; Pro Sales needs ₦2,500 minimum balance",
-      "benchmark": "Fixed package pricing, not auction. Cheapest paid visibility for physical goods in Nigeria."
+      "benchmark": "Fixed package pricing, not auction. Cheapest paid visibility for physical goods in Nigeria.",
+      "asOf": "2026-09",
+      "source": "Jiji Pro Sales & premium-services FAQ (jiji.ng/faq)",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "Fixed package boosts, not an auction; Pro Sales needs a ₦2,500 minimum balance."
+      }
     },
     "api": {
       "read": false,
@@ -365,7 +435,14 @@
     "economics": {
       "model": "prepaid",
       "entry": "₦5,000 minimum ad credit; 318×106 banner; six slots per section",
-      "benchmark": "Sep 2026: Health ₦9,927/mo, Fashion ₦3,219/mo, Adverts ₦34,662/mo, Business ₦333,908/mo, Top Pages ₦878,687/mo"
+      "benchmark": "Sep 2026: Health ₦9,927/mo, Fashion ₦3,219/mo, Adverts ₦34,662/mo, Business ₦333,908/mo, Top Pages ₦878,687/mo",
+      "asOf": "2026-09",
+      "source": "Nairaland ad rate card, September 2026 (nairaland.com/adrates)",
+      "rate": {
+        "metric": "monthly-fixed",
+        "amountNgn": 3219,
+        "note": "Section banners: Fashion ₦3,219/mo cheapest, Top Pages ₦878,687/mo. Six slots per section."
+      }
     },
     "api": {
       "read": false,
@@ -400,7 +477,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "Self-serve; minimum budget was $100 (≈₦133,000) at launch — confirm current",
-      "benchmark": "CPC or CPM; strong mobile reach, weaker targeting than Meta"
+      "benchmark": "CPC or CPM; strong mobile reach, weaker targeting than Meta",
+      "asOf": "2026-10",
+      "source": "Opera Ad Manager; $100 launch floor (blogs.opera.com, 2021) — confirm current",
+      "rate": {
+        "metric": "minimum-budget",
+        "amountNgn": 133000,
+        "note": "CPC or CPM; $100 ≈ ₦133,000 self-serve floor at launch."
+      }
     },
     "api": {
       "read": true,
@@ -435,7 +519,14 @@
     "economics": {
       "model": "free",
       "entry": "Free",
-      "benchmark": "No media cost. Paid boosts optional but not required."
+      "benchmark": "No media cost. Paid boosts optional but not required.",
+      "asOf": "2026-10",
+      "source": "No media cost — research note (2026-10)",
+      "rate": {
+        "metric": "none",
+        "amountNgn": 0,
+        "note": null
+      }
     },
     "api": {
       "read": false,
@@ -470,7 +561,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum; NGN card",
-      "benchmark": "Low competition; useful only where Bing/Copilot search intent exists"
+      "benchmark": "Low competition; useful only where Bing/Copilot search intent exists",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -505,7 +603,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "Ads account; API is separately pay-per-use",
-      "benchmark": "X API (organic posting) is $0.015/post from 20 April 2026; the Ads API is separately restricted"
+      "benchmark": "X API (organic posting) is $0.015/post from 20 April 2026; the Ads API is separately restricted",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "Ads spend auction; the X API itself is separately pay-per-use ($0.015/post organic, Apr 2026)."
+      }
     },
     "api": {
       "read": true,
@@ -540,7 +645,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum documented; high CPC",
-      "benchmark": "Most expensive per click of the majors; use for B2B lead gen only"
+      "benchmark": "Most expensive per click of the majors; use for B2B lead gen only",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "Most expensive per-click of the majors."
+      }
     },
     "api": {
       "read": true,
@@ -575,7 +687,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum documented",
-      "benchmark": "Auction; cheap awareness, weak local intent"
+      "benchmark": "Auction; cheap awareness, weak local intent",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -610,7 +729,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "No minimum documented",
-      "benchmark": "Cheap global inventory, negligible Nigerian scale"
+      "benchmark": "Cheap global inventory, negligible Nigerian scale",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": true,
@@ -645,7 +771,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "Minimum deposit varies by payment method",
-      "benchmark": "CPM/CPA; cheap volume, weak brand safety"
+      "benchmark": "CPM/CPA; cheap volume, weak brand safety",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "Cheap CPM, low intent; deposit varies."
+      }
     },
     "api": {
       "read": true,
@@ -680,7 +813,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "Minimum deposit varies",
-      "benchmark": "Cheap CPM; low intent"
+      "benchmark": "Cheap CPM; low intent",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "Cheap CPM, low intent; deposit varies."
+      }
     },
     "api": {
       "read": true,
@@ -715,7 +855,14 @@
     "economics": {
       "model": "ad-spend",
       "entry": "Account; minimum deposit varies",
-      "benchmark": "CPC/CPM; native CTR depends entirely on creative"
+      "benchmark": "CPC/CPM; native CTR depends entirely on creative",
+      "asOf": "2026-10",
+      "source": "Research note docs/FREE-AD-PLATFORMS-NIGERIA.md (paid-reach table, 2026-10) — no public Nigerian benchmark; verify in-platform",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": "Cheap CPM, low intent; deposit varies."
+      }
     },
     "api": {
       "read": true,
@@ -750,7 +897,14 @@
     "economics": {
       "model": "sales-led",
       "entry": "Seller account; commissions and fulfilment fees",
-      "benchmark": "Retail media and sponsored products are sales-led"
+      "benchmark": "Retail media and sponsored products are sales-led",
+      "asOf": "2026-10",
+      "source": "Sales-led partnership — commission/buying rate on enquiry (research note, 2026-10)",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": false,
@@ -785,7 +939,14 @@
     "economics": {
       "model": "sales-led",
       "entry": "Seller account; commissions",
-      "benchmark": "Sponsored placements are sales-led"
+      "benchmark": "Sponsored placements are sales-led",
+      "asOf": "2026-10",
+      "source": "Sales-led partnership — commission/buying rate on enquiry (research note, 2026-10)",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": false,
@@ -820,7 +981,14 @@
     "economics": {
       "model": "sales-led",
       "entry": "Insertion order; contact ad.mid@transsion.com",
-      "benchmark": "Direct-sold CPM/CPA; likely a high minimum"
+      "benchmark": "Direct-sold CPM/CPA; likely a high minimum",
+      "asOf": "2026-10",
+      "source": "Sales-led partnership — commission/buying rate on enquiry (research note, 2026-10)",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": false,
@@ -855,7 +1023,14 @@
     "economics": {
       "model": "sales-led",
       "entry": "Insertion order",
-      "benchmark": "Quoted per campaign"
+      "benchmark": "Quoted per campaign",
+      "asOf": "2026-10",
+      "source": "Sales-led partnership — commission/buying rate on enquiry (research note, 2026-10)",
+      "rate": {
+        "metric": "unknown",
+        "amountNgn": null,
+        "note": null
+      }
     },
     "api": {
       "read": false,

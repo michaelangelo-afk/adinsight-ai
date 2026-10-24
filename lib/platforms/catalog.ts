@@ -51,6 +51,27 @@ export type CostModel =
 
 export type BrowserPolicy = "prohibited" | "not-needed";
 
+/**
+ * Unit the disclosed rate is expressed in. "none" = no media cost at all;
+ * "unknown" = the research note found no public Nigerian figure (kept as an
+ * explicit state rather than inventing a number).
+ */
+export type RateMetric =
+  | "cpm"
+  | "cpc"
+  | "per-delivered-message"
+  | "monthly-fixed"
+  | "minimum-budget"
+  | "none"
+  | "unknown";
+
+export interface RateInfo {
+  metric: RateMetric;
+  /** NGN, null when the metric is "unknown" or the figure is not public. */
+  amountNgn: number | null;
+  note: string | null;
+}
+
 export type PlaywrightVerdict = "never" | "assisted-only";
 
 export interface Channel {
@@ -71,6 +92,12 @@ export interface Channel {
     model: CostModel;
     entry: string;
     benchmark: string;
+    /** YYYY-MM — when the cost figures were last verified. */
+    asOf: string;
+    /** Where the cost figures come from (research note or platform rate card). */
+    source: string;
+    /** Disclosed unit rate; optional so older catalog revisions still load. */
+    rate?: RateInfo;
   };
   api: {
     read: boolean;
@@ -91,6 +118,13 @@ export interface Channel {
 }
 
 export const CHANNELS = raw as unknown as Channel[];
+
+/**
+ * The Nigerian auction baseline the whole comparison story hangs off: Meta's
+ * measured 2026 country benchmark (Adamigo, third-party — not Meta-reported).
+ * Comparable, cancel-at-any-time, no budget floor.
+ */
+export const META_NGN_CPM = 1995;
 
 /** Channels with a sanctioned write API — the only ones the platform can post to. */
 export const OFFICIAL_WRITE_CHANNELS = CHANNELS.filter(

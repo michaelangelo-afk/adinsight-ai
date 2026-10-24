@@ -1,4 +1,7 @@
-import type { Channel, ChannelGroup } from "@/lib/platforms/catalog";
+"use client";
+
+import type { Channel, ChannelGroup, RateMetric } from "@/lib/platforms/catalog";
+import { META_NGN_CPM } from "@/lib/platforms/catalog";
 
 export type ChannelStatus = "live" | "api" | "assisted" | "sales";
 
@@ -92,4 +95,97 @@ export function composerIdFor(channel: Channel): string | null {
     default:
       return null;
   }
+}
+
+// ============================================================================
+// Rate transparency — what a naira actually buys, dated and sourced.
+//
+// The catalog carries economics.rate (see lib/platforms/catalog.ts). These
+// helpers turn that data into drawer copy. Unknown stays unknown: a channel
+// with no public Nigerian figure renders "No public benchmark", never an
+// invented number.
+// ============================================================================
+
+const ngn = new Intl.NumberFormat("en-NG", { maximumFractionDigits: 0 });
+
+/** How old a verified cost figure may be before we stamp it stale. */
+export const RATE_STALE_DAYS = 90;
+
+export const RATE_UNIT_LABELS: Record<RateMetric, string> = {
+  cpm: "per 1,000 impressions",
+  cpc: "per click",
+  "per-delivered-message": "per delivered message",
+  "monthly-fixed": "per month, fixed placement",
+  "minimum-budget": "minimum budget",
+  none: "",
+  unknown: ""
+};
+
+export interface RateView {
+  /** The headline figure, e.g. "≈₦1,995 per 1,000 impressions". */
+  line: string;
+  asOf: string | null;
+  /** True when the figure is older than RATE_STALE_DAYS. */
+  stale: boolean;
+  source: string | null;
+  note: string | null;
+}
+
+/**
+ * Adds RATE_STALE_DAYS to the first of the verification month and compares
+ * to today. "YYYY-MM" only — day-level precision would be false honesty.
+ */
+function ageInDays(asOf: string): number | null {
+  const m = /^(\d{4})-(\d{2})$/.exec(asOf);
+  if (!m) return null;
+  const then = Date.UTC(Number(m[1]), Number(m[2]) - 1, 1);
+  if (Number.isNaN(then)) return null;
+  return Math.floor((Date.now() - then) / 86_400_000);
+}
+
+export function rateView(channel: Channel): RateView | null {
+  const e = channel.economics;
+  const r = e?.rate;
+  if (!e || !r) return null;
+
+  let line: string;
+  switch (r.metric) {
+    case "none":
+      line = "No media cost";
+      break;
+    case "unknown":
+      line = "No public benchmark";
+      break;
+    default:
+      line =
+        r.amountNgn == null
+          ? "No public benchmark"
+          : `≈₦${ngn.format(r.amountNgn)} ${RATE_UNIT_LABELS[r.metric]}`;
+  }
+
+  const days = e.asOf ? ageInDays(e.asOf) : null;
+  return {
+    line,
+    asOf: e.asOf ?? null,
+    stale: days !== null && days > RATE_STALE_DAYS,
+    source: e.source ?? null,
+    note: r.note ?? null
+  };
+}
+
+/**
+ * The one comparison the research note actually computes: a fixed monthly
+ * placement priced against Meta's Nigerian CPM. Above the break-even
+ * impression count the fixed slot is cheaper per impression; below it, Meta
+ * wins. Returns null for every other metric — monthly WhatsApp templates or
+ * a $100 Opera floor are not CPM-comparable, and pretending otherwise would
+ * be the intransparency this surface exists to prevent.
+ */
+export function rateCounterfactual(channel: Channel): string | null {
+  const r = channel.economics?.rate;
+  if (!r || r.metric !== "monthly-fixed" || r.amountNgn == null) return null;
+  const breakEven = Math.round((r.amountNgn / META_NGN_CPM) * 1000);
+  return `At Meta's ≈₦${ngn.format(META_NGN_CPM)} Nigerian CPM, ₦${ngn.format(
+    r.amountNgn
+  )}/month buys about ${breakEven.toLocaleString("en-NG")} impressions — cheaper per impression than Meta only above that count.`;
 }

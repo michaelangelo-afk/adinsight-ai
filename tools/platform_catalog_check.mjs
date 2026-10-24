@@ -43,6 +43,15 @@ const METRICS = new Set([
   "devices",
   "unknown",
 ]);
+const RATE_METRICS = new Set([
+  "cpm",
+  "cpc",
+  "per-delivered-message",
+  "monthly-fixed",
+  "minimum-budget",
+  "none",
+  "unknown",
+]);
 
 for (const c of channels) {
   const where = c.id ?? "(missing id)";
@@ -60,6 +69,22 @@ for (const c of channels) {
   if (!c.api?.docs?.startsWith("http"))
     fail(`${where}: api.docs must be an http(s) URL`);
   if (!c.playbook) fail(`${where}: playbook is required`);
+
+  // --- economics rate-transparency fields ---
+  if (!c.economics?.asOf || !/^\d{4}-\d{2}$/.test(c.economics.asOf))
+    fail(`${where}: economics.asOf must be YYYY-MM`);
+  if (!c.economics?.source) fail(`${where}: economics.source is required`);
+  if (c.economics?.rate) {
+    if (!RATE_METRICS.has(c.economics.rate.metric))
+      fail(`${where}: bad economics.rate.metric "${c.economics.rate.metric}"`);
+    const amt = c.economics.rate.amountNgn;
+    if (c.economics.rate.metric === "unknown" && amt !== null)
+      fail(`${where}: rate.metric "unknown" must carry amountNgn: null (no invented figures)`);
+    if (c.economics.rate.metric === "none" && amt !== 0)
+      fail(`${where}: rate.metric "none" must carry amountNgn: 0`);
+    if (amt !== null && amt !== undefined && (typeof amt !== "number" || amt < 0))
+      fail(`${where}: economics.rate.amountNgn must be null or non-negative`);
+  }
 
   if (c.reach?.value !== null && !(typeof c.reach.value === "number" && c.reach.value > 0))
     fail(`${where}: reach.value must be null or a positive number`);

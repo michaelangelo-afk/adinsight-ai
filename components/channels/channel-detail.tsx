@@ -10,6 +10,8 @@ import {
   apiAccessLabel,
   composerIdFor,
   GROUP_LABELS,
+  rateCounterfactual,
+  rateView,
   reachLabel,
   reachTitle,
   statusOf,
@@ -40,6 +42,8 @@ function Row({ label, value }: { label: string; value: string }) {
 export function ChannelDetail({ channel, onClose, onAssist }: ChannelDetailProps) {
   const status = statusOf(channel);
   const composerId = composerIdFor(channel);
+  const rate = rateView(channel);
+  const counterfactual = rateCounterfactual(channel);
   const closeRef = React.useRef(onClose);
   closeRef.current = onClose;
 
@@ -136,7 +140,50 @@ export function ChannelDetail({ channel, onClose, onAssist }: ChannelDetailProps
             <h3 className="text-xs font-semibold uppercase tracking-wider text-mist-400">
               Economics
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-mist-200">
+
+            {/* Rate transparency: the headline figure, the month it was
+                verified, where it came from — and a stale stamp when the
+                figure has aged past RATE_STALE_DAYS. Unknown rates render
+                as "No public benchmark", never an invented number. */}
+            {rate && (
+              <div className="mt-2 rounded-2xl border border-mist-50/10 bg-mist-50/[0.03] p-4">
+                <div className="text-2xl font-semibold tabular-nums text-mist-50">
+                  {rate.line}
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {rate.asOf && (
+                    <span className="inline-flex items-center rounded-full border border-mist-50/10 bg-mist-50/[0.04] px-2.5 py-0.5 text-xs text-mist-300">
+                      Last verified {rate.asOf}
+                    </span>
+                  )}
+                  {rate.stale && (
+                    <Badge
+                      tone="warn"
+                      className="!border-amber-500/30 !bg-amber-500/15 !text-amber-200"
+                    >
+                      Stale — re-verify
+                    </Badge>
+                  )}
+                </div>
+                {rate.source && (
+                  <p className="mt-2 text-xs leading-relaxed text-mist-400">
+                    Source: {rate.source}
+                  </p>
+                )}
+                {rate.note && (
+                  <p className="mt-1 text-xs leading-relaxed text-mist-400">
+                    {rate.note}
+                  </p>
+                )}
+                {counterfactual && (
+                  <p className="mt-3 rounded-xl border border-brand-500/20 bg-brand-500/[0.07] p-3 text-xs leading-relaxed text-brand-100">
+                    {counterfactual}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <p className="mt-3 text-sm leading-relaxed text-mist-200">
               {channel.economics.entry}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-mist-400">
