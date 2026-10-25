@@ -12,22 +12,14 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatNaira, formatDelta } from "@/lib/utils";
+import { formatNaira } from "@/lib/utils";
 import type { Plan } from "@/lib/types";
 
-const TIER_GLOW: Record<Plan["id"], string> = {
-  free: "rgba(148,163,184,0.30)",
-  starter: "rgba(96,165,250,0.30)",
-  pro: "rgba(16,185,129,0.40)",
-  scale: "rgba(21,128,61,0.40)"
-};
-
-const TIER_BG: Record<Plan["id"], string> = {
-  free: "from-mist-50/[0.04] to-mist-50/[0.02]",
-  starter: "from-blue-500/[0.06] to-blue-500/[0.02]",
-  pro: "from-brand-500/[0.10] to-brand-500/[0.02]",
-  scale: "from-brand-500/[0.10] to-brand-500/[0.02]"
-};
+/**
+ * Plan cards are flat panels. The current plan gets one brand-tinted hairline
+ * and a 4%-fill wash — no blurred glow, no gradient card background. Tier
+ * identity is carried by the price and the badge, not by colour.
+ */
 
 export function CurrentPlanCard({
   plan,
@@ -40,67 +32,72 @@ export function CurrentPlanCard({
   renewalDate: string;
   daysUntilRenewal: number;
 }) {
+  const price =
+    interval === "monthly" ? plan.priceMonthly : plan.priceAnnual / 12;
+
   return (
-    <article
-      className="glass-card rounded-2xl p-6 sm:p-7 hover-lift  relative overflow-hidden"
-      style={{
-        background: `linear-gradient(135deg, ${TIER_BG[plan.id]}, transparent)`
-      }}
-    >
+    <article className="glass-card relative overflow-hidden rounded-xl p-5 sm:p-6">
       <span
         aria-hidden
-        className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl"
-        style={{ background: TIER_GLOW[plan.id] }}
+        className="pointer-events-none absolute -left-16 -top-24 h-64 w-64 rounded-full bg-brand-500/[0.09] blur-3xl"
       />
-      <div className="relative">
-        <Badge tone="good" className="!text-xs">
-          <Sparkles size={10} className="mr-1" aria-hidden />
-          Current
-        </Badge>
-        <h2 className="mt-3 text-xl font-semibold text-mist-50 tracking-tight">
-          {plan.name}{" "}
-          <span className="text-mist-400 text-base font-normal">plan</span>
-        </h2>
-        <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-3xl font-semibold text-mist-50 tabular-nums ">
-            {formatNaira(
-              interval === "monthly" ? plan.priceMonthly : plan.priceAnnual / 12
-            )}
-          </span>
-          <span className="text-sm text-mist-400">/ month</span>
-          {interval === "annual" && (
-            <Badge tone="brand">
-              billed yearly · save ~17%
-            </Badge>
-          )}
-        </div>
-        <p className="mt-1 text-xs text-mist-400">
-          Renews on{" "}
-          <time dateTime={renewalDate}>
-            {new Date(renewalDate).toLocaleDateString("en-NG", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })}
-          </time>
-          {" "}— in <strong className="text-mist-50">{daysUntilRenewal}d</strong>
-        </p>
 
-        <div className="mt-5">
-          <div className="text-xs uppercase tracking-wider text-mist-500 mb-2">
-            What's included
+      <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr),252px]">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge tone="good">
+              <Sparkles size={10} className="mr-1" aria-hidden />
+              Current
+            </Badge>
+            <span className="text-[11px] text-mist-500">
+              {interval === "annual" ? "Billed yearly" : "Billed monthly"} ·
+              cancel any time
+            </span>
           </div>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4" role="list">
+
+          <h2 className="mt-2.5 text-[19px] font-semibold tracking-tight text-mist-50">
+            {plan.name}
+            <span className="ml-1.5 text-[13px] font-normal text-mist-400">
+              plan
+            </span>
+          </h2>
+
+          <div className="mt-1 flex items-baseline gap-1.5">
+            <span className="text-[30px] font-semibold leading-none tracking-[-0.03em] text-mist-50 tabular-nums">
+              {formatNaira(price)}
+            </span>
+            <span className="text-[12px] text-mist-400">/ month</span>
+          </div>
+
+          <p className="mt-1.5 text-[11.5px] text-mist-500">
+            Renews on{" "}
+            <time dateTime={renewalDate} className="text-mist-300">
+              {new Date(renewalDate).toLocaleDateString("en-NG", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              })}
+            </time>{" "}
+            — in <strong className="font-medium text-mist-100">{daysUntilRenewal}d</strong>
+          </p>
+
+          <div className="fade-rule my-4" />
+
+          <div className="stat-label mb-2">What&apos;s included</div>
+          <ul
+            className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2"
+            role="list"
+          >
             {plan.perks.map((perk) => (
               <li
                 key={perk}
-                className="flex items-start gap-2 text-sm text-mist-200"
+                className="flex items-start gap-2 text-[12px] leading-relaxed text-mist-200"
               >
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-500/15 border border-brand-500/40 text-brand-300"
+                  className="mt-[2px] inline-flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-full bg-brand-500/[0.14] text-brand-300 ring-1 ring-inset ring-brand-500/30"
                 >
-                  <Check size={10} />
+                  <Check size={9} strokeWidth={3} />
                 </span>
                 <span>{perk}</span>
               </li>
@@ -108,20 +105,38 @@ export function CurrentPlanCard({
           </ul>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-          <div className="min-w-0 text-xs text-mist-400">
-            <div className="flex items-center gap-1.5">
-              <CreditCard size={11} aria-hidden />
-              {formatDelta(0).replace(/^[▲▼]\s*/, "")} saved vs Starter
+        {/* Billing rail — the facts the plan card used to bury in a footer. */}
+        <aside className="flex flex-col gap-3 rounded-xl border border-white/[0.06] bg-white/[0.015] p-4 lg:border-0 lg:border-l lg:border-white/[0.07] lg:bg-transparent lg:py-0 lg:pl-6 lg:pr-0 lg:rounded-none">
+          <div>
+            <div className="stat-label">Next charge</div>
+            <div className="mt-1 text-[15px] font-semibold tabular-nums text-mist-50">
+              {formatNaira(price)}
             </div>
-            <div className="mt-1 text-xs uppercase tracking-wider text-mist-500">
-              Limits ·{" "}
-              {plan.limits.campaignsMax} campaigns ·{" "}
-              {plan.limits.recommendationsPerMonth} recs/mo
+            <div className="mt-0.5 text-[10.5px] text-mist-500">
+              Auto-renews in {daysUntilRenewal} days
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+
+          <div className="fade-rule lg:hidden" />
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <div className="stat-label">Campaigns</div>
+              <div className="mt-1 text-[12.5px] font-medium tabular-nums text-mist-100">
+                {plan.limits.campaignsMax}
+              </div>
+            </div>
+            <div>
+              <div className="stat-label">Recs / mo</div>
+              <div className="mt-1 text-[12.5px] font-medium tabular-nums text-mist-100">
+                {plan.limits.recommendationsPerMonth}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-auto flex flex-col gap-2 pt-2">
             <Button variant="outline" size="sm">
+              <CreditCard size={11} aria-hidden />
               Manage payment
             </Button>
             <Button variant="primary" size="sm">
@@ -129,7 +144,7 @@ export function CurrentPlanCard({
               Upgrade plan
             </Button>
           </div>
-        </div>
+        </aside>
       </div>
     </article>
   );
@@ -145,48 +160,58 @@ export function PlanMatrixCard({
   return (
     <article
       className={
-        "glass-card rounded-2xl p-5 hover-lift  relative overflow-hidden " +
-        (highlighted ? "ring-1 ring-brand-500/40" : "")
+        "relative flex h-full flex-col overflow-hidden rounded-xl p-4 " +
+        (highlighted
+          ? "border border-brand-500/30 bg-brand-500/[0.035]"
+          : "glass-card panel-interactive")
       }
     >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-50"
-        style={{
-          background: `linear-gradient(135deg, ${TIER_BG[plan.id]}, transparent 60%)`
-        }}
-      />
-      <div className="relative space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-base font-semibold text-mist-50">
-            {plan.name}
-          </h3>
-          {plan.badge && (
-            <Badge tone="good">{plan.badge}</Badge>
-          )}
-        </div>
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-3xl font-semibold text-mist-50 tabular-nums">
-            {plan.priceMonthly === 0
-              ? "Free"
-              : `₦${(plan.priceMonthly / 1000).toFixed(0)}k`}
-          </span>
-          {plan.priceMonthly > 0 && (
-            <span className="text-xs text-mist-400">/ month</span>
-          )}
-        </div>
-        <ul className="space-y-1.5 text-xs text-mist-300" role="list">
-          {plan.perks.slice(0, 4).map((perk) => (
-            <li key={perk} className="flex items-start gap-2">
-              <span
-                aria-hidden
-                className={"mt-0.5 h-1.5 w-1.5 rounded-full " + (highlighted ? "bg-brand-400" : "bg-mist-400")}
-              />
-              {perk}
-            </li>
-          ))}
-        </ul>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-[13px] font-semibold text-mist-50">
+          {plan.name}
+        </h3>
+        {plan.badge && <Badge tone="good">{plan.badge}</Badge>}
       </div>
+
+      <div className="mt-2 flex items-baseline gap-1.5">
+        <span className="text-[26px] font-semibold leading-none tracking-[-0.025em] text-mist-50 tabular-nums">
+          {plan.priceMonthly === 0
+            ? "Free"
+            : `₦${(plan.priceMonthly / 1000).toFixed(0)}k`}
+        </span>
+        {plan.priceMonthly > 0 && (
+          <span className="text-[11px] text-mist-500">/ month</span>
+        )}
+      </div>
+
+      <div className="fade-rule my-3" />
+
+      <ul className="space-y-1.5 text-[11.5px] leading-relaxed text-mist-300" role="list">
+        {plan.perks.slice(0, 4).map((perk) => (
+          <li key={perk} className="flex items-start gap-2">
+            <span
+              aria-hidden
+              className={
+                "mt-[5px] h-1 w-1 shrink-0 rounded-full " +
+                (highlighted ? "bg-brand-400" : "bg-mist-500")
+              }
+            />
+            <span>{perk}</span>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        className={
+          "mt-3 flex h-7 w-full items-center justify-center rounded-md text-[11px] font-semibold transition-colors " +
+          (highlighted
+            ? "bg-transparent text-mist-300 hover:bg-white/[0.05] hover:text-mist-50"
+            : "border border-white/[0.09] text-mist-200 hover:border-brand-500/40 hover:text-brand-200")
+        }
+      >
+        {highlighted ? "Current plan" : `Switch to ${plan.name}`}
+      </button>
     </article>
   );
 }

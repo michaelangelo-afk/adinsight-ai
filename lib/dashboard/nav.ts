@@ -14,6 +14,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
+  Target,
   Megaphone,
   Sparkles,
   FileText,
@@ -44,6 +45,7 @@ export interface NavItem {
  */
 export const NAV_ITEMS: ReadonlyArray<NavItem> = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
+  { label: "Campaigns", icon: Target, href: "/campaigns" },
   { label: "Channels", icon: Megaphone, href: "/channels" },
   {
     label: "Recommendations",
@@ -96,7 +98,7 @@ export const SITE_GROUPS: ReadonlyArray<{
 }> = [
   {
     title: "Workspace",
-    items: [{ label: "Overview", icon: LayoutDashboard, href: "/dashboard" }, ...NAV_ITEMS.filter((n) => n.href !== "/dashboard")]
+    items: [...NAV_ITEMS]
   },
   { title: "Account", items: ACCOUNT_ITEMS }
 ];

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Topbar, type TopbarProfile } from "@/components/dashboard/topbar";
-import { TextureGrain } from "@/components/motion/texture-grain";
 import { ChannelsBoard } from "@/components/channels/channels-board";
 import { getCurrentUser } from "@/app/actions/auth";
 import { resolveOrgName } from "@/lib/auth/user-profile";
@@ -32,12 +31,6 @@ export default async function ChannelsPage() {
 
   return (
     <div className="relative flex min-w-0 flex-1 flex-col">
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      >
-        <TextureGrain />
-      </div>
       <Topbar profile={profile} />
       <ChannelsBoard defaultBusiness={orgName} />
     </div>

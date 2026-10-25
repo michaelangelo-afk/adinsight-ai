@@ -1,20 +1,23 @@
 import type { Config } from "tailwindcss";
 
 /**
- * GrowthAds design system — Madgicx-aligned (2026-10-19).
+ * GrowthAds design system — dark operator surface (2026-10-24).
  *
- * The reference, measured with tools/reference_audit.mjs + design_probe.mjs:
- *   - near-black page (#040114 there), white text at 56% / 72% opacity
- *   - one accent (violet #CAB7FF) used for glow and gradients, never as a
- *     large fill behind body copy
- *   - Inter body at 14px, near-identical grayscale steps, weight 400–600
- *   - 64px centred headline, white → 72% white gradient fill
- *   - pills (radius 60 / 1000) for CTAs, 8/16/32px radii for panels
- *   - product screenshots at 32px radius, 1262px wide, on a soft glow
+ * Modelled on the MarketMind-style reference: a deep navy stock, a single
+ * luminous accent, flat panels separated by 1px hairlines, and typography
+ * that steps down cleanly (26px figures, 13px titles, 11px labels).
  *
- * GrowthAds keeps its own accent (emerald instead of violet) but adopts that
- * structure exactly: dark page, white/72 body copy, white pill primary CTA,
- * dark glass pill secondary, rounded panels, product-first layout.
+ * Three rules encode the look:
+ *   1. One accent. Emerald is the only colour that carries meaning; every
+ *      other surface step is neutral navy. Multi-colour is reserved for
+ *      chart series, where position already differentiates.
+ *   2. Flat over glassy. Panels are a solid colour + a 7%-white border. No
+ *      blurred glows, no drop shadows on cards, no gradient washes.
+ *   3. Tight radii. 8px controls, 12px panels, pill only for status chips.
+ *
+ * Radii are deliberately remapped (2xl → 12px) so the hundreds of existing
+ * `rounded-2xl` call sites tighten with the system instead of each needing
+ * an edit.
  */
 const config: Config = {
   darkMode: "class",
@@ -26,15 +29,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        /** Near-black surfaces. 950 is the page, 900 cards, 800 raised. */
+        /** Navy surface stack. 950 page, 900 panel, 850 raised, 800 nested. */
         ink: {
-          950: "#05070B",
-          900: "#0A0D14",
-          850: "#0F1320",
-          800: "#151A29",
-          700: "#1E2436",
-          600: "#2A3145",
-          500: "#3A4356"
+          950: "#060911",
+          900: "#0A0F19",
+          850: "#0D131F",
+          800: "#111827",
+          700: "#1A2333",
+          600: "#253248",
+          500: "#33425A"
+        },
+        /** App panel surfaces as first-class tokens. */
+        app: {
+          bg: "#060911",
+          panel: "#0A0F19",
+          raised: "#0D131F",
+          inset: "#070C15",
+          line: "rgba(255,255,255,0.07)"
+        },
+        /** Chart series — meaning, not decoration. */
+        chart: {
+          green: "#34D399",
+          blue: "#60A5FA",
+          violet: "#A78BFA",
+          amber: "#FBBF24",
+          rose: "#FB7185"
         },
         /** Emerald accent ramp — the one colour that glows. */
         brand: {
@@ -58,15 +77,19 @@ const config: Config = {
           300: "#E2E8F0",
           400: "#CBD5E1"
         },
-        /** Light-mode text/borders. */
+        /**
+         * Text scale. On the app's navy stock, mist-50 is the primary figure,
+         * 300 is body, 400 label, 500 caption. The light-surface usages keep
+         * working because the app is dark-only (see lib/theme.ts).
+         */
         mist: {
-          50: "#F8FAFC",
-          100: "#F1F5F9",
-          200: "#E2E8F0",
-          300: "#CBD5E1",
-          400: "#94A3B8",
-          500: "#64748B",
-          600: "#475569"
+          50: "#F3F6FB",
+          100: "#E7ECF5",
+          200: "#CBD4E3",
+          300: "#A4B0C4",
+          400: "#7F8CA3",
+          500: "#5F6C82",
+          600: "#46536A"
         },
         /** Kept as aliases so earlier components stay valid. */
         paper: {
@@ -98,7 +121,9 @@ const config: Config = {
         mono: ["var(--font-jetbrains)", "ui-monospace", "monospace"]
       },
       backgroundImage: {
-        "brand-gradient": "linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%)",
+        "brand-gradient": "linear-gradient(135deg, #047857 0%, #10B981 60%, #34D399 100%)",
+        /** One soft top wash for page headers — used once per page, never per card. */
+        "page-glow": "radial-gradient(70% 60% at 30% 0%, rgba(16,185,129,0.10) 0%, rgba(6,9,17,0) 68%)",
         /** Headline fill used by the reference: white into 72% white. */
         "headline-fade": "linear-gradient(180deg, #FFFFFF 0%, rgba(255,255,255,0.72) 100%)",
         /** Top-light wash for glass cards. */
@@ -106,6 +131,8 @@ const config: Config = {
         "hero-glow": "radial-gradient(60% 55% at 50% 0%, rgba(16,185,129,0.22) 0%, rgba(5,7,11,0) 70%)"
       },
       boxShadow: {
+        /** Flat panels: a single hairline of inset light, nothing more. */
+        panel: "0 1px 0 0 rgba(255,255,255,0.03) inset",
         card: "0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px -28px rgba(0,0,0,0.8)",
         lift: "0 1px 0 rgba(255,255,255,0.06) inset, 0 32px 80px -28px rgba(0,0,0,0.9)",
         glow: "0 0 120px -24px rgba(16,185,129,0.45)",
@@ -113,13 +140,13 @@ const config: Config = {
         plate: "0 40px 120px -40px rgba(0,0,0,0.9)"
       },
       borderRadius: {
-        DEFAULT: "8px",
-        sm: "8px",
-        md: "12px",
-        lg: "16px",
-        xl: "16px",
-        "2xl": "16px",
-        "3xl": "24px",
+        DEFAULT: "6px",
+        sm: "6px",
+        md: "8px",
+        lg: "10px",
+        xl: "10px",
+        "2xl": "12px",
+        "3xl": "16px",
         pill: "9999px",
         full: "9999px"
       },
@@ -137,7 +164,8 @@ const config: Config = {
         sm: ["14px", { lineHeight: "1.4rem" }],
         base: ["16px", { lineHeight: "1.6rem" }],
         xl: ["20px", { lineHeight: "1.6rem", letterSpacing: "-0.01em" }],
-        "3xl": ["32px", { lineHeight: "2.25rem", letterSpacing: "-0.02em" }],
+        "2xl": ["24px", { lineHeight: "1.75rem", letterSpacing: "-0.02em" }],
+        "3xl": ["30px", { lineHeight: "2.125rem", letterSpacing: "-0.025em" }],
         "5xl": ["48px", { lineHeight: "3.1rem", letterSpacing: "-0.03em" }],
         "6xl": ["56px", { lineHeight: "3.5rem", letterSpacing: "-0.035em" }],
         "7xl": ["64px", { lineHeight: "1.1", letterSpacing: "-0.04em" }]

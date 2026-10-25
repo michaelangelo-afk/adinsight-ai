@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { Pause, Play, ArrowUpDown, MoreHorizontal } from "lucide-react";
+import * as React from "react";
+import Link from "next/link";
+import { ArrowRight, Pause, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { PlatformLogo } from "@/components/brand/platform-logo";
 import { MetricTooltip } from "@/components/ui/tooltip";
+import { Panel, PanelHeader } from "@/components/ui/panel";
 import type { CampaignSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
 import { updateCampaign } from "@/app/actions/meta";
+import { SERIES } from "@/lib/chart-theme";
 import {
   ColumnSpendTip,
   ColumnConversionsTip,
@@ -15,9 +18,18 @@ import {
   TrendSparklineTip
 } from "@/lib/metric-tooltips";
 
-function Sparkline({ data, tone }: { data: number[]; tone: "good" | "warn" | "bad" }) {
-  const w = 80;
-  const h = 24;
+type SortKey = "spend" | "conversions" | "cpc";
+
+const SORTS: { id: SortKey; label: string }[] = [
+  { id: "spend", label: "Spend" },
+  { id: "conversions", label: "Conv." },
+  { id: "cpc", label: "CPC" }
+];
+
+function Sparkline({ data, tone }: { data: number[]; tone: string }) {
+  const w = 64;
+  const h = 20;
+  if (data.length < 2) return <span className="inline-block w-16" />;
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
@@ -28,47 +40,52 @@ function Sparkline({ data, tone }: { data: number[]; tone: "good" | "warn" | "ba
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(" ");
-  const stroke =
-    tone === "good" ? "#1ed68f" : tone === "warn" ? "#fbbf24" : "#fb7185";
   return (
     <svg
       viewBox={`0 0 ${w} ${h}`}
       preserveAspectRatio="none"
-      className="w-20 h-6"
+      className="h-5 w-16"
       aria-hidden
     >
       <polyline
         points={pts}
         fill="none"
-        stroke={stroke}
+        stroke={tone}
         strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );
 }
 
-function PlatformDot({ platform }: { platform: string }) {
-  const map: Record<string, string> = {
-    meta: "#9b6cff",
-    google: "#1ed68f",
-    tiktok: "#5ee5ad"
-  };
+function PlatformMark({ platform, color }: { platform: string; color: string }) {
   return (
-    <PlatformLogo
-      platform={platform}
-      size="sm"
-      className="inline-block h-3.5 w-3.5"
-      fallback={
-        <span
-          className="h-2 w-2 rounded-full inline-block"
-          style={{ background: map[platform] ?? "#9b6cff" }}
-        />
-      }
-    />
+    <span
+      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md"
+      style={{ backgroundColor: `${color}1a` }}
+    >
+      <PlatformLogo
+        platform={platform}
+        size="xs"
+        fallback={
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ background: color }}
+            aria-hidden="true"
+          />
+        }
+      />
+    </span>
   );
 }
+
+const PLATFORM_COLOR: Record<string, string> = {
+  meta: SERIES.blue,
+  google: SERIES.green,
+  tiktok: SERIES.violet
+};
 
 function statusTone(
   status: "active" | "paused" | "completed"
@@ -79,59 +96,45 @@ function statusTone(
 }
 
 export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) {
-  const [sortKey, setSortKey] = useState<"spend" | "conversions" | "cpc">(
-    "spend"
-  );
-  const sorted = [...campaigns].sort((a, b) => b[sortKey] - a[sortKey]);
+  const [sortKey, setSortKey] = React.useState<SortKey>("spend");
+
+  const sorted = React.useMemo(() => {
+    const rows = [...campaigns];
+    if (sortKey === "cpc") return rows.sort((a, b) => a.cpc - b.cpc);
+    return rows.sort((a, b) => b[sortKey] - a[sortKey]);
+  }, [campaigns, sortKey]);
 
   return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift ">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
-            Campaigns
+    <Panel className="flex flex-col p-5">
+      <PanelHeader
+        eyebrow="Campaigns"
+        title="Top campaigns"
+        description="Sort by spend, conversions or cost per click."
+        actions={
+          <div className="seg" role="group" aria-label="Sort campaigns">
+            {SORTS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setSortKey(s.id)}
+                data-active={sortKey === s.id}
+                className="seg-item"
+                aria-pressed={sortKey === s.id}
+              >
+                {s.label}
+              </button>
+            ))}
           </div>
-          <h3 className="mt-1 text-base font-semibold tracking-tight text-ink-900 dark:text-mist-50">
-            How every campaign is performing
-          </h3>
-          <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">
-            Sort by spend, conversions or CPC. Click a campaign for drill-down.
-          </p>
-        </div>
-        <button className="hidden md:inline-flex items-center gap-2 rounded-2xl bg-mist-50/[0.04] hairline px-3 py-1.5 text-xs text-mist-200 hover:bg-mist-50/[0.08]">
-          <ArrowUpDown size={12} />
-          Sort:{" "}
-          <span className="text-mist-50 font-medium capitalize">
-            {sortKey}
-          </span>
-        </button>
-      </div>
+        }
+      />
 
-      {/* Sort pills */}
-      <div className="flex gap-2 mb-3">
-        {(["spend", "conversions", "cpc"] as const).map((k) => (
-          <button
-            key={k}
-            onClick={() => setSortKey(k)}
-            className={
-              "rounded-full px-3 py-1 text-xs font-medium transition-colors " +
-              (sortKey === k
-                ? "bg-brand-500/20 border border-brand-500/40 text-brand-200"
-                : "bg-mist-50/[0.04] hairline text-mist-300 hover:text-mist-50")
-            }
-          >
-            By {k}
-          </button>
-        ))}
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="-mx-1 mt-3 overflow-x-auto">
+        <table className="w-full min-w-[520px] text-[12px]">
           <thead>
-            <tr className="text-xs text-mist-600 dark:text-mist-400 border-b border-mist-50/[0.06]">
-              <th className="text-left py-3 px-2 font-medium">Campaign</th>
-              <th className="text-right py-3 px-2 font-medium">
-                <span className="inline-flex items-baseline justify-end w-full">
+            <tr className="border-b border-white/[0.06] text-[10px] uppercase tracking-[0.08em] text-mist-500">
+              <th className="px-1 pb-2 text-left font-medium">Campaign</th>
+              <th className="px-2 pb-2 text-right font-medium">
+                <span className="inline-flex w-full justify-end">
                   <MetricTooltip
                     content={ColumnSpendTip}
                     label="What spend means"
@@ -141,19 +144,19 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                   </MetricTooltip>
                 </span>
               </th>
-              <th className="text-right py-3 px-2 font-medium hidden md:table-cell">
-                <span className="inline-flex items-baseline justify-end w-full">
+              <th className="hidden px-2 pb-2 text-right font-medium sm:table-cell">
+                <span className="inline-flex w-full justify-end">
                   <MetricTooltip
                     content={ColumnConversionsTip}
                     label="What conversions means"
                     side="bottom"
                   >
-                    <span>Conversions</span>
+                    <span>Conv.</span>
                   </MetricTooltip>
                 </span>
               </th>
-              <th className="text-right py-3 px-2 font-medium hidden md:table-cell">
-                <span className="inline-flex items-baseline justify-end w-full">
+              <th className="hidden px-2 pb-2 text-right font-medium sm:table-cell">
+                <span className="inline-flex w-full justify-end">
                   <MetricTooltip
                     content={ColumnCpcTip}
                     label="What CPC means"
@@ -163,8 +166,8 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                   </MetricTooltip>
                 </span>
               </th>
-              <th className="text-right py-3 px-2 font-medium hidden sm:table-cell">
-                <span className="inline-flex items-baseline justify-end w-full">
+              <th className="hidden px-2 pb-2 text-right font-medium md:table-cell">
+                <span className="inline-flex w-full justify-end">
                   <MetricTooltip
                     content={TrendSparklineTip}
                     label="What the trend sparkline means"
@@ -174,89 +177,93 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
                   </MetricTooltip>
                 </span>
               </th>
-              <th className="text-right py-3 px-2 font-medium">Status</th>
+              <th className="pb-2 pl-2 text-right font-medium">Status</th>
             </tr>
           </thead>
           <tbody>
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-sm text-mist-600 dark:text-mist-400">
+                <td
+                  colSpan={6}
+                  className="py-10 text-center text-[12px] text-mist-500"
+                >
                   No campaigns yet. Connect an ad account to begin syncing.
                 </td>
               </tr>
             )}
             {sorted.map((c) => {
+              const color = PLATFORM_COLOR[c.platform] ?? SERIES.violet;
               const tone =
                 c.status === "active"
-                  ? "good"
+                  ? SERIES.green
                   : c.status === "paused"
-                  ? "warn"
-                  : "bad";
+                  ? SERIES.amber
+                  : SERIES.rose;
+              const isActive = c.status === "active";
               return (
                 <tr
                   key={c.id}
-                  className="border-b border-mist-50/[0.04] last:border-0 group hover:bg-mist-50/[0.06] transition-colors duration-200"
+                  className="group border-b border-white/[0.04] transition-colors last:border-0 hover:bg-white/[0.025]"
                 >
-                  <td className="py-3 px-2">
+                  <td className="px-1 py-2.5">
                     <div className="flex min-w-0 items-center gap-2.5">
-                      <PlatformDot platform={c.platform} />
-                      {/* Truncate on phones so the row fits 390px without
-                          horizontal scrolling; the platform + CTR line
-                          below still carries the full context. */}
-                      <span className="max-w-[9.5rem] truncate text-mist-50 font-medium sm:max-w-none">
-                        {c.name}
-                      </span>
-                    </div>
-                    <div className="text-xs text-mist-600 dark:text-mist-500 ml-4.5 mt-0.5 capitalize">
-                      {c.platform} · {formatPercent(c.ctr, 2)} CTR
+                      <PlatformMark platform={c.platform} color={color} />
+                      <div className="min-w-0">
+                        <div className="max-w-[13rem] truncate text-[12.5px] font-medium text-mist-50">
+                          {c.name}
+                        </div>
+                        <div className="text-[10.5px] capitalize text-mist-500">
+                          {c.platform} · {formatPercent(c.ctr, 2)} CTR
+                        </div>
+                      </div>
                     </div>
                   </td>
-                  <td className="py-3 px-2 text-right tabular-nums text-mist-50">
+                  <td className="px-2 py-2.5 text-right font-medium tabular-nums text-mist-100">
                     {formatNaira(c.spend)}
                   </td>
-                  <td className="py-3 px-2 text-right tabular-nums text-mist-200 hidden md:table-cell">
+                  <td className="hidden px-2 py-2.5 text-right tabular-nums text-mist-300 sm:table-cell">
                     {c.conversions}
                   </td>
-                  <td className="py-3 px-2 text-right tabular-nums text-mist-200 hidden md:table-cell">
+                  <td className="hidden px-2 py-2.5 text-right tabular-nums text-mist-300 sm:table-cell">
                     ₦{c.cpc.toFixed(2)}
                   </td>
-                  <td className="hidden py-3 px-2 text-right sm:table-cell">
-                    <div className="inline-flex justify-end">
-                      <Sparkline
-                        data={c.trend}
-                        tone={tone as "good" | "warn" | "bad"}
-                      />
+                  <td className="hidden px-2 py-2.5 md:table-cell">
+                    <div className="flex justify-end">
+                      <Sparkline data={c.trend} tone={tone} />
                     </div>
                   </td>
-                  <td className="py-3 px-2 text-right">
-                    <div className="inline-flex items-center gap-2">
-                      <Badge tone={statusTone(c.status)}>
+                  <td className="py-2.5 pl-2 text-right">
+                    <div className="inline-flex items-center gap-1.5">
+                      <Badge tone={statusTone(c.status)} dot>
                         {c.status}
                       </Badge>
-                      <form action={updateCampaign.bind(null, c.id, c.status === "active" ? "PAUSED" : "ACTIVE")} className="contents">
+                      <form
+                        action={updateCampaign.bind(
+                          null,
+                          c.id,
+                          isActive ? "PAUSED" : "ACTIVE"
+                        )}
+                        className="contents"
+                      >
                         <button
                           type="submit"
-                          aria-label={c.status === "active" ? `Pause ${c.name}` : `Resume ${c.name}`}
-                          title={c.status === "active" ? `Pause ${c.name} on Meta` : `Resume ${c.name} on Meta`}
-                          className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-2xl text-mist-600 dark:text-mist-500 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
+                          aria-label={
+                            isActive ? `Pause ${c.name}` : `Resume ${c.name}`
+                          }
+                          title={
+                            isActive
+                              ? `Pause ${c.name} on Meta`
+                              : `Resume ${c.name} on Meta`
+                          }
+                          className="rounded p-1 text-mist-600 opacity-0 transition-all hover:bg-white/[0.06] hover:text-mist-200 focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100"
                         >
-                          {c.status === "active" ? (
-                            <Pause size={13} />
+                          {isActive ? (
+                            <Pause size={11} aria-hidden />
                           ) : (
-                            <Play size={13} />
+                            <Play size={11} aria-hidden />
                           )}
                         </button>
                       </form>
-                      <button
-                        type="button"
-                        aria-disabled="true"
-                        aria-label="More actions"
-                        title={`Phase 3 wiring pending — open details for ${c.name}`}
-                        onClick={(e) => e.preventDefault()}
-                        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-all duration-200 p-1.5 rounded-2xl text-mist-600 dark:text-mist-500 hover:text-brand-700 dark:hover:text-brand-300 hover:bg-brand-500/10 cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950"
-                      >
-                        <MoreHorizontal size={13} />
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -265,6 +272,20 @@ export function CampaignsTable({ campaigns }: { campaigns: CampaignSummary[] }) 
           </tbody>
         </table>
       </div>
-    </div>
+
+      <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3">
+        <span className="text-[11px] text-mist-500">
+          {campaigns.length} campaign{campaigns.length === 1 ? "" : "s"} ·{" "}
+          {campaigns.filter((c) => c.status === "active").length} active
+        </span>
+        <Link
+          href="/campaigns"
+          className="inline-flex items-center gap-1 text-[11.5px] font-medium text-mist-300 transition-colors hover:text-brand-300"
+        >
+          View all campaigns
+          <ArrowRight size={12} aria-hidden />
+        </Link>
+      </div>
+    </Panel>
   );
 }

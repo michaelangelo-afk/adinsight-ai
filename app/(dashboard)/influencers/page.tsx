@@ -17,16 +17,10 @@
 // the source of truth identical across server and client renders.
 
 import { Suspense } from "react";
-import {
-  Sparkles,
-  Plus,
-  ArrowDownRight
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Logo } from "@/components/brand/logo";
-import { TextureGrain } from "@/components/motion/texture-grain";
+import { Sparkles, ArrowDownRight, UserRoundPlus } from "lucide-react";
 
 import { Topbar } from "@/components/dashboard/topbar";
+import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentUser } from "@/app/actions/auth";
 import { resolveOrgName } from "@/lib/auth/user-profile";
 
@@ -38,10 +32,7 @@ import {
   computeFitScore,
   withFitScores
 } from "@/lib/influencer/fit-score";
-import {
-  marketplaceStats,
-  averageAdCpmBy1000Reach
-} from "@/lib/influencer/compare-to-ads";
+import { marketplaceStats } from "@/lib/influencer/compare-to-ads";
 import { campaigns } from "@/lib/mock-data";
 import type { ExtendedInfluencer } from "@/lib/influencer/types";
 
@@ -199,8 +190,6 @@ export default async function InfluencersPage({
     (c) => fitsRecord[c.id]?.overall ?? 0
   );
 
-  const baselineCpm = averageAdCpmBy1000Reach(campaigns);
-
   const profile = {
     avatar:
       user?.profile?.avatar ||
@@ -216,95 +205,44 @@ export default async function InfluencersPage({
   };
 
   return (
-    <div className="relative flex-1 min-w-0 flex flex-col">
-      {/* Subtle alive background — orbs + grain — clipped to this page
-          (NOT the whole dashboard shell, so one page being "alive" doesn't
-          bleed into `/dashboard`). bg-brand-600/15 wash tinting
-          distinguishes the sector visually too. */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      >
-        <TextureGrain />
-      </div>
-
+    <div className="relative flex min-w-0 flex-1 flex-col">
       <Topbar profile={profile} />
 
-      <main className="flex-1 p-6 md:p-8 space-y-6">
-        {/* Z1: Hero */}
-        <section
-          className="relative rounded-2xl overflow-hidden hairline bg-gradient-to-br from-brand-700/15 via-ink-950/60 to-brand-500/10 p-6 sm:p-8 "
-          aria-label="Influencer sector hero"
-        >
-          <div
-            aria-hidden
-            className="absolute inset-0 grid-bg opacity-40"
-          />
-          <div className="relative grid lg:grid-cols-[1.5fr,1fr] gap-6 items-center">
-            <div>
-              <Badge tone="brand" className="!text-xs">
-                <Sparkles size={11} aria-hidden />
-                Phase 4 · Influencer sector
-              </Badge>
-              <h1 className="mt-3 text-3xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
-                Find{" "}
-                <span className="gradient-text">
-                  creators your audience already trusts.
-                </span>
-              </h1>
-              <p className="mt-3 text-sm sm:text-base text-mist-200 max-w-xl leading-relaxed">
-                Vet 12 vetted creators across Lagos, Abuja, Ibadan and Port
-                Harcourt — ranked by audience-overlap momentum with your
-                brand. Skip the cold outreach and brief the ones already
-                winning over your future customers.
-              </p>
-
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <a
-                    href="#marketplace-kpis"
-                    className="inline-flex items-center gap-2 rounded-2xl bg-brand-700 hover:bg-brand-600 text-white px-5 py-2.5 text-sm font-semibold shadow-card tap-press touch-target"
-                    aria-label="Jump to discovery KPIs"
-                  >
-                    <ArrowDownRight size={14} aria-hidden />
-                    Explore the marketplace
-                  </a>
-                <a
-                  href="/influencers?c=inf_01"
-                  className="inline-flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-sm font-semibold tap-press bg-paper-50/5 text-mist-200 border border-mist-50/10 hover:text-mist-50 hover:border-brand-500/40 touch-target"
-                >
-                  <Plus size={14} aria-hidden />
-                  See the top match
-                </a>
-              </div>
-
-              <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-xs text-mist-400">
-                <MiniStat label="Avg fit" value={`${stats.averageFit}/100`} />
-                <MiniStat
-                  label="Total reach"
-                  value={`${(stats.totalReach / 1000).toFixed(0)}k`}
-                />
-                <MiniStat
-                  label="vs Meta CPM"
-                  value={`−${Math.round((1 - stats.averageCpmBy1000Followers / baselineCpm) * 100)}%`}
-                  highlight
-                />
-              </div>
-            </div>
-
-            <div className="hidden lg:flex justify-center items-center">
-              <div className="relative h-48 w-48 text-brand-100">
-                <Logo showWordmark={false} className="h-48 w-48 [&>span]:h-full [&>span]:w-full [&>svg]:h-32 [&>svg]:w-32" />
-                <span
-                  aria-hidden
-                  className="absolute -bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-brand-500/15 border border-brand-500/30 px-3 py-1 text-xs uppercase tracking-wider text-brand-200"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand-400 " />
-                  Live · 12 vetted creators
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
+      <main className="flex-1 space-y-4 px-4 py-6 md:px-6 lg:px-8">
+        <PageHeader
+          eyebrow={
+            <>
+              <Sparkles size={11} aria-hidden className="text-brand-300" />
+              Creator marketplace
+            </>
+          }
+          title="Influencers"
+          description={
+            <>
+              {extendedInfluencers.length} vetted creators across Lagos, Abuja,
+              Ibadan and Port Harcourt, ranked by audience overlap with your
+              brand. Brief the ones already winning over your future customers.
+            </>
+          }
+          actions={
+            <>
+              <a
+                href="#marketplace-kpis"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.02] px-2.5 text-[11.5px] font-medium text-mist-200 transition-colors hover:border-white/[0.18] hover:text-white"
+              >
+                <ArrowDownRight size={12} aria-hidden />
+                Marketplace stats
+              </a>
+              <a
+                href="/influencers?c=inf_01"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand-600 px-3 text-[11.5px] font-semibold text-white transition-colors hover:bg-brand-500"
+              >
+                <UserRoundPlus size={12} aria-hidden />
+                Top match
+              </a>
+            </>
+          }
+        />
 
         {/* Z2: Filter bar */}
         <Suspense fallback={null}>
@@ -345,7 +283,7 @@ export default async function InfluencersPage({
       </Suspense>
 
       {/* Brand weights summary footer */}
-      <footer className="px-6 md:px-8 pb-6 text-xs text-mist-500">
+      <footer className="px-4 pb-6 text-[11px] text-mist-500 md:px-6 lg:px-8">
         Fit is computed against your brand weights
         (Food {Math.round((BRAND_NICHE_WEIGHTS.Food ?? 0) * 100)}%,
         Lifestyle {Math.round((BRAND_NICHE_WEIGHTS.Lifestyle ?? 0) * 100)}%,
@@ -357,28 +295,3 @@ export default async function InfluencersPage({
   );
 }
 
-function MiniStat({
-  label,
-  value,
-  highlight
-}: {
-  label: string;
-  value: string;
-  highlight?: boolean;
-}) {
-  return (
-    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-center">
-      <div className="text-xs uppercase tracking-wider text-mist-500">
-        {label}
-      </div>
-      <div
-        className={
-          "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-brand-300" : "text-mist-50")
-        }
-      >
-        {value}
-      </div>
-    </div>
-  );
-}

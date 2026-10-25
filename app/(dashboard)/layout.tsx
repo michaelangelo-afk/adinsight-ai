@@ -39,9 +39,12 @@ export default async function DashboardLayout({
     : resolveOrgName(user?.profile?.organizations ?? null);
 
   return (
-    <div className="min-h-screen flex bg-ink-950">
-      <Sidebar orgName={orgName} />
-      <div className="flex-1 min-w-0 flex flex-col">{children}</div>
+    <div className="flex min-h-screen bg-app-bg">
+      <Sidebar
+        orgName={orgName}
+        userName={user?.profile?.full_name ?? "Demo user"}
+      />
+      <div className="flex min-w-0 flex-1 flex-col">{children}</div>
     </div>
   );
 }

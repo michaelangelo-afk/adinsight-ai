@@ -2,59 +2,77 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Plus, LogOut, ArrowLeft } from "lucide-react";
+import { usePathname } from "next/navigation";
+import {
+  ArrowLeft,
+  ChevronsUpDown,
+  LogOut,
+  Plus
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/app/actions/auth";
 import { Logo } from "@/components/brand/logo";
 import { NAV_ITEMS, isNavActive } from "@/lib/dashboard/nav";
-import { usePathname } from "next/navigation";
 
 /**
- * Sidebar nav. Phase 4 wires the Influencers entry to the real
- * `/influencers` route and uses Next's `usePathname()` to drive the
- * active state — keeping the dashboard's Overview active when on
- * `/dashboard` AND on any nested filter URL on `/influencers` (so
- * users browsing the influencer sector get the right rail highlight
- * without losing context).
+ * Sidebar — the workspace rail (lg+).
  *
- * Phase 6 — NAV_ITEMS + isNavActive now live in
- * `lib/dashboard/nav.ts` and are SHARED with the Topbar's horizontal
- * nav strip (`components/dashboard/topbar.tsx`). Both surfaces
- * consume the same source so the active state is consistent on
- * either (e.g. expanding the Influencers drawer from /influencers?c=
- * lights the same Influencers entry on both surfaces).
+ * One job: orientation. The rail carries the product mark, the signed-in
+ * workspace, the seven destinations, and the account footer. No promo tiles in
+ * the nav flow; the plan nudge sits at the bottom as a quiet card, and the only
+ * saturated surface is the workspace switcher's focus state.
+ *
+ * Below `lg` the rail is hidden and the Topbar's hamburger sheet takes over.
  */
 interface SidebarProps {
   /** The signed-in user's organization/business name */
   orgName: string;
+  /** Display name for the account footer (optional — demo mode has none). */
+  userName?: string;
 }
 
-export function Sidebar({ orgName }: SidebarProps) {
+export function Sidebar({ orgName, userName = "Demo user" }: SidebarProps) {
   const pathname = usePathname();
+
   return (
-    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-mist-200 dark:border-mist-50/[0.04] bg-paper-50/80 dark:bg-ink-900/40">
-      <div className="px-5 py-5">
-        <Link href="/" className="inline-flex">
+    <aside className="hidden w-[232px] shrink-0 flex-col border-r border-white/[0.06] bg-[#070B13] lg:flex">
+      <div className="px-4 pb-2 pt-5">
+        <Link
+          href="/"
+          className="inline-flex rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+          aria-label="GrowthAds home"
+        >
           <Logo />
         </Link>
       </div>
 
-      <div className="px-3">
-        <button className="w-full flex items-center justify-between gap-2 rounded-2xl px-3 py-2.5 bg-brand-500/15 border border-brand-500/30 text-brand-200 hover:bg-brand-500/25 hover:border-brand-400/50 transition-all duration-200 tap-press touch-target group">
-          <span className="flex items-center gap-2 text-sm font-medium">
-            <Plus size={16} className="transition-transform duration-300 group-hover:rotate-90" />
-            <span className="truncate max-w-[10rem]">{orgName}</span>
+      {/* Workspace switcher — the reference's org context sits directly under
+          the mark, not buried in a settings menu. */}
+      <div className="px-3 pt-3">
+        <button
+          type="button"
+          className="group flex h-9 w-full items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.03] px-2.5 text-left transition-colors duration-150 hover:border-white/[0.14] hover:bg-white/[0.05]"
+          title={`${orgName} — workspace`}
+        >
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[5px] bg-brand-500/[0.14] text-[10px] font-semibold uppercase text-brand-300">
+            {orgName.slice(0, 2)}
           </span>
-          <span className="text-xs uppercase tracking-wider text-brand-300/70 shrink-0 transition-colors group-hover:text-brand-200">
-            switch
+          <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-mist-100">
+            {orgName}
           </span>
+          <ChevronsUpDown
+            size={13}
+            className="shrink-0 text-mist-500 transition-colors group-hover:text-mist-200"
+            aria-hidden
+          />
         </button>
       </div>
 
       <nav
-        className="mt-6 px-3 flex-1 space-y-1"
+        className="mt-6 flex-1 space-y-0.5 px-3"
         aria-label="Workspace navigation"
       >
+        <div className="stat-label px-2 pb-2">Workspace</div>
         {NAV_ITEMS.map((n) => {
           const Icon = n.icon;
           const active = isNavActive(pathname, n.href);
@@ -64,38 +82,42 @@ export function Sidebar({ orgName }: SidebarProps) {
               href={n.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "nav-indicator group flex items-center gap-3 rounded-2xl px-3 py-2 text-sm transition-all duration-200 hover:translate-x-0.5",
+                "nav-indicator group relative flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-[13px] transition-colors duration-150",
                 active
-                  ? "bg-brand-100 text-brand-900 is-active dark:bg-brand-500/10 dark:text-mist-50"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-mist-300 dark:hover:bg-mist-50/[0.04] dark:hover:text-mist-50",
-                n.stub && "opacity-70 cursor-not-allowed"
+                  ? "is-active bg-white/[0.06] font-medium text-mist-50"
+                  : "text-mist-400 hover:bg-white/[0.03] hover:text-mist-100",
+                n.stub && "cursor-not-allowed opacity-60"
               )}
               onClick={(e) => {
                 if (n.stub) e.preventDefault();
               }}
             >
               <Icon
-                size={16}
+                size={15}
+                strokeWidth={1.75}
+                aria-hidden
                 className={cn(
-                  "transition-transform duration-300",
+                  "shrink-0 transition-colors duration-150",
                   active
-                    ? "text-brand-700 dark:text-brand-300"
-                    : "group-hover:scale-110 group-hover:text-brand-700 dark:group-hover:text-brand-300"
+                    ? "text-brand-300"
+                    : "text-mist-500 group-hover:text-mist-300"
                 )}
               />
+              <span className="flex-1 truncate">{n.label}</span>
               {n.stub && (
-                <span
-                  className="text-xs uppercase tracking-wider text-slate-400 ml-auto dark:text-mist-600"
-                  title="Coming soon"
-                >
+                <span className="text-[9px] uppercase tracking-[0.08em] text-mist-600">
                   soon
                 </span>
               )}
-              <span className={cn("flex-1", n.stub && "ml-auto")}>
-                {n.label}
-              </span>
               {n.badge !== undefined && (
-                <span className="inline-flex items-center justify-center rounded-2xl bg-brand-500 px-1.5 h-5 text-xs font-semibold text-ink-950 ">
+                <span
+                  className={cn(
+                    "inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-md px-1 text-[10px] font-semibold tabular-nums",
+                    active
+                      ? "bg-brand-500/20 text-brand-200"
+                      : "bg-white/[0.07] text-mist-300"
+                  )}
+                >
                   {n.badge}
                 </span>
               )}
@@ -104,42 +126,78 @@ export function Sidebar({ orgName }: SidebarProps) {
         })}
       </nav>
 
-      <div className="px-4 pb-5">
-        <div className="rounded-2xl p-4 bg-gradient-to-br from-brand-100 to-brand-100 border border-brand-200 dark:from-brand-500/15 dark:to-brand-500/15 dark:border-brand-500/30 hover-lift hover:border-brand-400/50 relative overflow-hidden">
-          <div aria-hidden className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-brand-500/15 blur-2xl" />
-          <div className="text-xs uppercase tracking-wider text-brand-700 dark:text-brand-200">
-            Pro plan
-          </div>
-          <p className="mt-1 text-xs text-slate-600 dark:text-mist-200 leading-relaxed">
-            Priority AI insights unlock in <strong className="text-slate-900 dark:text-mist-50">2 days</strong>.
-          </p>
-          <button className="mt-3 w-full rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2 tap-press touch-target hover:shadow-glow transition-shadow duration-300">
-            Upgrade
-          </button>
+      <div className="space-y-3 border-t border-white/[0.06] p-3">
+        {/* Connection state — always visible so "is this live?" is answerable
+            from anywhere in the workspace. */}
+        <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-2">
+          <span className="relative flex h-1.5 w-1.5" aria-hidden>
+            <span className="absolute inline-flex h-full w-full rounded-full bg-brand-400/50" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-400" />
+          </span>
+          <span className="text-[11px] font-medium text-mist-300">
+            Connected
+          </span>
+          <span className="ml-auto text-[11px] text-mist-500">Meta Ads</span>
         </div>
 
-        <Link
-          href="/"
-          className="mt-4 inline-flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors duration-200 hover:text-brand-700 dark:text-mist-300 dark:hover:text-brand-300 tap-press"
-        >
-          <ArrowLeft size={14} aria-hidden />
-          Back to site
-        </Link>
-
-        {/*
-          Server-action form: posts to signOut() and redirects in middleware.
-          Server actions can be used directly via <form action={fn}> in
-          Next.js 14 without needing a client component.
-        */}
-        <form action={signOut} className="mt-4">
-          <button
-            type="submit"
-            className="flex items-center gap-2 text-sm text-slate-500 hover:text-rose-600 dark:text-mist-300 dark:hover:text-rose-300 transition-colors duration-200 tap-press touch-target py-1.5 group"
+        {/* Plan nudge — deliberately the quietest card in the rail. */}
+        <div className="rounded-lg border border-white/[0.07] bg-white/[0.02] p-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-medium text-mist-200">
+              Pro plan
+            </span>
+            <span className="rounded bg-brand-500/[0.12] px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-brand-300">
+              Trial
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] leading-4 text-mist-500">
+            Priority insights unlock in 2 days.
+          </p>
+          <Link
+            href="/billing"
+            className="mt-2.5 flex h-7 w-full items-center justify-center gap-1 rounded-md bg-brand-600 text-[11px] font-semibold text-white transition-colors hover:bg-brand-500"
           >
-            <LogOut size={14} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
-            Sign out
-          </button>
-        </form>
+            <Plus size={11} aria-hidden />
+            Upgrade
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2 pt-0.5">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-500/[0.16] text-[10px] font-semibold text-brand-200">
+            {userName
+              .split(" ")
+              .map((p) => p[0] ?? "")
+              .join("")
+              .slice(0, 2)
+              .toUpperCase() || "?"}
+          </div>
+          <div className="min-w-0 flex-1 leading-tight">
+            <div className="truncate text-[11.5px] font-medium text-mist-100">
+              {userName}
+            </div>
+            <div className="truncate text-[10.5px] text-mist-500">
+              {orgName}
+            </div>
+          </div>
+          <Link
+            href="/"
+            aria-label="Back to site"
+            title="Back to site"
+            className="rounded-md p-1.5 text-mist-500 transition-colors hover:bg-white/[0.05] hover:text-mist-100"
+          >
+            <ArrowLeft size={13} aria-hidden />
+          </Link>
+          <form action={signOut}>
+            <button
+              type="submit"
+              aria-label="Sign out"
+              title="Sign out"
+              className="rounded-md p-1.5 text-mist-500 transition-colors hover:bg-white/[0.05] hover:text-rose-300"
+            >
+              <LogOut size={13} aria-hidden />
+            </button>
+          </form>
+        </div>
       </div>
     </aside>
   );

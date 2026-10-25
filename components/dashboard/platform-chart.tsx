@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -7,7 +8,8 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Cell
+  Cell,
+  LabelList
 } from "recharts";
 import type { DashboardSummary } from "@/lib/types";
 import { formatNaira, formatPercent } from "@/lib/utils";
@@ -19,92 +21,152 @@ import {
   TiktokBriefTip,
   BestCostPerConvTip
 } from "@/lib/metric-tooltips";
+import {
+  SERIES,
+  AXIS_TICK,
+  GRID,
+  TOOLTIP_STYLE,
+  TOOLTIP_LABEL_STYLE
+} from "@/lib/chart-theme";
+import { Panel, PanelHeader } from "@/components/ui/panel";
 
 const PLATFORM_META: Record<string, { name: string; color: string }> = {
-  meta: { name: "Meta", color: "#9b6cff" },
-  google: { name: "Google", color: "#1ed68f" },
-  tiktok: { name: "TikTok", color: "#5ee5ad" }
+  meta: { name: "Meta", color: SERIES.blue },
+  google: { name: "Google", color: SERIES.green },
+  tiktok: { name: "TikTok", color: SERIES.violet }
 };
 
+type View = "spend" | "conversions";
+
 export function PlatformChart({ data }: { data: DashboardSummary["platformBreakdown"] }) {
+  const [view, setView] = React.useState<View>("spend");
+
   const totalSpend = data.reduce((s, d) => s + d.spend, 0);
   const sorted = [...data].sort((a, b) => b.spend - a.spend);
   const chartData = sorted.map((d) => ({
     platform: PLATFORM_META[d.platform]?.name ?? d.platform,
     spend: d.spend,
     conversions: d.conversions,
-    share: d.spend / totalSpend,
+    share: totalSpend ? d.spend / totalSpend : 0,
     orig: d.platform,
-    color: PLATFORM_META[d.platform]?.color ?? "#9b6cff"
+    color: PLATFORM_META[d.platform]?.color ?? SERIES.violet
   }));
 
-  return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 hover-lift ">
-      <div className="mb-4">
-        <div className="text-xs uppercase tracking-wider text-mist-600 dark:text-mist-400">
-          Platform mix
-        </div>
-        <h3 className="mt-1 text-base font-semibold tracking-tight text-ink-900 dark:text-mist-50">
-          Where every naira goes
-        </h3>
-        <p className="mt-1 text-sm text-mist-600 dark:text-mist-300">
-          Total: <span className="text-ink-900 dark:text-mist-50 font-medium">{formatNaira(totalSpend)}</span>
-        </p>
-      </div>
+  // Best efficiency, derived from the data rather than asserted.
+  const best = [...data]
+    .filter((d) => d.conversions > 0)
+    .sort((a, b) => a.spend / a.conversions - b.spend / b.conversions)[0];
 
-      <div className="h-56 w-full">
+  const isSpend = view === "spend";
+
+  return (
+    <Panel className="flex flex-col p-5">
+      <PanelHeader
+        eyebrow="Channel performance"
+        title={isSpend ? "Spend by channel" : "Conversions by channel"}
+        description={
+          isSpend
+            ? `${formatNaira(totalSpend)} across ${data.length} channels.`
+            : `${data
+                .reduce((s, d) => s + d.conversions, 0)
+                .toLocaleString()} conversions this period.`
+        }
+        actions={
+          <div className="seg" role="group" aria-label="Metric">
+            <button
+              type="button"
+              onClick={() => setView("spend")}
+              data-active={isSpend}
+              className="seg-item"
+              aria-pressed={isSpend}
+            >
+              Spend
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("conversions")}
+              data-active={!isSpend}
+              className="seg-item"
+              aria-pressed={!isSpend}
+            >
+              Conv.
+            </button>
+          </div>
+        }
+      />
+
+      <div className="mt-3 min-h-[168px] w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
-            layout="vertical"
-            margin={{ top: 0, right: 12, left: 0, bottom: 0 }}
+            margin={{ top: 20, right: 4, left: 0, bottom: 0 }}
+            barCategoryGap="34%"
           >
+            <defs>
+              {chartData.map((d) => (
+                <linearGradient
+                  key={d.orig}
+                  id={`bar-${d.orig}`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop offset="0%" stopColor={d.color} stopOpacity={0.95} />
+                  <stop offset="100%" stopColor={d.color} stopOpacity={0.35} />
+                </linearGradient>
+              ))}
+            </defs>
             <XAxis
-              type="number"
-              stroke="#7a7ca0"
-              tick={{ fill: "#7a7ca0", fontSize: 11 }}
+              dataKey="platform"
+              tick={AXIS_TICK}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(v) => `₦${Math.round(v / 1000)}k`}
+              dy={6}
             />
             <YAxis
-              type="category"
-              dataKey="platform"
-              stroke="#7a7ca0"
-              tick={{ fill: "#cdcee0", fontSize: 12 }}
+              tick={AXIS_TICK}
               tickLine={false}
               axisLine={false}
-              width={60}
+              tickFormatter={(v) =>
+                isSpend ? `₦${Math.round(v / 1000)}k` : String(v)
+              }
+              width={54}
             />
             <Tooltip
-              cursor={{ fill: "rgba(21,128,61,0.08)" }}
-              contentStyle={{
-                background: "rgba(13,13,30,0.95)",
-                border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: 12,
-                color: "#f4f4ff",
-                fontSize: 12
-              }}
-              formatter={(value, _key, item) => {
+              contentStyle={TOOLTIP_STYLE}
+              labelStyle={TOOLTIP_LABEL_STYLE}
+              cursor={{ fill: "rgba(255,255,255,0.035)" }}
+              formatter={(value) => {
                 const v = typeof value === "number" ? value : Number(value) || 0;
-                const pay = item && typeof item === "object" && "payload" in item
-                  ? (item as { payload?: { share?: number } }).payload
-                  : undefined;
-                const share = pay?.share ?? 0;
-                return [`${formatNaira(v)} · ${formatPercent(share, 1)}`, "Spend"];
+                return isSpend ? [formatNaira(v), "Spend"] : [v, "Conversions"];
               }}
             />
-            <Bar dataKey="spend" radius={[0, 8, 8, 0]} barSize={18}>
-              {chartData.map((d, i) => (
-                <Cell key={i} fill={d.color} />
+            <Bar
+              dataKey={view}
+              radius={[4, 4, 0, 0]}
+              maxBarSize={54}
+              isAnimationActive={false}
+            >
+              {chartData.map((d) => (
+                <Cell key={d.orig} fill={`url(#bar-${d.orig})`} />
               ))}
+              <LabelList
+                dataKey={view}
+                position="top"
+                fill="#A4B0C4"
+                fontSize={10.5}
+                offset={6}
+                formatter={(v: number) =>
+                  isSpend ? `₦${Math.round(v / 1000)}k` : String(v)
+                }
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Conversion rate per platform */}
-      <div className="mt-4 pt-4 border-t border-mist-50/[0.04] space-y-3">
+      <div className="mt-2 space-y-0.5 border-t border-white/[0.06] pt-2">
         {chartData.map((p) => {
           const tip =
             p.orig === "meta"
@@ -123,35 +185,50 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
               ? "What TikTok Ads means"
               : `What ${p.platform} Ads means`;
           return (
-            <div key={p.platform} className="flex items-center gap-3">
-              <PlatformLogo
-                platform={p.orig}
-                size="xs"
-                fallback={
-                  <span
-                    className="h-2 w-2 rounded-full shrink-0"
-                    style={{ background: p.color }}
-                    aria-hidden="true"
-                  />
-                }
-              />
-              <span className="text-sm text-ink-800 dark:text-mist-200 flex-1">
+            <div
+              key={p.platform}
+              className="flex items-center gap-2.5 rounded-md px-1.5 py-1.5"
+            >
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md"
+                style={{ backgroundColor: `${p.color}1a` }}
+              >
+                <PlatformLogo
+                  platform={p.orig}
+                  size="xs"
+                  fallback={
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ background: p.color }}
+                      aria-hidden="true"
+                    />
+                  }
+                />
+              </span>
+              <span className="flex-1 truncate text-[12px] text-mist-200">
                 {tip ? (
-                  <MetricTooltip
-                    content={tip}
-                    label={ariaLabel}
-                    side="top"
-                  >
+                  <MetricTooltip content={tip} label={ariaLabel} side="top">
                     <span>{p.platform}</span>
                   </MetricTooltip>
                 ) : (
                   p.platform
                 )}
               </span>
-              <span className="text-sm text-ink-900 dark:text-mist-50 font-medium tabular-nums">
-                {p.conversions} conv
+              <span className="text-[11.5px] tabular-nums text-mist-300">
+                {p.conversions.toLocaleString()} conv
               </span>
-              <span className="text-xs text-mist-600 dark:text-mist-400 tabular-nums w-12 text-right">
+              <span className="hidden w-12 sm:block" aria-hidden>
+                <span className="block h-1 overflow-hidden rounded-full bg-white/[0.07]">
+                  <span
+                    className="block h-full rounded-full"
+                    style={{
+                      width: `${Math.max(3, p.share * 100)}%`,
+                      background: p.color
+                    }}
+                  />
+                </span>
+              </span>
+              <span className="w-9 text-right text-[11px] tabular-nums text-mist-400">
                 {formatPercent(p.share, 0)}
               </span>
             </div>
@@ -159,18 +236,25 @@ export function PlatformChart({ data }: { data: DashboardSummary["platformBreakd
         })}
       </div>
 
-      <div className="mt-4 rounded-2xl bg-brand-500/[0.06] border border-brand-500/20 p-3 text-xs text-ink-800 dark:text-mist-200">
-        <strong className="text-brand-700 dark:text-brand-300">
-          <MetricTooltip
-            content={BestCostPerConvTip}
-            label="What best cost-per-conversion means"
-            side="top"
-          >
-            <span>Best cost-per-conversion:</span>
-          </MetricTooltip>
-        </strong>{" "}
-        Meta Retargeting — ₦362/c. Lean into it.
-      </div>
-    </div>
+      {best && (
+        <div className="mt-3 rounded-lg border border-brand-500/25 bg-brand-500/[0.07] px-3 py-2.5 text-[11.5px] leading-relaxed text-mist-200">
+          <strong className="font-semibold text-brand-300">
+            <MetricTooltip
+              content={BestCostPerConvTip}
+              label="What best cost-per-conversion means"
+              side="top"
+            >
+              <span>Best cost per conversion</span>
+            </MetricTooltip>
+            :
+          </strong>{" "}
+          {PLATFORM_META[best.platform]?.name ?? best.platform} at{" "}
+          <span className="font-medium text-mist-50 tabular-nums">
+            {formatNaira(best.spend / best.conversions)}
+          </span>{" "}
+          — the cheapest of the {data.length} channels you run.
+        </div>
+      )}
+    </Panel>
   );
 }

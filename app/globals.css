@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 /**
- * GrowthAds — Madgicx-aligned surface system.
+ * GrowthAds — dark operator surface.
  *
- * The marketing page is dark, product-led and softly lit. Panels are 16px
- * rounded, bordered with white/8%, and carry a top-light sheen rather than a
- * drop shadow. The primary CTA is a white pill with a 3px translucent ring;
- * the secondary is a dark glass pill with a 1px accent-tinted border — both
- * measured from the reference (see tools/design_probe.mjs).
+ * The app is a single navy stock (#060911) with flat #0A0F19 panels separated
+ * by 7%-white hairlines. One accent (emerald) carries all meaning; series
+ * colour is reserved for charts. Radii come from the Tailwind scale (8px
+ * controls, 12px panels, pill only for status chips).
  *
- * The signed-in app stays on light surfaces; only the landing shell is dark.
+ * The marketing shell keeps its own token set and can still be light, but the
+ * workspace is dark by construction — lib/theme.ts forces it at the html level
+ * so every legacy `dark:` utility keeps resolving.
  */
 
 @layer base {
@@ -39,10 +40,10 @@
    * being permanently dark.
    */
   .shell {
-    --shell-bg: 5 7 11;
+    --shell-bg: 6 9 17;
     --shell-fg: 255 255 255;
     --pattern-ink: 255 255 255;
-    --shell-accent: 110 231 183; /* brand-300, 8.6:1 on #05070B */
+    --shell-accent: 110 231 183; /* brand-300, 8.6:1 on #060911 */
     --shell-glow: 16 185 129;
     background-color: rgb(var(--shell-bg));
     color: rgb(var(--shell-fg));
@@ -70,11 +71,11 @@
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: #2a3145;
-    border: 2px solid #05070b;
+    background: #253248;
+    border: 2px solid #060911;
     border-radius: 9999px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: #3a4356; }
+  ::-webkit-scrollbar-thumb:hover { background: #33425a; }
 }
 
 /* Focus: white ring on the dark shell, emerald in the app. */
@@ -202,55 +203,114 @@
     border-color: rgb(var(--shell-accent) / 0.35);
   }
 
-  /* App buttons (light + dark), unchanged API. */
+  /* App buttons — 8px radius, restrained fill. Marketing keeps its pills. */
   .btn-primary {
-    @apply btn bg-brand-600 text-white;
+    @apply btn rounded-lg bg-brand-600 text-white;
   }
   .btn-primary:hover { @apply bg-brand-500; }
+  .btn-primary:active { @apply bg-brand-700; }
 
   .btn-secondary {
-    @apply btn bg-surface-50 text-mist-600 border border-mist-300;
+    @apply btn rounded-lg bg-ink-900 text-mist-100 border border-white/[0.09];
   }
-  .btn-secondary:hover { @apply bg-mist-50 border-mist-400; }
-  html.dark .btn-secondary {
-    @apply bg-ink-900 text-mist-100 border-ink-700;
+  .btn-secondary:hover { @apply bg-ink-850 border-white/[0.16] text-white; }
+  html:not(.dark) .btn-secondary {
+    @apply bg-surface-50 text-mist-600 border-mist-300;
   }
-  html.dark .btn-secondary:hover { @apply bg-ink-850 border-ink-600; }
+  html:not(.dark) .btn-secondary:hover { @apply bg-mist-50 border-mist-400; }
 
   .btn-ghost {
-    @apply btn bg-transparent text-mist-600;
+    @apply btn rounded-lg bg-transparent text-mist-300;
   }
-  .btn-ghost:hover { @apply bg-mist-100; }
-  html.dark .btn-ghost { @apply text-mist-200; }
-  html.dark .btn-ghost:hover { @apply bg-ink-850 text-white; }
+  .btn-ghost:hover { @apply bg-white/[0.05] text-white; }
+  html:not(.dark) .btn-ghost { @apply text-mist-600; }
+  html:not(.dark) .btn-ghost:hover { @apply bg-mist-100 text-ink-950; }
 
   .btn-outline {
-    @apply btn bg-transparent text-brand-300 border border-brand-500/40;
+    @apply btn rounded-lg bg-transparent text-brand-300 border border-brand-500/35;
   }
-  .btn-outline:hover { @apply border-brand-400 bg-brand-500/10; }
+  .btn-outline:hover { @apply border-brand-400/60 bg-brand-500/10 text-brand-200; }
 
-  /* ── Legacy vocabulary, retuned ───────────────────────────────────────── */
+  /* ── App surfaces ─────────────────────────────────────────────────────── */
 
+  /*
+   * The one panel primitive. A navy plate one visible step above the page, a
+   * 8.5%-white hairline, and a top sheen so every card catches the light from
+   * the same direction. The sheen is what separates "elevated surface" from
+   * "hole in the page" — without it a dark UI reads flat at any contrast.
+   */
   .glass-card {
-    @apply bg-surface-50;
-    border: 1px solid rgba(226, 232, 240, 0.9);
+    position: relative;
+    background-color: #0b111c;
+    background-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.045) 0%,
+      rgba(255, 255, 255, 0.012) 34%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.085);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.055) inset,
+      0 18px 40px -34px rgba(0, 0, 0, 0.9);
   }
-  html.dark .glass-card {
-    background: rgba(255, 255, 255, 0.025);
-    border-color: rgba(255, 255, 255, 0.09);
+  html:not(.dark) .glass-card {
+    background-color: #ffffff;
+    background-image: none;
+    border-color: rgba(15, 23, 42, 0.09);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 12px 32px -28px rgba(15, 23, 42, 0.35);
+  }
+  .panel-interactive {
+    @apply transition-colors duration-200;
+  }
+  .panel-interactive:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    background-color: #0e1420;
+  }
+
+  /* Accent wash clipped to a panel — one per screen, never per card. */
+  .panel-accent::before {
+    content: "";
+    position: absolute;
+    inset: -1px -1px auto -1px;
+    height: 96px;
+    border-radius: inherit;
+    background: radial-gradient(
+      70% 100% at 22% 0%,
+      rgba(16, 185, 129, 0.16) 0%,
+      rgba(16, 185, 129, 0) 72%
+    );
+    pointer-events: none;
+  }
+
+  /* Hairline rule that fades out on both ends — panel-internal dividers. */
+  .fade-rule {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 12%,
+      rgba(255, 255, 255, 0.08) 88%,
+      transparent 100%
+    );
+  }
+
+  /* Nested row / well inside a panel. */
+  .well {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .hairline {
-    border: 1px solid rgba(226, 232, 240, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.07);
   }
-  html.dark .hairline {
-    border-color: rgba(255, 255, 255, 0.09);
+  html:not(.dark) .hairline {
+    border-color: rgba(15, 23, 42, 0.08);
   }
 
   .grid-bg {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 72px 72px;
     mask-image: radial-gradient(60% 60% at 50% 30%, black 0%, transparent 100%);
   }
@@ -258,12 +318,33 @@
 
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium;
-    border-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.72);
   }
   html.dark .chip {
-    border-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* Uppercase micro-label used above every figure and section title. */
+  .stat-label {
+    @apply text-[10.5px] font-medium uppercase tracking-[0.1em] text-mist-400;
+  }
+
+  /* Segmented control — the reference's Daily / 7 days switchers. */
+  .seg {
+    @apply inline-flex items-center gap-0.5 rounded-lg border p-0.5;
+    border-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.025);
+  }
+  .seg-item {
+    @apply rounded-[7px] px-2.5 py-1 text-[11px] font-medium text-mist-400 transition-colors duration-150;
+  }
+  .seg-item:hover { @apply text-mist-100; }
+  .seg-item[data-active="true"] {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.07));
+    color: #ffffff;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.09) inset;
   }
 
   .chip-brand {
@@ -305,7 +386,7 @@ html .on-ink .eyebrow {
 /* ── Interaction + motion ──────────────────────────────────────────────── */
 
 .hover-lift { @apply transition-transform duration-200 ease-out; }
-.hover-lift:hover { transform: translateY(-2px); }
+.hover-lift:hover { transform: translateY(-1px); }
 
 .row-interactive { @apply cursor-pointer transition-colors duration-200; }
 .row-interactive:hover { @apply bg-mist-50; }
@@ -380,20 +461,18 @@ html.dark .icon-btn { @apply text-mist-200 hover:bg-ink-850 hover:text-brand-300
     linear-gradient(180deg, #05070b 0%, #0a0d14 60%, #05070b 100%);
 }
 
-/* Legacy gradient text (dashboard headings). */
+/*
+ * Legacy accent text. It used to be a three-stop gradient, which read as
+ * decoration rather than hierarchy. Emphasis inside a heading is now a single
+ * accent colour; the heading itself carries the weight.
+ */
 .gradient-text {
-  background-image: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 45%, #34d399 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: #a7f3d0;
-  -webkit-text-fill-color: transparent;
+  color: #6ee7b7;
+  background: none;
+  -webkit-text-fill-color: currentColor;
 }
-html.dark .gradient-text {
-  background-image: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #34d399 100%);
-}
-@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-  .gradient-text { background: none; -webkit-text-fill-color: inherit; }
-}
+html:not(.dark) .gradient-text { color: #047857; }
+html .on-ink .gradient-text { color: #6ee7b7; }
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Pattern system — "instrument field"
@@ -468,13 +547,11 @@ html.dark .gradient-text {
   -webkit-mask-image: radial-gradient(60% 60% at 0% 100%, #000 0%, transparent 72%);
 }
 
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-duration: 0.18s;
-  transition-timing-function: ease;
-}
+/*
+ * No universal transition. Animating every property on every node made hovers
+ * feel soft and cost layout work on the data tables; components now opt in
+ * with Tailwind's `transition-*` utilities where motion is meaningful.
+ */
 
 @media (prefers-reduced-motion: reduce) {
   *,

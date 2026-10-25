@@ -13,9 +13,9 @@ type Size = "sm" | "md" | "lg";
  * the label grows so the mono caps stay optically even.
  */
 const sizes: Record<Size, string> = {
-  sm: "h-10 min-h-10 px-3.5 gap-1.5",
-  md: "h-11 min-h-11 px-5 gap-2",
-  lg: "h-12 min-h-12 px-6 gap-2.5"
+  sm: "h-8 min-h-8 px-3 gap-1.5 text-[12px]",
+  md: "h-10 min-h-10 px-4 gap-2 text-[13px]",
+  lg: "h-12 min-h-12 px-6 gap-2.5 text-sm"
 };
 
 /**
@@ -25,7 +25,7 @@ const sizes: Record<Size, string> = {
  */
 const shared =
   "inline-flex cursor-pointer select-none items-center justify-center whitespace-nowrap " +
-  "rounded-full border border-transparent text-sm font-medium " +
+  "rounded-lg border border-transparent font-medium " +
   "transition-colors duration-200 tap-press " +
   "disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none";
 
@@ -45,10 +45,10 @@ const variants: Record<Variant, string> = {
     "dark:text-mist-300 dark:hover:bg-ink-850 dark:hover:text-white",
   /** Marketing primary — contrast pill, inverts with the shell. */
   white:
-    "bg-shell text-shellbg shadow-cta-ring hover:brightness-[0.96] dark:hover:brightness-100",
+    "rounded-full bg-shell text-shellbg shadow-cta-ring hover:brightness-[0.96] dark:hover:brightness-100",
   /** Marketing secondary — glass pill, accent-tinted. */
   glass:
-    "text-shell border-accent/30 bg-shell/[0.04] " +
+    "rounded-full text-shell border-accent/30 bg-shell/[0.04] " +
     "hover:bg-accent/10 hover:border-accent/50"
 };
 

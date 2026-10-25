@@ -1,11 +1,16 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
+import { isWorkspacePath, WORKSPACE_THEME, type Theme } from "@/lib/theme";
 
-export type Theme = "light" | "dark";
+export type { Theme };
 
 export type ThemeContextValue = {
+  /** The theme actually in effect (workspace routes are always dark). */
   theme: Theme;
+  /** The visitor's saved preference — what the landing page uses. */
+  preference: Theme;
   mounted: boolean;
   toggleTheme: () => void;
   setTheme: (t: Theme) => void;
@@ -54,42 +59,45 @@ function applyClass(t: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // During SSR and the first client render, we don't yet know the user's
-  // true theme (the FlashThemeScript in <head> has set the class but React
-  // hasn't read it). We expose a `mounted` flag so consumers can render a
-  // neutral placeholder until hydration completes — preventing the
-  // sun/moon flicker (and any icon-related hydration warnings).
-  const [theme, setThemeState] = React.useState<Theme>("light");
+  // `preference` is the visitor's saved choice for the marketing shell. The
+  // workspace ignores it — see lib/theme.ts.
+  const [preference, setPreference] = React.useState<Theme>("light");
   const [mounted, setMounted] = React.useState(false);
+  const pathname = usePathname();
+  const inWorkspace = isWorkspacePath(pathname);
+  const theme: Theme = inWorkspace ? WORKSPACE_THEME : preference;
 
-  // Sync state from <html> class on mount (post-hydration).
+  // Sync from <html> class / storage on mount (post-hydration).
   React.useEffect(() => {
-    const persisted = readPersisted();
     const fromHtml = document.documentElement.classList.contains("dark");
-    const initial: Theme = persisted ?? (fromHtml ? "dark" : "light");
-    applyClass(initial);
-    setThemeState(initial);
+    setPreference(readPersisted() ?? (fromHtml ? "dark" : systemPreference()));
     setMounted(true);
   }, []);
 
+  // Keep the document class in sync with the route + preference.
+  React.useEffect(() => {
+    applyClass(theme);
+  }, [theme]);
+
   const setTheme = React.useCallback((t: Theme) => {
-    applyClass(t);
     writePersisted(t);
-    setThemeState(t);
+    setPreference(t);
   }, []);
 
   const toggleTheme = React.useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [theme, setTheme]);
+    setPreference((prev) => {
+      const next: Theme = prev === "dark" ? "light" : "dark";
+      writePersisted(next);
+      return next;
+    });
+  }, []);
 
   // Listen for OS-level preference changes when no manual override exists.
   React.useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = (e: MediaQueryListEvent) => {
       if (readPersisted() === null) {
-        const next: Theme = e.matches ? "dark" : "light";
-        applyClass(next);
-        setThemeState(next);
+        setPreference(e.matches ? "dark" : "light");
       }
     };
     mq.addEventListener?.("change", onChange);
@@ -97,8 +105,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = React.useMemo(
-    () => ({ theme, mounted, toggleTheme, setTheme }),
-    [theme, mounted, toggleTheme, setTheme]
+    () => ({ theme, preference, mounted, toggleTheme, setTheme }),
+    [theme, preference, mounted, toggleTheme, setTheme]
   );
 
   return (
@@ -109,9 +117,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme(): ThemeContextValue {
   const v = React.useContext(ThemeContext);
   if (!v) {
-    // Rendered outside ThemeProvider — return a safe default (light + no-op).
+    // Rendered outside ThemeProvider — return a safe default.
     return {
       theme: "light",
+      preference: "light",
       mounted: false,
       toggleTheme: () => {},
       setTheme: () => {}

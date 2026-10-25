@@ -1,212 +1,136 @@
-import { Plus, RefreshCw, Link2, Sparkles, ExternalLink } from "lucide-react";
+import { Plus, RefreshCw, Sparkles, ExternalLink } from "lucide-react";
 import type { AdAccount } from "@/lib/types";
 import { connectMeta, connectDemoMeta, syncInsights } from "@/app/actions/meta";
 import { PlatformLogo } from "@/components/brand/platform-logo";
 import { MetricTooltip } from "@/components/ui/tooltip";
 import { DemoPillTip } from "@/lib/metric-tooltips";
 
-/** Deep-link to the Meta app creation wizard — opened when env vars are
- *  missing so users get pointed at the actual setup instead of a
- *  dead-end Connect button. Use `target=_blank` so they keep their
- *  dashboard context. */
+/** Deep-link to the Meta app creation wizard when env vars are missing. */
 const META_APP_CREATE_URL = "https://developers.facebook.com/apps/create";
 
-const PLATFORM_META: Record<string, { name: string; color: string }> = {
-  meta: { name: "Meta Ads", color: "#9b6cff" },
-  google: { name: "Google Ads", color: "#1ed68f" },
-  tiktok: { name: "TikTok Ads", color: "#5ee5ad" }
+const PLATFORM_LABEL: Record<string, string> = {
+  meta: "Meta Ads",
+  google: "Google Ads",
+  tiktok: "TikTok Ads"
 };
 
-/**
- * Renders the real platform mark. The colored dot survives only as the
- * fallback for a platform whose logo asset has not been added yet.
- */
-function PlatformMark({ platform }: { platform: string }) {
-  const color = PLATFORM_META[platform]?.color ?? "#9b6cff";
-  return (
-    <PlatformLogo
-      platform={platform}
-      size="xs"
-      fallback={
-        <span
-          className="h-2 w-2 rounded-full shrink-0"
-          style={{ background: color }}
-          aria-hidden="true"
-        />
-      }
-    />
-  );
-}
+const pill =
+  "inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[11.5px] font-medium transition-colors duration-150";
+const ghost =
+  "border border-white/[0.08] text-mist-300 hover:border-white/[0.16] hover:bg-white/[0.04] hover:text-mist-50";
+const accent = "border border-brand-500/30 bg-brand-500/[0.10] text-brand-200 hover:bg-brand-500/[0.18]";
 
+/**
+ * AccountsStrip — connection state plus the actions that change it.
+ *
+ * Sits in the page header. Each connected account is a quiet pill; the one
+ * primary action (Connect) is accent-tinted. Buttons that would dead-end are
+ * swapped for the real next step instead of firing an error toast.
+ */
 export function AccountsStrip({
   accounts,
   hasDemo,
   metaEnvReady = true
 }: {
   accounts: AdAccount[];
-  /**
-   * When true, render a synthetic "Demo Meta Ads" pill using the same
-   * visual language as a real connected account. Source of truth is the
-   * META_DEMO_COOKIE flag set by connectDemoMeta; the dashboard page
-   * reads it server-side and forwards the boolean here so we don't have
-   * to import `cookies()` into a client-or-bare component.
-   */
   hasDemo?: boolean;
-  /**
-   * Whether the META_APP_ID / META_APP_SECRET env vars are set on the
-   * server. When false, the Connect / Sync server actions would dead-end
-   * with the env-config toast; better to replace them with a 'Set up
-   * your Meta app' CTA pointing at developers.facebook.com/apps/create.
-   * The dashboard reads `readMetaEnv()` server-side and forwards the
-   * boolean here so the component stays a pure Server Component.
-   *
-   * Default true to keep legacy call sites backwards-compatible — only
-   * the dashboard page wires this prop today.
-   */
   metaEnvReady?: boolean;
 }) {
-  // Sync is meaningful only when a real Meta connection exists; on a
-  // bare dashboard (no accounts) it's a dead button that fires the
-  // env-config error.
   const hasMetaAccount = accounts.some((a) => a.platform === "meta");
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex flex-wrap items-center gap-1.5">
       {hasDemo && (
-        <div
+        <span
           data-demo-pill="1"
-          className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-brand-500/15 hairline text-xs"
+          className={`${pill} border border-brand-500/30 bg-brand-500/[0.10]`}
         >
           <PlatformLogo platform="meta" size="xs" />
-          <span className="text-ink-900 dark:text-mist-100">
-            <MetricTooltip
-              content={DemoPillTip}
-              label="What demo mode means"
-              side="bottom"
-            >
-              <span>Meta Ads</span>
-            </MetricTooltip>
-          </span>
-          <span
-            title="Demo mode — no real Meta OAuth. Connect Meta Ads to swap to live data."
-            className="chip px-2 py-0 text-xs uppercase tracking-wider bg-brand-500/30 text-brand-100 border border-brand-500/40"
+          <MetricTooltip
+            content={DemoPillTip}
+            label="What demo mode means"
+            side="bottom"
           >
+            <span className="text-mist-100">Meta Ads</span>
+          </MetricTooltip>
+          <span className="rounded bg-brand-500/20 px-1 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-brand-200">
             demo
           </span>
-        </div>
+        </span>
       )}
-      {accounts.map((a) => {
-        const meta = PLATFORM_META[a.platform] ?? {
-          name: a.platform,
-          color: "#9b6cff"
-        };
-        return (
-          <div
-            key={a.id}
-            className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs"
-          >
-            <PlatformMark platform={a.platform} />
-            <span className="text-mist-100">{meta.name}</span>
-            <span
-              className={`chip px-2 py-0 text-xs uppercase tracking-wider ${
-                a.isActive
-                  ? "bg-brand-500/15 text-brand-300 border border-brand-500/30"
-                  : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
-              }`}
-            >
-              {a.isActive ? "live" : "paused"}
-            </span>
-          </div>
-        );
-      })}
 
-      {accounts.length === 0 && (
-        <div className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-mist-600 dark:text-mist-400">
-          <Link2 size={12} />
-          No accounts connected yet
-        </div>
+      {accounts.map((a) => (
+        <span
+          key={a.id}
+          className={`${pill} border border-white/[0.07] bg-white/[0.03]`}
+        >
+          <PlatformLogo platform={a.platform} size="xs" />
+          <span className="text-mist-200">
+            {PLATFORM_LABEL[a.platform] ?? a.platform}
+          </span>
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${
+              a.isActive ? "bg-brand-400" : "bg-amber-400"
+            }`}
+            aria-hidden
+          />
+          <span className="sr-only">{a.isActive ? "live" : "paused"}</span>
+        </span>
+      ))}
+
+      {accounts.length === 0 && !hasDemo && (
+        <span className={`${pill} border border-white/[0.07] text-mist-500`}>
+          No accounts connected
+        </span>
       )}
 
       {metaEnvReady ? (
         <>
-          {/* Connect — server action sets a CSRF state cookie + redirects
-              to Facebook OAuth. The form's "contents" class lets the
-              button participate in the parent flex layout as if it
-              weren't wrapped. The `title` attribute explicitly previews
-              what'll appear next so non-developer testers don't read a
-              "no permission dialog was shown" bug into Meta's normal
-              consent screen. */}
           <form action={connectMeta} className="contents">
             <button
               type="submit"
               title="We'll redirect you to Meta so you can approve the app to read your ad accounts."
               aria-label="Connect your Meta Ads account (opens Meta's permission screen)"
-              className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-brand-500/15 border border-brand-500/30 text-xs text-brand-700 hover:bg-brand-500/25 hover:border-brand-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-brand-200"
+              className={`${pill} ${accent}`}
             >
-              <Plus
-                size={12}
-                className="transition-transform duration-300 group-hover:rotate-90"
-              />
+              <Plus size={12} aria-hidden />
               Connect
             </button>
           </form>
-          {/* Try demo — secondary action for users without a real Meta
-              Ads account today. Upserts a row into meta_connections with
-              a recognizable demo sentinel so a future real OAuth upsert
-              can cleanly overwrite it via the user_id unique constraint.
-              DemoMode is also the right answer on env-not-ready states
-              when the user wants to explore the dashboard before they
-              have time to set up Meta. */}
           <form action={connectDemoMeta} className="contents">
             <button
               type="submit"
               aria-label="Connect a demo Meta ad account (no real OAuth)"
-              title="Demo mode — populates the connected-state UI without real Meta OAuth. Connect Meta Ads later to swap to live insights."
-              className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
+              title="Demo mode — populates the connected-state UI without real Meta OAuth."
+              className={`${pill} ${ghost}`}
             >
-              <Sparkles
-                size={12}
-                className="transition-transform duration-300 group-hover:scale-110 group-hover:text-brand-700 dark:group-hover:text-brand-200"
-              />
+              <Sparkles size={12} aria-hidden />
               Try demo
             </button>
           </form>
-          {/* Sync — only meaningful after a real Meta connection has
-              established an access_token; the action would fire an
-              env-config or no_connection toast otherwise. Hidden on
-              empty accounts to avoid the dead-button UX. */}
           {hasMetaAccount && (
             <form action={syncInsights} className="contents">
               <button
                 type="submit"
-                className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-mist-50/[0.04] hairline text-xs text-ink-800 hover:text-ink-900 hover:border-brand-500/40 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-mist-300 dark:hover:text-mist-100"
+                className={`${pill} ${ghost}`}
+                aria-label="Sync insights from Meta"
               >
-                <RefreshCw
-                  size={12}
-                  className="transition-transform duration-500 group-hover:rotate-180"
-                />
+                <RefreshCw size={12} aria-hidden />
                 Sync
               </button>
             </form>
           )}
         </>
       ) : (
-        // Env not ready: Connect / Sync would dead-end with the same
-        // env-config toast we've already deemed unhelpful. Surface a CTA
-        // that points the user at the actual setup wizard. Anchor
-        // (target=_blank) so the dashboard context is preserved.
         <a
           href={META_APP_CREATE_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Set up a Meta developer app (opens in new tab)"
           title="Open the Meta developer portal to create the App ID + Secret — opens in a new tab so you keep your dashboard state."
-          className="inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 bg-brand-500/15 border border-brand-500/30 text-xs text-brand-700 hover:bg-brand-500/25 hover:border-brand-400/50 transition-all duration-200 tap-press touch-target group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 dark:text-brand-200"
+          className={`${pill} ${accent}`}
         >
-          <ExternalLink
-            size={12}
-            className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
+          <ExternalLink size={12} aria-hidden />
           Set up Meta Ads
         </a>
       )}

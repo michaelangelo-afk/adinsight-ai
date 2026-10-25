@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { AutoRefresh } from "@/components/dashboard/auto-refresh";
-import {
-  Topbar,
-  type TopbarProfile
-} from "@/components/dashboard/topbar";
+import { Topbar, type TopbarProfile } from "@/components/dashboard/topbar";
+import { PageHeader } from "@/components/ui/page-header";
 import { MetricsGrid } from "@/components/dashboard/metrics-grid";
 import { TrendChart } from "@/components/dashboard/trend-chart";
 import { PlatformChart } from "@/components/dashboard/platform-chart";
@@ -19,26 +19,18 @@ import {
 } from "@/app/actions/dashboard";
 import { getCurrentUser } from "@/app/actions/auth";
 import { resolveOrgName } from "@/lib/auth/user-profile";
-import {
-  META_DEMO_COOKIE,
-  parseMetaDemoFlag
-} from "@/lib/action-msg";
+import { META_DEMO_COOKIE, parseMetaDemoFlag } from "@/lib/action-msg";
 import { readMetaEnv } from "@/lib/meta/env";
+import { formatNaira } from "@/lib/utils";
 
 /**
- * Phase 2 — Real-Supabase dashboard page.
+ * Overview.
  *
- * Async Server Component. Fetches the user + all four data sources in
- * parallel via `Promise.all`, then passes them as props to the
- * (now prop-driven) widget components. The page is wrapped in
- * <AutoRefresh> so RSC re-fetches happen silently every 60 seconds.
- *
- * Errors bubble up to `app/(dashboard)/error.tsx`.
- *
- * The Sidebar is rendered by `app/(dashboard)/layout.tsx` so it sits
- * outside this page (and outside <AutoRefresh>) — that avoids a double
- * render AND keeps AutoRefresh's router.refresh() from reloading the
- * Sidebar.
+ * One screen, four bands: page header (state + actions), KPI row, performance
+ * chart with the AI readout beside it, then campaigns and channel mix. Every
+ * panel is the same primitive; hierarchy comes from the grid and the type
+ * scale. Data still arrives from the four server actions in parallel, and
+ * <AutoRefresh> keeps it fresh without re-rendering the shell.
  */
 export default async function DashboardPage() {
   const [user, summary, campaigns, recommendations, accounts] =
@@ -50,22 +42,9 @@ export default async function DashboardPage() {
       getConnectedAccounts()
     ]);
 
-  // Read the demo flag server-side so AccountsStrip can render the
-  // "Demo Meta Ads" pill without coupling to cookies() itself.
-  const hasDemo = parseMetaDemoFlag(
-    cookies().get(META_DEMO_COOKIE)?.value
-  );
-
-  // Detect Meta env readiness so AccountsStrip can swap the dead-end
-  // Connect button for a 'Set up your Meta app' deep-link to the Meta
-  // developer portal when META_APP_ID / META_APP_SECRET aren't yet on
-  // the server. Cheaper than letting the user click into a wall-of-text
-  // toast — and matches the actionable nudge the runbook recommends.
+  const hasDemo = parseMetaDemoFlag(cookies().get(META_DEMO_COOKIE)?.value);
   const metaEnvReady = readMetaEnv().ok;
 
-  // Topbar profile from the joined auth.users + public.users + organizations.
-  // (resolveOrgName lives in app/actions/auth.ts and is shared with
-  // app/(dashboard)/layout.tsx so the org-name coercion is in one place.)
   const fullName = user?.profile?.full_name ?? "User";
   const profile: TopbarProfile = {
     avatar:
@@ -81,79 +60,64 @@ export default async function DashboardPage() {
     businessName: resolveOrgName(user?.profile?.organizations ?? null)
   };
 
-  // Topbar is rendered OUTSIDE <AutoRefresh> so router.refresh() skips it
-  // (user's profile doesn't change every 60s — no point re-rendering).
+  const channelCount = summary.platformBreakdown.length;
+  const convDir = summary.conversionsDelta >= 0 ? "up" : "down";
+
   return (
     <>
       <Topbar profile={profile} />
       <AutoRefresh interval={60_000}>
-        {/* overflow-x-hidden is defense-in-depth: even though MetricTooltip
-            is now portalled + clamped to the viewport, it keeps any
-            (possibly forgotten) horizontal overflow from scrolling the
-            body on narrow mobile breakpoints. */}
-        <div className="flex-1 p-6 md:p-8 space-y-6 overflow-x-hidden">
-          {/* Phase 3.1 — flash-cookie-driven action feedback. The cookie
-              has maxAge=30 so it auto-clears on next page read; the toast
-              renders once per rendered action. */}
+        <div className="relative flex-1 space-y-4 overflow-x-hidden px-4 py-6 md:px-6 lg:px-8">
+          {/* Single page-level wash. Panels stay flat. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-page-glow"
+          />
+
           <MetaActionToast />
-          {/* Welcome / summary line */}
-          {/* Welcome / summary line */}
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
-            <div>
-              <div className="text-xs uppercase tracking-wider text-mist-400">
-                Performance overview
-              </div>
-              <h1 className="mt-1 text-xl md:text-3xl font-semibold text-mist-50 tracking-tight">
-                You&apos;re{" "}
-                <span className="gradient-text">
-                  {summary.totalConversions > 0
-                    ? "roasting it"
-                    : "getting started"}
+
+          <PageHeader
+            eyebrow="Last 30 days · all connected channels"
+            title="Performance overview"
+            description={
+              <>
+                {formatNaira(summary.totalSpend)} invested across {channelCount}{" "}
+                channels. Conversions {convDir}{" "}
+                {Math.abs(summary.conversionsDelta).toFixed(1)}%, returning{" "}
+                <span className="font-medium text-mist-200">
+                  {summary.roi.toFixed(2)}×
                 </span>{" "}
-                this month.
-              </h1>
-              <p className="mt-1 text-sm text-mist-300">
-                {summary.totalConversions > 0 ? (
-                  <>
-                    Spend is {Math.abs(summary.spendDelta).toFixed(1)}%{" "}
-                    {summary.spendDelta < 0 ? "lower" : "higher"}, conversions{" "}
-                    {summary.conversionsDelta >= 0 ? "up" : "down"}{" "}
-                    {Math.abs(summary.conversionsDelta).toFixed(1)}%, ROI{" "}
-                    {summary.roi.toFixed(2)}×. Here&apos;s what&apos;s driving
-                    it.
-                  </>
-                ) : (
-                  <>
-                    Connect an ad account to start syncing campaign metrics,
-                    spend, and AI recommendations.
-                  </>
-                )}
-              </p>
-            </div>
-            <AccountsStrip
-              accounts={accounts ?? []}
-              hasDemo={hasDemo}
-              metaEnvReady={metaEnvReady}
-            />
-          </div>
+                per naira spent.
+              </>
+            }
+            actions={
+              <>
+                <AccountsStrip
+                  accounts={accounts ?? []}
+                  hasDemo={hasDemo}
+                  metaEnvReady={metaEnvReady}
+                />
+                <Link
+                  href="/campaigns"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand-600 px-3 text-[11.5px] font-semibold text-white transition-colors hover:bg-brand-500"
+                >
+                  <Plus size={12} aria-hidden />
+                  New campaign
+                </Link>
+              </>
+            }
+          />
 
           <MetricsGrid summary={summary} />
 
-          {/* Two-up only from xl (1280px). Between the sidebar becoming
-              visible (lg, 1024px) and xl there simply isn't room: the
-              campaign table's min-content width is ~530px, so a 1.4fr
-              track beside the rail used to overflow and get clipped by
-              the overflow-x-hidden wrapper. `[&>*]:min-w-0` lets the
-              fr tracks shrink below min-content instead of pushing the
-              page wide. */}
-          <div className="grid gap-6 [&>*]:min-w-0 xl:grid-cols-[1.6fr,1fr]">
+          <div className="grid gap-4 [&>*]:min-w-0 xl:grid-cols-[1.65fr,1fr]">
             <TrendChart data={summary.trend} />
-            <PlatformChart data={summary.platformBreakdown} />
+            <RecommendationsPanel recommendations={recommendations ?? []} />
           </div>
 
-          <div className="grid gap-6 [&>*]:min-w-0 xl:grid-cols-[1.4fr,1fr]">
+          <div className="grid gap-4 [&>*]:min-w-0 xl:grid-cols-[1.45fr,1fr]">
             <CampaignsTable campaigns={campaigns ?? []} />
-            <RecommendationsPanel recommendations={recommendations ?? []} />
+            <PlatformChart data={summary.platformBreakdown} />
           </div>
         </div>
       </AutoRefresh>

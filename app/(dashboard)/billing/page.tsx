@@ -1,24 +1,14 @@
-// app/(dashboard)/billing/page.tsx
-//
-// Phase 5 — Billing route. Server-rendered.
-//
-// Sections:
-//  1. Hero
-//  2. CurrentPlanCard (Pro)
-//  3. UsageMeters (4 tiles: campaigns, recs, reports, creator shortlist)
-//  4. PlanMatrixCard row (Free / Starter / Pro / Scale)
-//  5. InvoicesList
-
 import {
-  Wallet,
+  CalendarDays,
+  CreditCard,
   Sparkles,
-  TrendingUp,
-  CreditCard
+  Users,
+  Wallet
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { TextureGrain } from "@/components/motion/texture-grain";
 
 import { Topbar } from "@/components/dashboard/topbar";
+import { PageHeader } from "@/components/ui/page-header";
+import { Panel } from "@/components/ui/panel";
 import { getCurrentUser } from "@/app/actions/auth";
 import { resolveOrgName } from "@/lib/auth/user-profile";
 
@@ -35,148 +25,102 @@ import {
   CurrentPlanCard,
   PlanMatrixCard
 } from "@/components/billing/plan-card";
-import {
-  UsageMeter
-} from "@/components/billing/usage-meter";
-import {
-  InvoicesList
-} from "@/components/billing/invoice-list";
+import { UsageMeter } from "@/components/billing/usage-meter";
+import { InvoicesList } from "@/components/billing/invoice-list";
 
 export default async function BillingPage() {
   const user = await getCurrentUser();
   const orgName = resolveOrgName(user?.profile?.organizations ?? null);
   const stats = billingStats();
 
+  const fullName = user?.profile?.full_name ?? "User";
   const profile = {
     avatar:
       user?.profile?.avatar ||
-      (user?.profile?.full_name ?? "User")
+      fullName
         .split(" ")
         .map((part: string) => part[0] ?? "")
         .join("")
         .slice(0, 2)
         .toUpperCase() ||
       "?",
-    fullName: user?.profile?.full_name ?? "User",
+    fullName,
     businessName: orgName
   };
 
   return (
-    <div className="relative flex-1 min-w-0 flex flex-col">
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      >
-        <TextureGrain />
-      </div>
-
+    <div className="relative flex min-w-0 flex-1 flex-col">
       <Topbar profile={profile} />
 
-      <main className="flex-1 p-6 md:p-8 space-y-6">
-        {/* Hero */}
-        <section
-          className="relative rounded-2xl overflow-hidden hairline bg-gradient-to-br from-brand-500/15 via-ink-950/60 to-brand-500/15 p-6 sm:p-8 "
-          aria-label="Billing hero"
-        >
-          <div
-            aria-hidden
-            className="absolute inset-0 grid-bg opacity-30"
-          />
-          <div className="relative grid lg:grid-cols-[1.5fr,1fr] gap-6 items-center">
-            <div>
-              <Badge tone="good" className="!text-xs">
-                <Wallet size={11} aria-hidden className="mr-1" />
-                Phase 5 · Billing center
-              </Badge>
-              <h1 className="mt-3 text-3xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-mist-50 leading-[1.05]">
-                Pay for what{" "}
-                <span className="gradient-text">moves the needle.</span>
-              </h1>
-              <p className="mt-3 text-sm sm:text-base text-mist-200 max-w-xl leading-relaxed">
-                <strong className="text-mist-50">Lagos Bites</strong> is on
-                the <em className="not-italic text-brand-300">Pro</em>{" "}
-                plan — ₦{currentPlan.priceMonthly.toLocaleString()}/mo with{" "}
-                <strong className="text-mist-50">
-                  ₦{stats.savedYtd.toLocaleString()}
-                </strong>{" "}
-                saved through applied recommendations this year.
-              </p>
+      <main className="flex-1 space-y-4 px-4 py-6 md:px-6 lg:px-8">
+        <PageHeader
+          eyebrow="Billing center"
+          title="Plan and usage"
+          description={
+            <>
+              {orgName} is on the{" "}
+              <span className="font-medium text-brand-300">
+                {currentPlan.name}
+              </span>{" "}
+              plan at {formatNaira(currentPlan.priceMonthly)}/month, with{" "}
+              {formatNaira(stats.savedYtd)} saved through applied
+              recommendations this year.
+            </>
+          }
+          actions={
+            <>
+              <button
+                type="button"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/[0.08] px-2.5 text-[11.5px] font-medium text-mist-300 transition-colors hover:bg-white/[0.04] hover:text-mist-50"
+              >
+                <CreditCard size={12} aria-hidden />
+                Manage payment
+              </button>
+              <button
+                type="button"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand-600 px-3 text-[11.5px] font-semibold text-white transition-colors hover:bg-brand-500"
+              >
+                <Sparkles size={12} aria-hidden />
+                Upgrade plan
+              </button>
+            </>
+          }
+        />
 
-              <div className="mt-5 grid grid-cols-3 gap-2 max-w-md text-xs text-mist-400">
-                <KpiPill
-                  label="Next bill"
-                  value={`${stats.daysUntilRenewal}d`}
-                />
-                <KpiPill
-                  label="Monthly"
-                  value={formatNaira(currentPlan.priceMonthly)}
-                />
-                <KpiPill
-                  label="Saved YTD"
-                  value={`₦${(stats.savedYtd / 1000).toFixed(0)}k`}
-                  highlight
-                />
-              </div>
-            </div>
-
-            <div className="hidden lg:flex justify-end items-center">
-              <div className="relative h-44 w-44 rounded-full bg-brand-500/[0.06] hairline flex items-center justify-center">
-                <span
-                  aria-hidden
-                  className="absolute inset-2 rounded-full bg-brand-500/[0.10] "
-                />
-                <CreditCard
-                  size={64}
-                  className="text-brand-300 relative"
-                  aria-hidden
-                />
-                <span
-                  className="absolute -top-2 right-2 inline-flex items-center gap-1 rounded-full bg-brand-500/15 border border-brand-500/30 px-2 py-0.5 text-xs uppercase tracking-wider text-brand-200"
-                >
-                  <Sparkles size={10} aria-hidden />
-                  Pro
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* KPI strip — quick at-a-glance */}
         <section
           aria-label="Billing KPIs"
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-2 gap-3 lg:grid-cols-4"
         >
           <KpiTile
+            icon="calendar"
+            tone="#34D399"
             label="Next renewal"
-            value={`${stats.daysUntilRenewal}d`}
-            icon={<TrendingUp size={14} aria-hidden />}
-            hint={`₦${currentPlan.priceMonthly.toLocaleString()} Pro · ${currentPlan.id === "pro" ? "renews" : "downgrade protection"}`}
-            tone="accent"
+            value={`${stats.daysUntilRenewal} days`}
+            hint={`${formatNaira(currentPlan.priceMonthly)} · Pro`}
           />
           <KpiTile
-            label="Active seats"
+            icon="users"
+            tone="#60A5FA"
+            label="Seats included"
             value={String(currentPlan.limits.seatsIncluded)}
-            icon={<Sparkles size={14} aria-hidden />}
-            hint="Including you + 4 collaborators"
-            tone="brand"
+            hint="You plus four collaborators"
           />
           <KpiTile
-            label="YTD savings"
-            value={`₦${(stats.savedYtd / 1000).toFixed(0)}k`}
-            icon={<Wallet size={14} aria-hidden />}
-            hint="From applied AI recommendations"
-            tone="accent"
+            icon="wallet"
+            tone="#A78BFA"
+            label="Saved year to date"
+            value={formatNaira(stats.savedYtd)}
+            hint="From applied recommendations"
           />
           <KpiTile
+            icon="card"
+            tone="#FBBF24"
             label="Payment method"
             value="Visa · 4271"
-            icon={<CreditCard size={14} aria-hidden />}
-            hint="Auto-renews on next cycle"
-            tone="brand"
+            hint="Auto-renews on the next cycle"
           />
         </section>
 
-        {/* Current plan */}
         <CurrentPlanCard
           plan={currentPlan}
           interval="monthly"
@@ -184,38 +128,24 @@ export default async function BillingPage() {
           daysUntilRenewal={stats.daysUntilRenewal}
         />
 
-        {/* Usage meters */}
-        <section
-          aria-label="Plan usage"
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
+        <section aria-label="Plan usage" className="grid gap-3 md:grid-cols-2">
           {usageMetrics.map((m, i) => (
-            <div
-              key={m.id}
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
+            <div key={m.id} style={{ animationDelay: `${i * 80}ms` }}>
               <UsageMeter metric={m} />
             </div>
           ))}
         </section>
 
-        {/* Plan matrix */}
-        <section
-          aria-label="Plan catalog"
-          className="space-y-3"
-        >
-          <header className="flex items-center justify-between">
-            <div>
-              <h2 className="text-base font-semibold text-mist-50">
-                Compare plans
-              </h2>
-              <p className="text-sm text-mist-400">
-                Annual billing saves ~17%. Switch tiers any time — no
-                commitment.
-              </p>
-            </div>
-          </header>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section aria-label="Plan catalog" className="space-y-3">
+          <div>
+            <h2 className="text-[13px] font-semibold text-mist-50">
+              Compare plans
+            </h2>
+            <p className="text-[11.5px] text-mist-500">
+              Annual billing saves about 17%. Switch tiers any time.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {plans.map((p, i) => (
               <div key={p.id} style={{ animationDelay: `${i * 60}ms` }}>
                 <PlanMatrixCard
@@ -227,98 +157,61 @@ export default async function BillingPage() {
           </div>
         </section>
 
-        {/* Invoices */}
         <InvoicesList invoices={invoices} />
 
-        <footer className="text-xs text-mist-400 flex flex-wrap gap-3 items-center justify-between rounded-2xl hairline px-4 py-3">
-          <span>
+        <footer className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.06] px-4 py-3 text-[11px] text-mist-500">
+          <span className="inline-flex items-center gap-1.5">
+            <Wallet size={11} aria-hidden />
             Payments secured by{" "}
-            <code className="text-xs bg-mist-50/[0.05] rounded-2xl px-1.5 py-0.5">
+            <code className="rounded bg-white/[0.05] px-1.5 py-0.5 text-[10.5px] text-mist-300">
               Paystack
             </code>
-            . Receipts auto-emailed within 60s.
+            . Receipts are auto-emailed within 60 seconds.
           </span>
-          <span className="text-mist-500">
-            Currency: NGN · billed monthly
-          </span>
+          <span>NGN · billed monthly</span>
         </footer>
       </main>
     </div>
   );
 }
 
+const KPI_ICONS = {
+  calendar: CalendarDays,
+  users: Users,
+  wallet: Wallet,
+  card: CreditCard
+} as const;
+
 function KpiTile({
+  icon,
+  tone,
   label,
   value,
-  icon,
-  hint,
-  tone
+  hint
 }: {
+  icon: keyof typeof KPI_ICONS;
+  tone: string;
   label: string;
   value: string;
-  icon: React.ReactNode;
   hint: string;
-  tone: "brand" | "accent";
 }) {
+  const Icon = KPI_ICONS[icon];
   return (
-    <div className="glass-card rounded-2xl p-5 hover-lift  relative overflow-hidden">
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full blur-3xl"
-        style={{
-          background:
-            tone === "accent"
-              ? "rgba(16,185,129,0.16)"
-              : "rgba(21,128,61,0.16)"
-        }}
-      />
-      <div className="relative flex items-center justify-between mb-3">
+    <Panel className="p-4">
+      <div className="flex items-start justify-between gap-2">
+        <div className="stat-label min-w-0">{label}</div>
         <span
-          className={
-            "inline-flex h-8 w-8 items-center justify-center rounded-2xl hairline " +
-            (tone === "accent"
-              ? "bg-brand-500/15 text-brand-300"
-              : "bg-brand-500/15 text-brand-300")
-          }
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md"
+          style={{ backgroundColor: `${tone}1f`, color: tone }}
+          aria-hidden
         >
-          {icon}
+          <Icon size={12} strokeWidth={1.9} />
         </span>
       </div>
-      <div className="relative">
-        <div className="text-xs uppercase tracking-wider text-mist-500">
-          {label}
-        </div>
-        <div className="mt-1 text-xl font-semibold text-mist-50 tabular-nums ">
-          {value}
-        </div>
-        <div className="mt-0.5 text-xs text-mist-400">{hint}</div>
-      </div>
-    </div>
-  );
-}
-
-function KpiPill({
-  label,
-  value,
-  highlight
-}: {
-  label: string;
-  value: string;
-  highlight?: boolean;
-}) {
-  return (
-    <div className="rounded-2xl bg-mist-50/[0.04] hairline px-3 py-2 text-center">
-      <div className="text-xs uppercase tracking-wider text-mist-500">
-        {label}
-      </div>
-      <div
-        className={
-          "text-sm font-semibold tabular-nums " +
-          (highlight ? "text-brand-300" : "text-mist-50")
-        }
-      >
+      <div className="mt-1.5 truncate text-[17px] font-semibold tracking-tight text-mist-50 tabular-nums">
         {value}
       </div>
-    </div>
+      <div className="mt-1 truncate text-[11px] text-mist-500">{hint}</div>
+    </Panel>
   );
 }
