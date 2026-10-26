@@ -71,18 +71,23 @@ export async function GET(req: Request) {
     });
     return NextResponse.redirect(new URL(redirectTo, req.url));
   };
+  /** Failure redirect carrying a machine-readable reason, so the branch
+   *  that actually failed is identifiable from the URL alone rather than
+   *  by guessing which of the eight exits fired. */
+  const failTo = (reason: string) =>
+    `/dashboard?meta_connect=failed&reason=${reason}`;
 
   // ---- 1. Surface user-denied errors from Facebook ----
   if (errorParam) {
     return flashError(
       `Meta denied: ${errorParam}`,
-      "/dashboard?meta_connect=failed"
+      failTo("denied")
     );
   }
   if (!code || !state) {
     return flashError(
       "Meta OAuth callback missing code or state.",
-      "/dashboard?meta_connect=failed"
+      failTo("missing_params")
     );
   }
 
@@ -92,14 +97,14 @@ export async function GET(req: Request) {
   if (!expected || expected !== state) {
     return flashError(
       "Meta OAuth state mismatch — possible CSRF.",
-      "/dashboard?meta_connect=failed"
+      failTo("state_mismatch")
     );
   }
 
   // ---- 3. Env + auth checks ----
   const env = readMetaEnv();
   if (!env.ok) {
-    return flashError(formatMetaEnvError(env), "/dashboard?meta_connect=failed");
+    return flashError(formatMetaEnvError(env), failTo("env"));
   }
 
   const anon = createClient();
@@ -124,7 +129,7 @@ export async function GET(req: Request) {
   } catch (err) {
     return flashError(
       err instanceof Error ? err.message : "Token exchange failed",
-      "/dashboard?meta_connect=failed"
+      failTo("token_exchange")
     );
   }
 
@@ -157,8 +162,9 @@ export async function GET(req: Request) {
   }
 
   // ---- 6. Persist via service role (bypasses RLS) ----
+  let connectionId: string | null = null;
   try {
-    await upsertMyMetaConnection({
+    connectionId = await upsertMyMetaConnection({
       meta_user_id: metaUserId ?? "unknown",
       meta_user_name: metaUserName,
       access_token: token.access_token,
@@ -166,11 +172,24 @@ export async function GET(req: Request) {
       scopes: [...META_OAUTH_SCOPES]
     });
   } catch (err) {
+    console.error("[meta-callback] upsert failed:", err);
     return flashError(
       err instanceof Error
         ? `Failed to store Meta connection: ${err.message}`
         : "Failed to store Meta connection",
-      "/dashboard?meta_connect=failed"
+      failTo("store_failed")
+    );
+  }
+
+  // upsertMyMetaConnection signals "no resolvable session" by RETURNING
+  // null rather than throwing. Treating that as success was a silent
+  // no-op: the user saw "Meta account connected." while no row was ever
+  // written, so the dashboard had nothing to show. Fail loudly instead.
+  if (!connectionId) {
+    console.error("[meta-callback] upsert returned null (no session)");
+    return flashError(
+      "Signed-in session could not be resolved — sign in again, then reconnect Meta.",
+      failTo("no_session")
     );
   }
 
