@@ -25,6 +25,17 @@ import "server-only";
 import { cache } from "react";
 import { createClient as createAnonClient } from "./server";
 import { createServiceClient } from "./server";
+import { encryptToken, decryptToken } from "@/lib/crypto/token-cipher";
+
+/** Decrypts token columns read with the service role. Rows written before
+ *  encryption existed still hold plaintext; those pass through unchanged so
+ *  existing connections keep working until they are re-saved. */
+function revealTokens<T extends MetaConnectionWithSecrets>(row: T | null): T | null {
+  if (!row) return null;
+  const reveal = (v: string | null) =>
+    v === null ? null : v.startsWith("v1:") ? decryptToken(v) : v;
+  return { ...row, access_token: reveal(row.access_token), refresh_token: reveal(row.refresh_token) };
+}
 
 export interface MetaConnectionMeta {
   id: string;
@@ -108,7 +119,7 @@ export async function getMyMetaConnectionWithSecrets(): Promise<MetaConnectionWi
     .eq("user_id", authed.id)
     .maybeSingle();
   if (error) throw error;
-  return (data as MetaConnectionWithSecrets | null) ?? null;
+  return revealTokens(data as MetaConnectionWithSecrets | null);
 }
 
 /**
@@ -137,7 +148,7 @@ export async function getAuthedUserAndMetaSecrets(): Promise<
   if (error) throw error;
   return {
     userId,
-    conn: (data as MetaConnectionWithSecrets | null) ?? null
+    conn: revealTokens(data as MetaConnectionWithSecrets | null)
   };
 }
 
@@ -169,8 +180,8 @@ export async function upsertMyMetaConnection(input: {
         user_id: authed.id,
         meta_user_id: input.meta_user_id,
         meta_user_name: input.meta_user_name ?? null,
-        access_token: input.access_token,
-        refresh_token: input.refresh_token ?? null,
+        access_token: encryptToken(input.access_token),
+        refresh_token: input.refresh_token ? encryptToken(input.refresh_token) : null,
         expires_at: input.expires_at,
         scopes: input.scopes,
         status: "active"
