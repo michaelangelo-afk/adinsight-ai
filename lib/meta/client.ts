@@ -20,12 +20,16 @@ import { readMetaEnv } from "./env";
 const GRAPH_BASE = "https://graph.facebook.com";
 const OAUTH_BASE = "https://www.facebook.com";
 
-/** OAuth scopes needed for ad-account read + write + insights. */
-export const META_OAUTH_SCOPES = [
-  "ads_read",
-  "ads_management",
-  "read_insights"
-] as const;
+/**
+ * OAuth scopes needed for ad-account read + write + insights.
+ *
+ * `read_insights` is deliberately absent. It is a *Page* Insights
+ * permission, not an ad-account one, and Meta's OAuth dialog rejects it
+ * for this login configuration with "Invalid Scopes: read_insights".
+ * Ad-account reporting (GET /act_<id>/insights) is covered by `ads_read`,
+ * and `ads_management` already includes read access for the manage flows.
+ */
+export const META_OAUTH_SCOPES = ["ads_read", "ads_management"] as const;
 
 export interface MetaTokenResponse {
   access_token: string;
